@@ -1,0 +1,15 @@
+/vendor
+/node_modules
+/resources/dist
+/.chronos
+/.idea
+/.vscode
+.env
+.php-cs-fixer.cache
+.phpunit.result.cache
+build
+composer.lock
+coverage
+docs
+phpstan.neon
+testbench.yaml
