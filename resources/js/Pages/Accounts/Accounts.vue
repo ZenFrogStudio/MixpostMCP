@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from "vue";
-import {router} from '@inertiajs/vue3'
+import {router, usePage} from '@inertiajs/vue3'
 import {Head} from '@inertiajs/vue3';
 import useNotifications from "@/Composables/useNotifications";
 import PageHeader from "@/Components/DataDisplay/PageHeader.vue";
@@ -33,6 +33,19 @@ const {notify} = useNotifications();
 const addAccountModal = ref(false);
 const confirmationAccountDeletion = ref(null);
 const accountIsDeleting = ref(false);
+
+// Saved credentials are not enough to offer a network — the provider class has to exist too.
+// `available_providers` is the registry's own list, so a button can never offer a connection
+// that would fail the moment it is clicked.
+const canAdd = (provider, service = null) => {
+    const page = usePage().props;
+
+    if (!page.available_providers.includes(provider)) {
+        return false;
+    }
+
+    return service === null ? true : page.is_service_active[service];
+}
 
 const updateAccount = (accountId) => {
     router.put(route('mixpost.accounts.update', {account: accountId}), {}, {
@@ -168,25 +181,25 @@ const closeConfirmationAccountDeletion = () => {
            @close="addAccountModal = false">
         <div class="flex flex-col">
             <AddFacebookPage
-                v-if="$page.props.is_service_active.facebook"
+                v-if="canAdd('facebook_page', 'facebook')"
             />
             <!-- Instagram authenticates through the same Meta app as Facebook Pages,
                  so it is gated on the facebook service rather than an instagram one. -->
             <AddInstagramAccount
-                v-if="$page.props.is_service_active.facebook"
+                v-if="canAdd('instagram', 'facebook')"
             />
-            <AddMastodonAccount/>
+            <AddMastodonAccount v-if="canAdd('mastodon')"/>
             <AddTwitterAccount
-                v-if="$page.props.is_service_active.twitter"
+                v-if="canAdd('twitter', 'twitter')"
             />
             <AddLinkedInAccount
-                v-if="$page.props.is_service_active.linkedin"
+                v-if="canAdd('linkedin', 'linkedin')"
             />
             <AddTikTokAccount
-                v-if="$page.props.is_service_active.tiktok"
+                v-if="canAdd('tiktok', 'tiktok')"
             />
             <AddYouTubeAccount
-                v-if="$page.props.is_service_active.youtube"
+                v-if="canAdd('youtube', 'youtube')"
             />
         </div>
     </Modal>

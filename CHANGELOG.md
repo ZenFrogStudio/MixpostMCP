@@ -2,6 +2,28 @@
 
 All notable changes to `mixpost` will be documented in this file.
 
+## 2.16.1 - 2026-08-29
+
+**Fixed**
+
+- Connecting a network whose provider class does not exist crashed with a fatal error instead of
+  simply not being offered. The YouTube service, its credentials form, its Add-account button and
+  its README setup section had all shipped, but `YouTubeProvider` had not — so following the
+  documented setup ended at an uncatchable `Class not found`. The registry
+  (`SocialProviderManager::providers()`) is now the single authority on which networks are
+  available: `createConnection()` checks it before dispatching to a `connect<Name>Provider()`
+  method, the accounts page receives the same list as `available_providers`, and every
+  Add-account button is gated on it as well as on the service being configured. Previously three
+  places decided availability independently and disagreed.
+- `AddAccountController` answers a request for an unavailable network with the accounts page and a
+  message rather than a 500. The route is reachable directly even though the UI no longer links it.
+
+**Added**
+
+- Registry tests covering both halves of the contract that broke: every registered provider has a
+  connect method, and connecting an unregistered provider raises a catchable exception instead of
+  instantiating a class that may not exist.
+
 ## 2.16.0 - 2026-08-25
 
 **Added**

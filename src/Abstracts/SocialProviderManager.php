@@ -21,6 +21,13 @@ abstract class SocialProviderManager
         $this->config = $container->make('config');
     }
 
+    /**
+     * The provider identifiers this installation can actually connect, mapped to their classes.
+     * This is the single source of truth for provider availability — the accounts UI and
+     * createConnection() both read it, so a network can never be offered and then fail.
+     */
+    abstract public function providers(): array;
+
     public function connect(string $provider, array $values = [])
     {
         $this->setValues($values);
@@ -35,6 +42,14 @@ abstract class SocialProviderManager
 
     private function createConnection(string $provider)
     {
+        // Checked before the connect method runs, because a connect method names its provider
+        // class directly: calling one for a provider that is not registered instantiates a class
+        // that may not exist, which is a fatal error rather than a catchable one. Registered-ness
+        // is the same test the accounts UI uses to decide what to offer.
+        if (! array_key_exists($provider, $this->providers())) {
+            throw new InvalidArgumentException("Provider [$provider] is not available.");
+        }
+
         $method = 'connect'.Str::studly($provider).'Provider';
 
         if (method_exists($this, $method)) {

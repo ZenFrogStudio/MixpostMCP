@@ -11,6 +11,7 @@ use Inovector\Mixpost\Actions\UpdateOrCreateAccount;
 use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
 use Inovector\Mixpost\Enums\ServiceGroup;
 use Inovector\Mixpost\Facades\ServiceManager;
+use Inovector\Mixpost\Facades\SocialProviderManager;
 use Inovector\Mixpost\Http\Resources\AccountResource;
 use Inovector\Mixpost\Models\Account;
 
@@ -26,6 +27,9 @@ class AccountsController extends Controller
             'accounts' => AccountResource::collection(Account::latest()->get())->resolve(),
             'is_configured_service' => ServiceManager::isConfigured($socialServices),
             'is_service_active' => ServiceManager::isActive($socialServices),
+            // A configured service is not enough to offer a network: the provider class has to
+            // exist too. Offering one without the other is how the connect button became a fatal.
+            'available_providers' => array_keys(SocialProviderManager::providers()),
         ]);
     }
 
