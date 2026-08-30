@@ -87,10 +87,16 @@ trait ManagesResources
 
         [$title, $description] = YouTubeProvider::deriveTitleAndDescription($text, $params);
 
+        // YouTube refuses an untitled video, and a video posted with no caption is a normal post
+        // here, so the file name stands in for one.
+        $title = $title !== '' ? $title : $this->fallbackTitle($video);
+
+        if ($rejection = $this->rejectUnpostableText($title, $description)) {
+            return $rejection;
+        }
+
         $session = $this->initResumableUpload($video, [
-            // YouTube refuses an untitled video, and a video posted with no caption is a normal
-            // post here, so the file name stands in for one.
-            'title' => $title !== '' ? $title : $this->fallbackTitle($video),
+            'title' => $title,
             'description' => $description,
             'categoryId' => $this->chooseOption($params, 'category_id', 22),
         ], [
@@ -171,6 +177,38 @@ trait ManagesResources
 
             return $this->response(SocialProviderResponseStatus::ERROR, [
                 "The video is {$sizeInGb} GB. YouTube's limit is 128 GB.",
+            ]);
+        }
+
+        return null;
+    }
+
+    /**
+     * The two things YouTube refuses about a video's metadata, both of them only after the whole
+     * file has already been uploaded — so an upload thrown away here costs the transfer and a slice
+     * of the channel's daily quota as well.
+     *
+     * The angle brackets are rejected rather than stripped: someone who typed `<3` into a post
+     * should be told the character is not allowed, not find it quietly missing from a published
+     * video.
+     */
+    protected function rejectUnpostableText(string $title, string $description): ?SocialProviderResponse
+    {
+        foreach (['title' => $title, 'description' => $description] as $field => $value) {
+            foreach (['<', '>'] as $character) {
+                if (str_contains($value, $character)) {
+                    return $this->response(SocialProviderResponseStatus::ERROR, [
+                        "The video $field contains `$character`. YouTube rejects `<` and `>` in a title or description — remove them and try again.",
+                    ]);
+                }
+            }
+        }
+
+        $length = mb_strlen($description);
+
+        if ($length > YouTubeProvider::DESCRIPTION_LIMIT) {
+            return $this->response(SocialProviderResponseStatus::ERROR, [
+                "The video description is $length characters. YouTube's limit is ".YouTubeProvider::DESCRIPTION_LIMIT.'.',
             ]);
         }
 

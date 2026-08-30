@@ -2,15 +2,14 @@
 
 namespace Inovector\Mixpost\SocialProviders\TikTok\Concerns;
 
-use FFMpeg\FFProbe;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
 use Inovector\Mixpost\Models\Media;
 use Inovector\Mixpost\SocialProviders\TikTok\TikTokProvider;
+use Inovector\Mixpost\Support\MediaProbe;
 use Inovector\Mixpost\Support\SocialProviderResponse;
-use Inovector\Mixpost\Util;
 
 /**
  * Reads the connected creator and publishes to them.
@@ -30,6 +29,14 @@ trait ManagesResources
      * accepts.
      */
     const TITLE_LIMIT_UTF16 = 2200;
+
+    /**
+     * TikTok's floor for any video. The ceiling is deliberately not a constant — it varies per
+     * creator and is read from creator_info/query, see rejectAgainstCreatorConstraints().
+     */
+    const MIN_VIDEO_SECONDS = 3;
+
+    const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/quicktime', 'video/webm'];
 
     public function getAccount(): SocialProviderResponse
     {
@@ -144,7 +151,7 @@ trait ManagesResources
     /**
      * TikTok's Content Posting API has no delete endpoint — a published video can only be removed
      * by the creator in the app. Reporting OK matches how FacebookPageProvider and MastodonProvider
-     * handle the same gap: deleting the post in Mixpost should not fail because the network cannot
+     * handle the same gap: deleting the post in Mixpost Live should not fail because the network cannot
      * follow.
      */
     public function deletePost($id): SocialProviderResponse
@@ -186,7 +193,7 @@ trait ManagesResources
         // bytes have to be readable from here. External media is a bare URL with no file behind it.
         if ($video->disk === 'external_media' || (int) $video->size <= 0) {
             return $this->response(SocialProviderResponseStatus::ERROR, [
-                "The video {$video->name} is not stored in Mixpost, so its file cannot be uploaded to TikTok.",
+                "The video {$video->name} is not stored in Mixpost Live, so its file cannot be uploaded to TikTok.",
             ]);
         }
 
@@ -195,6 +202,22 @@ trait ManagesResources
 
             return $this->response(SocialProviderResponseStatus::ERROR, [
                 "The video is {$sizeInGb} GB. TikTok's limit is 4 GB.",
+            ]);
+        }
+
+        if (! in_array($video->mime_type, self::ALLOWED_VIDEO_TYPES, true)) {
+            return $this->response(SocialProviderResponseStatus::ERROR, [
+                "The video {$video->name} is a {$video->mime_type} file. TikTok accepts MP4, MOV and WEBM.",
+            ]);
+        }
+
+        $duration = MediaProbe::for($video)?->duration;
+
+        if ($duration !== null && $duration < self::MIN_VIDEO_SECONDS) {
+            $rounded = round($duration, 1);
+
+            return $this->response(SocialProviderResponseStatus::ERROR, [
+                "The video is {$rounded}s long. TikTok requires at least ".self::MIN_VIDEO_SECONDS.'s.',
             ]);
         }
 
@@ -224,8 +247,10 @@ trait ManagesResources
             ]);
         }
 
+        // The ceiling belongs to the creator, not to TikTok — a verified account may be allowed ten
+        // minutes where a new one is allowed one — so it is read from the answer rather than fixed.
         $maxDuration = (int) Arr::get($constraints, 'max_video_post_duration_sec', 0);
-        $duration = $this->probeVideoDurationSeconds($video);
+        $duration = MediaProbe::for($video)?->duration;
 
         if ($maxDuration > 0 && $duration !== null && $duration > $maxDuration) {
             $rounded = (int) ceil($duration);
@@ -313,31 +338,5 @@ trait ManagesResources
     protected function utf16Length(string $text): int
     {
         return (int) (strlen(mb_convert_encoding($text, 'UTF-16LE', 'UTF-8')) / 2);
-    }
-
-    /**
-     * Duration is not stored on media, so it has to be measured. This is best-effort on purpose:
-     * ffmpeg is an optional dependency and probing a file on S3 would mean downloading it twice, so
-     * remote media is left to TikTok's own `duration_check_failed`, which publishPost() surfaces
-     * with a readable message.
-     */
-    protected function probeVideoDurationSeconds(Media $video): ?float
-    {
-        if (! Util::isFFmpegInstalled() || ! $video->isLocalAdapter() || $video->disk === 'external_media') {
-            return null;
-        }
-
-        try {
-            $duration = FFProbe::create([
-                'ffmpeg.binaries' => Util::config('ffmpeg_path'),
-                'ffprobe.binaries' => Util::config('ffprobe_path'),
-            ])->format($video->getFullPath())->get('duration');
-
-            return $duration !== null ? (float) $duration : null;
-        } catch (\Throwable) {
-            // A file ffprobe cannot read is not automatically a file TikTok cannot read, so this
-            // never blocks the post on its own.
-            return null;
-        }
     }
 }

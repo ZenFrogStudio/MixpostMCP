@@ -2,6 +2,44 @@
 
 All notable changes to Mixpost Live will be documented in this file.
 
+## 2.21.0 - 2026-08-29
+
+**Added**
+
+- **Per-platform media validation.** Every network enforces its own rules about the media itself —
+  how long a video may run, what shape an image may be, which container formats it accepts — and a
+  violation used to surface as an opaque API rejection inside a queued job, long after whoever wrote
+  the post had moved on. Each provider now checks the file against its own rules inside
+  `publishPost()`, before a single byte is uploaded, and every message names the real limit and the
+  real value: *"The video is 1s long. TikTok requires at least 3s."*
+  - Validation lives in the provider, not in the media library. The same file is valid for LinkedIn
+    and invalid for TikTok, so a single verdict at upload time would be wrong by construction.
+  - **Instagram** — feed images must sit between 0.8:1 (4:5 portrait) and 1.91:1 landscape; video is
+    published as a Reel and capped at 15 minutes; JPEG and PNG images, MP4 and MOV video.
+  - **TikTok** — a 3 second floor, which is TikTok's own. The *ceiling* is read from the creator
+    info query rather than fixed in code, because it varies per creator. MP4, MOV and WEBM.
+  - **YouTube** — descriptions over 5000 characters, and `<` or `>` anywhere in the title or
+    description, are now rejected by name rather than silently stripped and truncated. YouTube
+    refuses both outright, and only after the whole file has been uploaded — which costs the
+    transfer and a slice of the channel's daily quota as well.
+  - **LinkedIn** — video must run between 3 seconds and 30 minutes.
+  - **X** — a GIF over 15 MB is rejected up front. `max_file_size.gif` guards the library at upload
+    time, but that is one operator setting covering every network, and a GIF can be in the library
+    and still be too big for X.
+- **`MediaProbe`.** One small helper in `src/Support/` that reports a file's duration, width, height
+  and aspect ratio. Video is measured with ffprobe; images are measured with `getimagesize()`, so an
+  image-only post never launches ffmpeg. Results are cached on the media row, because the same file
+  is checked once per network it goes to. It is best effort by design: media on a remote disk, or an
+  install without ffmpeg, returns nothing at all and every rule lets the post through rather than
+  blocking work that would have succeeded.
+
+**Note**
+
+- Non-conforming video is **rejected, not re-encoded.** `php-ffmpeg` could transcode it
+  automatically, but silent re-encoding is slow, lossy and surprising — someone who uploaded a
+  specific file expects that file to be posted. If transcoding is wanted it should be an explicit,
+  opt-in action.
+
 ## 2.20.0 - 2026-08-29
 
 **Fixed**

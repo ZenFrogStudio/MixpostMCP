@@ -5,7 +5,11 @@ use Inovector\Mixpost\SocialProviders\TikTok\TikTokProvider;
 
 beforeEach(function () {
     Http::preventStrayRequests();
-    Http::fake();
+
+    // An empty array turns recording on without registering a catch-all stub. A catch-all would be
+    // matched ahead of the specific stubs the tests below register, since the first stub to answer
+    // wins.
+    Http::fake([]);
 
     $this->provider = makeProvider(TikTokProvider::class, 'tiktok');
 });
@@ -64,6 +68,75 @@ it('rejects a text-only post without calling TikTok', function () {
 
     expect($response->hasError())->toBeTrue()
         ->and($response->context()[0])->toContain('must include a video');
+
+    Http::assertNothingSent();
+});
+
+it('rejects a video under three seconds and names the minimum', function () {
+    $response = $this->provider->publishPost('A quick clip', collect([
+        mediaWithProbe('video/mp4', ['duration' => 1.0]),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('The video is 1s long')
+        ->toContain('at least 3s');
+
+    // The floor is TikTok's own, so it costs nothing to find out — not even the creator info call.
+    Http::assertNothingSent();
+});
+
+it('reads the maximum duration from creator info rather than a constant', function () {
+    // The ceiling is per-creator: a verified account may be allowed ten minutes where a new one is
+    // allowed one. A hard-coded maximum would reject a video this creator is allowed to post.
+    Http::fake([
+        '*/post/publish/creator_info/query/' => Http::response([
+            'data' => [
+                'privacy_level_options' => ['PUBLIC_TO_EVERYONE'],
+                'max_video_post_duration_sec' => 60,
+            ],
+        ]),
+    ]);
+
+    $response = $this->provider
+        ->useAccessToken(['access_token' => 'a-token'])
+        ->publishPost('A long clip', collect([
+            mediaWithProbe('video/mp4', ['duration' => 120.0]),
+        ]), ['privacy_level' => 'PUBLIC_TO_EVERYONE']);
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('120 seconds long')
+        ->toContain('at most 60 seconds');
+});
+
+it('lets a video this creator is allowed to post through the duration checks', function () {
+    // The regression that matters: validation that is too strict blocks work that used to succeed.
+    Http::fake([
+        '*/post/publish/creator_info/query/' => Http::response([
+            'data' => [
+                'privacy_level_options' => ['PUBLIC_TO_EVERYONE'],
+                'max_video_post_duration_sec' => 600,
+            ],
+        ]),
+        '*/post/publish/video/init/' => Http::response(['data' => []]),
+    ]);
+
+    $response = $this->provider
+        ->useAccessToken(['access_token' => 'a-token'])
+        ->publishPost('A normal clip', collect([
+            mediaWithProbe('video/mp4', ['duration' => 30.0]),
+        ]), ['privacy_level' => 'PUBLIC_TO_EVERYONE']);
+
+    // It got past validation and reached the upload, which is the only claim being made here.
+    expect($response->context()[0])->toContain('did not return an upload URL');
+});
+
+it('rejects a video format TikTok does not accept', function () {
+    $response = $this->provider->publishPost('A clip', collect([
+        mediaWithProbe('video/x-msvideo', ['duration' => 10.0], ['name' => 'clip.avi']),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('MP4, MOV and WEBM');
 
     Http::assertNothingSent();
 });

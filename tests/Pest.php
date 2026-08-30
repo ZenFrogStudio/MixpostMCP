@@ -4,6 +4,7 @@ use GuzzleHttp\Psr7\Response as Psr7Response;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Inovector\Mixpost\Abstracts\SocialProvider;
+use Inovector\Mixpost\Models\Media;
 use Inovector\Mixpost\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);
@@ -57,6 +58,24 @@ function queryParams(string $url): array
     parse_str((string) parse_url($url, PHP_URL_QUERY), $params);
 
     return $params;
+}
+
+/**
+ * A saved Media row whose probe result is already cached, so a rule that reads a duration or a frame
+ * size can be tested without ffprobe and without a real file on disk. MediaProbe reads its cache
+ * before it looks for anything to measure, which is exactly the path a second network publishing the
+ * same file takes.
+ *
+ * $probe takes any of `duration` (seconds), `width` and `height`.
+ */
+function mediaWithProbe(string $mimeType, array $probe, array $attributes = []): Media
+{
+    return Media::factory()->create(array_merge([
+        'name' => 'clip.mp4',
+        'mime_type' => $mimeType,
+        'size' => 1024,
+        'data' => ['probe' => $probe],
+    ], $attributes));
 }
 
 /**

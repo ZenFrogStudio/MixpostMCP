@@ -51,6 +51,44 @@ it('refuses a callback whose state does not match', function () {
     Http::assertNothingSent();
 });
 
+it('rejects a video longer than LinkedIn\'s thirty minute maximum', function () {
+    $response = $this->provider->publishPost('A long video', collect([
+        mediaWithProbe('video/mp4', ['duration' => 2700.0]),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('45 minutes long')
+        ->toContain('at most 30 minutes');
+
+    Http::assertNothingSent();
+});
+
+it('rejects a video shorter than LinkedIn\'s three second minimum', function () {
+    $response = $this->provider->publishPost('A quick clip', collect([
+        mediaWithProbe('video/mp4', ['duration' => 1.5]),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('1.5s long')
+        ->toContain('at least 3s');
+
+    Http::assertNothingSent();
+});
+
+it('lets a video inside the bounds reach the upload', function () {
+    // The regression that matters: validation that is too strict blocks work that used to succeed.
+    $provider = makeProvider(LinkedInProvider::class, 'linkedin', ['provider_id' => 'urn:li:person:abc'])
+        ->useAccessToken(['access_token' => 'a-token']);
+
+    $response = $provider->publishPost('A normal video', collect([
+        mediaWithProbe('video/mp4', ['duration' => 60.0]),
+    ]));
+
+    // The faked initializeUpload answers with an empty body, so the flow stops one step past
+    // validation. Getting there is the claim: the video itself was accepted.
+    expect($response->context()[0])->toContain('did not return a usable upload URL');
+});
+
 it('returns a well-formed post options schema', function () {
     assertWellFormedPostOptions(LinkedInProvider::postOptions());
 });

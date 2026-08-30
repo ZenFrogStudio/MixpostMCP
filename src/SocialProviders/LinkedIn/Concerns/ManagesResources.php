@@ -7,11 +7,20 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
 use Inovector\Mixpost\Models\Media;
+use Inovector\Mixpost\Support\MediaProbe;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 use Inovector\Mixpost\Util;
 
 trait ManagesResources
 {
+    /**
+     * LinkedIn's own video bounds. These are the API's limits rather than a composer setting, so
+     * they are fixed here rather than read from `social_provider_options.linkedin`.
+     */
+    const MIN_VIDEO_SECONDS = 3;
+
+    const MAX_VIDEO_SECONDS = 1800; // 30 minutes
+
     public function getAccount(): SocialProviderResponse
     {
         return $this->isOrganization() ? $this->getOrganizationAccount() : $this->getMemberAccount();
@@ -116,6 +125,10 @@ trait ManagesResources
                 ]);
             }
 
+            if ($rejection = $this->rejectUnpostableVideo($video)) {
+                return $rejection;
+            }
+
             $upload = $this->uploadVideo($video);
 
             return $upload->hasError() ? $upload : ['media' => ['id' => $upload->id()]];
@@ -141,6 +154,42 @@ trait ManagesResources
         }
 
         return ['multiImage' => ['images' => array_map(fn ($urn) => ['id' => $urn], $urns)]];
+    }
+
+    /**
+     * A video outside LinkedIn's bounds is only found out about after every part of a multi-part
+     * upload has been sent — so checking here saves the whole transfer, and says which bound was
+     * missed instead of leaving a `PROCESSING_FAILED` with no reason attached.
+     *
+     * A duration that could not be measured is not a rejection: the file may be on a remote disk or
+     * ffmpeg may not be installed, and blocking a valid post over that would be worse than letting
+     * LinkedIn decide.
+     */
+    protected function rejectUnpostableVideo(Media $video): ?SocialProviderResponse
+    {
+        $duration = MediaProbe::for($video)?->duration;
+
+        if ($duration === null) {
+            return null;
+        }
+
+        if ($duration < self::MIN_VIDEO_SECONDS) {
+            $rounded = round($duration, 1);
+
+            return $this->response(SocialProviderResponseStatus::ERROR, [
+                "The video is {$rounded}s long. LinkedIn requires at least ".self::MIN_VIDEO_SECONDS.'s.',
+            ]);
+        }
+
+        if ($duration > self::MAX_VIDEO_SECONDS) {
+            $minutes = round($duration / 60, 1);
+
+            return $this->response(SocialProviderResponseStatus::ERROR, [
+                "The video is {$minutes} minutes long. LinkedIn allows at most 30 minutes.",
+            ]);
+        }
+
+        return null;
     }
 
     /**

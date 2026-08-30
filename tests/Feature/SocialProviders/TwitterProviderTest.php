@@ -1,5 +1,6 @@
 <?php
 
+use Inovector\Mixpost\Models\Media;
 use Inovector\Mixpost\SocialProviders\Twitter\TwitterProvider;
 
 /**
@@ -13,6 +14,23 @@ it('reports its display name as X', function () {
 
 it('returns a well-formed post options schema', function () {
     assertWellFormedPostOptions(TwitterProvider::postOptions());
+});
+
+it('rejects a GIF over X\'s fifteen megabyte limit, naming the limit', function () {
+    // X only says so after the whole file has been sent chunk by chunk, and `max_file_size.gif` is
+    // one operator setting covering every network — a GIF can be in the library and still be too
+    // big for X.
+    $gif = Media::factory()->create([
+        'name' => 'loop.gif',
+        'mime_type' => 'image/gif',
+        'size' => 20 * 1024 * 1024,
+    ]);
+
+    $response = makeProvider(TwitterProvider::class, 'twitter')->publishPost('A big loop', collect([$gif]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('is 20 MB')
+        ->toContain("X's limit is 15 MB");
 });
 
 it('applies the configured composer limits', function () {

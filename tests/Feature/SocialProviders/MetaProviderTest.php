@@ -47,6 +47,53 @@ it('rejects a text-only Instagram post without calling the Graph API', function 
     Http::assertNothingSent();
 });
 
+it('rejects a feed image outside Instagram\'s aspect ratio bounds and names the bound', function () {
+    $response = makeProvider(InstagramProvider::class, 'instagram')->publishPost('A tall photo', collect([
+        mediaWithProbe('image/jpeg', ['width' => 600, 'height' => 1200], ['name' => 'tall.jpg']),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('600×1200')
+        ->toContain('0.5:1')
+        ->toContain('0.8:1 (4:5 portrait)');
+
+    Http::assertNothingSent();
+});
+
+it('rejects a video longer than a Reel can be', function () {
+    $response = makeProvider(InstagramProvider::class, 'instagram')->publishPost('A long video', collect([
+        mediaWithProbe('video/mp4', ['duration' => 1200.0], ['name' => 'long.mp4']),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('runs 20 minutes')
+        ->toContain('capped at 15 minutes');
+
+    Http::assertNothingSent();
+});
+
+it('rejects a file format Instagram does not accept', function () {
+    $response = makeProvider(InstagramProvider::class, 'instagram')->publishPost('An animation', collect([
+        mediaWithProbe('image/gif', ['width' => 1080, 'height' => 1080], ['name' => 'loop.gif']),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('JPEG and PNG images');
+
+    Http::assertNothingSent();
+});
+
+it('lets a square feed image past the media rules', function () {
+    // The regression that matters: validation that is too strict blocks work that used to succeed.
+    $response = makeProvider(InstagramProvider::class, 'instagram')->publishPost('A photo', collect([
+        mediaWithProbe('image/jpeg', ['width' => 1080, 'height' => 1080], ['name' => 'square.jpg', 'path' => 'square.jpg']),
+    ]));
+
+    // Instagram downloads media by URL and a test disk has no public host, so the next check along
+    // is the one that stops it. Reaching that check is the claim here: the file itself was accepted.
+    expect($response->context()[0])->toContain('reachable from the public internet');
+});
+
 it('returns a well-formed Instagram post options schema', function () {
     assertWellFormedPostOptions(InstagramProvider::postOptions());
 });

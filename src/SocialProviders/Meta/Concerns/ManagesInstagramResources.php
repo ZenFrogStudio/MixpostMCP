@@ -7,11 +7,25 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
 use Inovector\Mixpost\Models\Media;
+use Inovector\Mixpost\Support\MediaProbe;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 use Inovector\Mixpost\Util;
 
 trait ManagesInstagramResources
 {
+    /**
+     * A feed image has to sit between 4:5 portrait and 1.91:1 landscape. Instagram used to crop
+     * anything outside that; it now refuses the container instead, with a bare error code.
+     */
+    const MIN_IMAGE_RATIO = 0.8; // 4:5
+
+    const MAX_IMAGE_RATIO = 1.91;
+
+    /**
+     * Every Instagram video is published as a Reel, and a Reel runs at most 15 minutes.
+     */
+    const MAX_VIDEO_SECONDS = 900;
+
     public function getAccount(): SocialProviderResponse
     {
         $response = Http::get("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}", [
@@ -106,12 +120,18 @@ trait ManagesInstagramResources
             ]);
         }
 
+        // A carousel is 2 to 10 items: one item is published as a single post below rather than
+        // rejected, so only the upper bound needs checking here.
         $maxItems = Util::config('social_provider_options.instagram.media_limit.photos', 10);
 
         if ($media->count() > $maxItems) {
             return $this->response(SocialProviderResponseStatus::ERROR, [
                 "Instagram allows up to $maxItems items in a carousel, this post has {$media->count()}.",
             ]);
+        }
+
+        if ($rejection = $this->rejectUnpostableMedia($media)) {
+            return $rejection;
         }
 
         // Resolve every URL before calling the API, so an unreachable file fails with a clear
@@ -146,6 +166,73 @@ trait ManagesInstagramResources
     {
         // The Graph API cannot delete published Instagram posts.
         return $this->response(SocialProviderResponseStatus::OK, []);
+    }
+
+    /**
+     * Instagram's rules for the files themselves, checked before the first container is created.
+     * A container that violates one still costs a Graph call and comes back as an error code with
+     * no indication of which file or which limit was the problem.
+     */
+    protected function rejectUnpostableMedia(Collection $media): ?SocialProviderResponse
+    {
+        foreach ($media as $item) {
+            if ($rejection = $this->rejectUnpostableFormat($item)) {
+                return $rejection;
+            }
+
+            $probe = MediaProbe::for($item);
+
+            // Nothing could be measured — a remote disk, or ffmpeg not installed. Let Instagram be
+            // the judge rather than blocking a post that is probably fine.
+            if (! $probe) {
+                continue;
+            }
+
+            if ($item->isVideo()) {
+                if ($probe->duration !== null && $probe->duration > self::MAX_VIDEO_SECONDS) {
+                    $minutes = round($probe->duration / 60, 1);
+
+                    return $this->response(SocialProviderResponseStatus::ERROR, [
+                        "\"$item->name\" runs $minutes minutes. Instagram publishes video as a Reel, which is capped at 15 minutes.",
+                    ]);
+                }
+
+                continue;
+            }
+
+            $ratio = $probe->aspectRatio();
+
+            if ($ratio !== null && ($ratio < self::MIN_IMAGE_RATIO || $ratio > self::MAX_IMAGE_RATIO)) {
+                return $this->response(SocialProviderResponseStatus::ERROR, [
+                    sprintf(
+                        '"%s" is %d×%d, an aspect ratio of %s:1. Instagram accepts feed images between 0.8:1 (4:5 portrait) and 1.91:1 (landscape).',
+                        $item->name,
+                        $probe->width,
+                        $probe->height,
+                        round($ratio, 2)
+                    ),
+                ]);
+            }
+        }
+
+        return null;
+    }
+
+    protected function rejectUnpostableFormat(Media $item): ?SocialProviderResponse
+    {
+        $allowed = $item->isVideo()
+            ? ['video/mp4', 'video/quicktime']
+            : ['image/jpg', 'image/jpeg', 'image/png'];
+
+        if (in_array($item->mime_type, $allowed, true)) {
+            return null;
+        }
+
+        $readable = $item->isVideo() ? 'MP4 and MOV video' : 'JPEG and PNG images';
+
+        return $this->response(SocialProviderResponseStatus::ERROR, [
+            "\"$item->name\" is a $item->mime_type file. Instagram accepts $readable.",
+        ]);
     }
 
     protected function publishInstagramSingle(string $text, Media $item, string $url, bool $shareToFeed): SocialProviderResponse

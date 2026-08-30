@@ -29,11 +29,13 @@ class Media extends Model
         'size',
         'size_total',
         'conversions',
+        'data',
     ];
 
     protected $casts = [
         'id' => 'string',
         'conversions' => 'array',
+        'data' => 'array',
     ];
 
     public function getFullPath(): string

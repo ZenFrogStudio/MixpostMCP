@@ -39,6 +39,14 @@ trait ManagesResources
      */
     protected const MEDIA_CHUNK_BYTES = 4194304;
 
+    /**
+     * X caps an animated GIF at 15 MB, and only says so after the whole file has been sent chunk by
+     * chunk. `max_file_size.gif` guards the media library at upload time and happens to default to
+     * the same number, but that is one operator setting covering every network — this is X's own
+     * limit, and it also catches a GIF that entered the library before the setting was lowered.
+     */
+    protected const MAX_GIF_BYTES = 15728640;
+
     public function getAccount(): SocialProviderResponse
     {
         $response = $this->connection->get('users/me', ['user.fields' => 'profile_image_url,created_at']);
@@ -55,6 +63,10 @@ trait ManagesResources
 
     public function publishPost(string $text, Collection $media, array $params = []): SocialProviderResponse
     {
+        if ($rejection = $this->rejectUnpostableMedia($media)) {
+            return $rejection;
+        }
+
         try {
             $mediaResult = $this->uploadMedia($media);
         } catch (TwitterMediaUploadRateLimit $exception) {
@@ -77,6 +89,24 @@ trait ManagesResources
             'legacy' => $this->storePostWithApiV1($text, $mediaResult),
             default => $this->storePostWithApiV2($text, $mediaResult),
         };
+    }
+
+    /**
+     * Everything X would refuse about a file, checked before the first chunk is uploaded.
+     */
+    protected function rejectUnpostableMedia(Collection $media): ?SocialProviderResponse
+    {
+        foreach ($media as $item) {
+            if ($item->isImageGif() && (int) $item->size > self::MAX_GIF_BYTES) {
+                $sizeInMb = round($item->size / 1024 / 1024, 1);
+
+                return $this->response(SocialProviderResponseStatus::ERROR, [
+                    "The GIF \"$item->name\" is {$sizeInMb} MB. X's limit is 15 MB.",
+                ]);
+            }
+        }
+
+        return null;
     }
 
     protected function storePostWithApiV1(string $text, array $mediaResult): SocialProviderResponse

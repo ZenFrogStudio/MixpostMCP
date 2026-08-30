@@ -107,13 +107,56 @@ it('truncates a long title on a word boundary', function () {
         ->and($title)->toEndWith('shed');
 });
 
-it('strips angle brackets from the title and description', function () {
-    // YouTube rejects `<` and `>` outright rather than escaping them, and only after the file has
-    // already been uploaded.
+it('leaves the post text alone rather than quietly editing it', function () {
+    // Only the title is shortened here. Anything YouTube would refuse is left intact so the publish
+    // path can reject it by name instead of publishing something the author did not write.
     [$title, $description] = YouTubeProvider::deriveTitleAndDescription("A <b>bold</b> title\nAnd a <i>body</i>");
 
-    expect($title)->toBe('A bbold/b title')
-        ->and($description)->toBe('And a ibody/i');
+    expect($title)->toBe('A <b>bold</b> title')
+        ->and($description)->toBe('And a <i>body</i>');
+});
+
+it('rejects a title containing an angle bracket without calling YouTube', function () {
+    $response = $this->provider->publishPost("A <b>bold</b> title\nAnd a body", collect([
+        mediaWithProbe('video/mp4', ['duration' => 60.0]),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('The video title contains `<`')
+        ->toContain('YouTube rejects `<` and `>`');
+
+    // An upload thrown away at the end costs the transfer and a slice of the daily quota.
+    Http::assertNothingSent();
+});
+
+it('rejects a description over five thousand characters, naming the limit', function () {
+    $description = str_repeat('a', 5001);
+
+    $response = $this->provider->publishPost("A title\n$description", collect([
+        mediaWithProbe('video/mp4', ['duration' => 60.0]),
+    ]));
+
+    expect($response->hasError())->toBeTrue()
+        ->and($response->context()[0])->toContain('5001 characters')
+        ->toContain("YouTube's limit is 5000");
+
+    Http::assertNothingSent();
+});
+
+it('lets an ordinary title and description through', function () {
+    // The regression that matters: validation that is too strict blocks work that used to succeed.
+    $provider = makeProvider(YouTubeProvider::class, 'youtube', ['provider_id' => 'a-channel'])
+        ->useAccessToken(['access_token' => 'a-token']);
+
+    Http::fake(['*upload/youtube/v3/videos*' => Http::response([], 200)]);
+
+    $response = $provider->publishPost("How I built a shed\nIt took a weekend.", collect([
+        mediaWithProbe('video/mp4', ['duration' => 60.0]),
+    ]));
+
+    // The faked session response carries no Location header, so the flow stops one step past
+    // validation. Getting there is the claim: the text itself was accepted.
+    expect($response->context()[0])->toContain('upload session');
 });
 
 it('stores token expiry as an absolute timestamp that tokenIsAboutToExpire can read', function () {

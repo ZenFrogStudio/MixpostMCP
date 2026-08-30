@@ -163,35 +163,29 @@ class YouTubeProvider extends SocialProvider
      * panel supplies a title — in which case the whole body is the description and nothing is
      * quietly eaten from the post.
      *
-     * `<` and `>` are stripped from both because YouTube rejects them outright rather than escaping
-     * them, and it does so only after the file has been uploaded.
+     * Only the title is shortened here, because YouTube's title limit is a formatting decision with
+     * an obvious right answer. Anything else YouTube would refuse — angle brackets, an over-long
+     * description — is left intact for the publish path to reject by name, so the post is never
+     * silently altered on its way out.
      *
      * Returns `[$title, $description]`. The title can come back empty when the post has no text at
      * all; publishPost() substitutes the file name, because YouTube refuses an untitled video.
      */
     public static function deriveTitleAndDescription(string $text, array $params = []): array
     {
-        $body = trim(self::stripAngleBrackets($text));
-        $explicitTitle = trim(self::stripAngleBrackets((string) Arr::get($params, 'title', '')));
+        $body = trim($text);
+        $explicitTitle = trim((string) Arr::get($params, 'title', ''));
 
         if ($explicitTitle !== '') {
-            return [
-                self::truncateOnWordBoundary($explicitTitle, self::TITLE_LIMIT),
-                mb_substr($body, 0, self::DESCRIPTION_LIMIT),
-            ];
+            return [self::truncateOnWordBoundary($explicitTitle, self::TITLE_LIMIT), $body];
         }
 
         $lines = preg_split("/\r\n|\n|\r/", $body, 2);
 
         return [
             self::truncateOnWordBoundary(trim($lines[0] ?? ''), self::TITLE_LIMIT),
-            mb_substr(trim($lines[1] ?? ''), 0, self::DESCRIPTION_LIMIT),
+            trim($lines[1] ?? ''),
         ];
-    }
-
-    protected static function stripAngleBrackets(string $text): string
-    {
-        return str_replace(['<', '>'], '', $text);
     }
 
     /**
