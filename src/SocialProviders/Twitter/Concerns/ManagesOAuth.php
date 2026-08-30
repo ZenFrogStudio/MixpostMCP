@@ -24,15 +24,22 @@ trait ManagesOAuth
         ];
     }
 
-    // Overwrite setAccessToken to use Twitter SDK
+    // Overwrite setAccessToken to use Twitter SDK.
+    // The token is also kept on the provider because media uploads bypass the SDK and sign
+    // themselves — see ManagesResources::mediaUploadAuthorization(). Without this, getAccessToken()
+    // would fall through to the session and throw inside a queued job.
     public function setAccessToken(array $token = []): void
     {
+        $this->accessToken = $token;
+
         $this->connection->setOauthToken($token['oauth_token'], $token['oauth_token_secret']);
     }
 
     // Overwrite useAccessToken to use Twitter SDK
     public function useAccessToken(array $token = []): static
     {
+        $this->accessToken = $token;
+
         $this->connection->setOauthToken($token['oauth_token'], $token['oauth_token_secret']);
 
         return $this;

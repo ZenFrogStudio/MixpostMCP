@@ -2,6 +2,48 @@
 
 All notable changes to Mixpost Live will be documented in this file.
 
+## 2.20.0 - 2026-08-29
+
+**Fixed**
+
+- **Media posting on X.** Photos, GIFs and video uploaded to `upload.twitter.com/1.1`, which X
+  sunset on 9 June 2025, so every post with an attachment failed. Uploads now run X's v2 chunked
+  flow — INIT, an APPEND per chunk, FINALIZE, then STATUS while X transcodes — against
+  `https://api.x.com/2/media/upload`. Text-only posting is untouched.
+  - The `inovector/twitteroauth` SDK cannot reach the v2 endpoint at all: `upload()` and
+    `mediaStatus()` hardcode the retired host, the host constants are `private` so there is nothing
+    to override, and the request builder only writes urlencoded or JSON bodies while APPEND needs a
+    multipart file part. Transport is now Laravel's HTTP client. **The OAuth 1.0a signing is still
+    the SDK's** — `Request`, `HmacSha1`, `Consumer` and `Token` driven directly — so no signing code
+    was hand-rolled. Body fields are correctly left out of the signature base string, which OAuth
+    1.0a only covers for urlencoded bodies.
+  - X publishes two contradictory shapes for this flow. We use the single-URL form with a `command`
+    field, per the chunked-upload quickstart; the alternative REST paths (`/initialize`, `/append`,
+    `/{id}/finalize`) are recorded in `README.md` as the fallback to try. **This choice comes from
+    the docs, not from a live call** — see the caveat below.
+  - Chunks are capped at 4 MiB, under X's 5 MB APPEND limit, so a large video is split across
+    several APPEND requests.
+  - Photos now take the chunked path too, because v2 has no single-shot upload.
+  - `media_category` for video is now `amplify_video` rather than v1.1's `tweet_video`.
+  - A 403 no longer reads as a generic auth failure: it names the `media.write` scope and says to
+    set the X app to *Read and write* and reconnect the account. Uploading is scoped separately from
+    posting, so a token that publishes text happily still 403s the first time it sees a file.
+  - A 429 during upload now releases the queued job with the right retry delay instead of marking
+    the post failed. On the free tier INIT and FINALIZE share the 17-per-24-hours allowance with
+    `POST /2/tweets`, so hitting the cap mid-upload is routine and the media is still uploadable
+    later.
+  - The processing-status poll is unchanged apart from the response shape — v2 nests everything
+    under `data` — except that a FINALIZE which is already terminal no longer sleeps before checking.
+  - `TwitterProvider` now keeps the access token on the provider as well as inside the SDK. The
+    Twitter override of `useAccessToken()`/`setAccessToken()` only ever handed it to the SDK, so
+    `getAccessToken()` fell through to the session and threw inside a queued job.
+
+> **Not verified against live X credentials.** This checkout has no X app credentials, and no PHP
+> runtime or `vendor/` directory, so neither the test suite nor a real photo/GIF/video post could be
+> run here. The wire format was derived from X's published docs and from reading
+> `inovector/twitteroauth` v7.1.0's source directly. Confirm with a real photo, GIF and video post
+> before trusting this.
+
 ## 2.19.0 - 2026-08-29
 
 **Added**

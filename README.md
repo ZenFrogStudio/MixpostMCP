@@ -111,11 +111,27 @@ month; Basic to roughly 50,000 app-wide. Once you hit the cap X rejects every pu
 of the billing cycle, and from Mixpost Live that looks like posts failing for no reason. Check your
 usage in the portal dashboard before assuming something is broken.
 
-> **Known issue: media posting on X is likely broken.**
-> X sunset the v1.1 media upload endpoints on 9 June 2025 and Mixpost Live still uploads through them,
-> because the `inovector/twitteroauth` package it uses only speaks v1.1
-> (`https://upload.twitter.com/1.1/media/upload.json`). Text-only posts go through the v2 `tweets`
-> endpoint and are unaffected. Migrating uploads to `/2/media/upload` has not been done yet.
+**Media uploads use the v2 endpoint.** X sunset the v1.1 upload host on 9 June 2025, so photos, GIFs
+and video all go through `POST https://api.x.com/2/media/upload` as an INIT / APPEND / FINALIZE /
+STATUS sequence.
+
+X documents two contradictory shapes for that flow, so to save the next person re-deriving it:
+Mixpost Live uses the **single-URL form**, sending `command=INIT|APPEND|FINALIZE` as multipart form
+fields to `/2/media/upload`, per the [chunked upload
+quickstart](https://docs.x.com/x-api/media/quickstart/media-upload-chunked). The alternative — the
+REST paths `/2/media/upload/initialize`, `/append` and `/{id}/finalize` in the API reference — is
+not used. Chosen from the docs on **29 August 2026**; it has *not* yet been confirmed against a live
+upload with real credentials. If uploads start failing with 404 or 405, the REST paths are the first
+thing to try.
+
+Two things to know if uploads fail:
+
+- **Uploading is scoped separately from posting.** A token that publishes text fine can still get a
+  403 the first time it is handed a file — that is the `media.write` scope missing. Set the X app to
+  *Read and write* in the Developer Portal, then reconnect the account so a new token is issued.
+- **Uploads eat your posting allowance.** On the free tier the INIT and FINALIZE steps share the
+  same 17-per-24-hours budget as `POST /2/tweets`, so a single video costs three requests. When X
+  rate limits an upload, Mixpost Live releases the job and retries later rather than failing the post.
 
 ### LinkedIn
 
