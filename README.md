@@ -219,11 +219,10 @@ Three networks issue short-lived access tokens and depend on scheduled refresh:
 | Facebook / Instagram | about 60 days | Exchanged for a long-lived token when you connect, so no refresh needed |
 | Mastodon | does not expire | Nothing |
 
-> **Not yet implemented.** The `mixpost:refresh-access-tokens` command that performs this sweep has
-> not been written, and nothing is registered in `src/Schedule.php` to run it. YouTube, TikTok and
-> LinkedIn each implement `refreshAccessToken()`, but no scheduled job calls it — so for now a
-> YouTube account stops posting about an hour after you connect it, and a TikTok account a day
-> after, and both have to be reconnected by hand.
+The sweep is `mixpost:refresh-access-tokens`, registered in `src/Schedule.php` to run every thirty
+minutes. It renews any token due to expire within the next ten minutes and marks an account
+unauthorized if its refresh token has died, which lights up the Unauthorized badge on the accounts
+page. All of that depends on the cron entry above being in place.
 
 ## Changelog
 

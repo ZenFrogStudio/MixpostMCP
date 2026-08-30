@@ -62,6 +62,44 @@ trait ManagesOAuth
     }
 
     /**
+     * LinkedIn access tokens last about 60 days, so without this an account connected today stops
+     * publishing two months later with no warning.
+     *
+     * Only apps approved for programmatic refresh are issued a refresh token, so a stored token may
+     * not have one. That case is reported as an error rather than retried: the account genuinely
+     * has to be reconnected by hand, and saying so beats a silent loop that never succeeds.
+     *
+     * Returns the persisted token, or `['error' => ...]` when the refresh was refused.
+     */
+    public function refreshAccessToken(): array
+    {
+        $refreshToken = Arr::get($this->getAccessToken(), 'refresh_token');
+
+        if (! $refreshToken) {
+            return ['error' => 'This LinkedIn account has no refresh token. Reconnect the account.'];
+        }
+
+        $response = Http::asForm()->post('https://www.linkedin.com/oauth/v2/accessToken', [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refreshToken,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+        ]);
+
+        $body = $response->json() ?? [];
+
+        if ($response->failed() || Arr::get($body, 'error')) {
+            return ['error' => $this->authorizationErrorMessage($body)];
+        }
+
+        $token = $this->buildToken($body);
+
+        $this->updateToken($token);
+
+        return $token;
+    }
+
+    /**
      * LinkedIn access tokens last about 60 days. Refresh tokens are only issued to apps that have
      * been approved for programmatic refresh, so `refresh_token` is stored only when it is present.
      *
@@ -88,7 +126,7 @@ trait ManagesOAuth
     /**
      * A single-use random value put in the session before the redirect and compared on return.
      * Without it, a third party could hand the user a crafted callback URL and attach their own
-     * LinkedIn account to this Mixpost install.
+     * LinkedIn account to this Mixpost Live install.
      */
     protected function verifyState(mixed $state): ?string
     {

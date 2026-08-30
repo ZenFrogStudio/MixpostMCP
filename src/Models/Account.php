@@ -129,6 +129,16 @@ class Account extends Model
         return $this->getProviderClass()::service()::isActive();
     }
 
+    /**
+     * Called by SocialProvider::updateToken() every time a provider renews its token. Without it
+     * the refresh succeeds against the network and then fails to save, so the account keeps
+     * presenting the dead token.
+     */
+    public function updateAccessToken(array $accessToken): void
+    {
+        $this->update(['access_token' => $accessToken]);
+    }
+
     public function isAuthorized(): bool
     {
         return $this->authorized;

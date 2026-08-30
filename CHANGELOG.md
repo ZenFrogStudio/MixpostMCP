@@ -2,6 +2,38 @@
 
 All notable changes to Mixpost Live will be documented in this file.
 
+## 2.19.0 - 2026-08-29
+
+**Added**
+
+- **Scheduled access token refresh.** `mixpost:refresh-access-tokens` renews any access token due to
+  expire in the next ten minutes, and `Schedule` runs it every thirty minutes. Without it a post
+  scheduled today fails when it fires: a YouTube token lasts about an hour and a TikTok token 24
+  hours, so those accounts died within a day of being connected and had to be reconnected by hand.
+  - Thirty minutes rather than hourly because a YouTube token against a ten-minute lookahead leaves
+    a gap where the token dies between two hourly runs.
+  - Accounts already marked unauthorized are skipped — their refresh token is dead, so retrying
+    spends rate limit and fixes nothing.
+  - A provider with no `refreshAccessToken()` is skipped by asking the class, not by a hard-coded
+    list, so a future network is picked up on its own. Mastodon tokens do not expire and Meta's are
+    exchanged for long-lived ones at connect time.
+  - Every account is wrapped in its own try/catch and logged through `Support\Log`, so one network
+    being down cannot abort the sweep and let every other token expire.
+  - A refused refresh marks the account unauthorized, which lights up the existing Unauthorized
+    badge on the accounts page.
+- `LinkedInProvider::refreshAccessToken()`, which did not exist. LinkedIn only issues refresh tokens
+  to apps approved for them, so an account without one returns a clear "reconnect the account"
+  error rather than sending a null and retrying forever.
+- `AccountPublishPost` now renews an about-to-expire token immediately before publishing, which
+  closes the gap where a backed-up queue hands a job a token that expired while it waited.
+
+**Fixed**
+
+- `Account::updateAccessToken()` did not exist, though `SocialProvider::updateToken()` has always
+  called it. Every token refresh would have succeeded against the network and then thrown while
+  saving, leaving the account presenting the dead token — and for TikTok, which rotates its refresh
+  token on every refresh, discarding the only replacement it will issue.
+
 ## 2.18.0 - 2026-08-29
 
 **Added**

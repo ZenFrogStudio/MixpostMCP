@@ -27,7 +27,15 @@ class AccountPublishPost
             return new SocialProviderResponse(SocialProviderResponseStatus::ERROR, $errors);
         }
 
-        $response = $this->connectProvider($account)->publishPost(
+        $provider = $this->connectProvider($account);
+
+        // The scheduled sweep renews tokens every thirty minutes, but a backed-up queue can still
+        // hand this job a token that died while it waited. Renewing here closes that gap.
+        if (method_exists($provider, 'refreshAccessToken') && $provider->tokenIsAboutToExpire()) {
+            $provider->refreshAccessToken();
+        }
+
+        $response = $provider->publishPost(
             text: $parser->formatBody($content[0]['body']),
             media: $parser->formatMedia($content[0]['media']),
             params: $parser->getVersionOptions()

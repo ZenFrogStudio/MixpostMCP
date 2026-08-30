@@ -92,3 +92,97 @@ it('only stores a refresh token when LinkedIn issues one', function () {
 
     expect($token)->not->toHaveKey('refresh_token');
 });
+
+it('refuses to refresh an account that was never issued a refresh token', function () {
+    // Only apps approved for programmatic refresh get one, so this is the common case. Sending a
+    // null refresh token would fail on every sweep with nothing telling the user why.
+    $this->provider->useAccessToken([
+        'access_token' => 'a-token',
+        'expires_in' => now('UTC')->timestamp,
+    ]);
+
+    $result = $this->provider->refreshAccessToken();
+
+    expect($result['error'])->toContain('Reconnect the account');
+
+    Http::assertNothingSent();
+});
+
+it('exchanges a refresh token for a fresh access token', function () {
+    Http::fake([
+        'https://www.linkedin.com/oauth/v2/accessToken' => Http::response([
+            'access_token' => 'a-fresh-token',
+            'expires_in' => 5184000,
+            'refresh_token' => 'a-new-refresh-token',
+            'refresh_token_expires_in' => 31536000,
+        ]),
+    ]);
+
+    // updateToken() looks the account up to persist the new token, so the id has to be present.
+    $provider = makeProvider(LinkedInProvider::class, 'linkedin', ['account_id' => 0]);
+
+    $provider->useAccessToken([
+        'access_token' => 'an-old-token',
+        'refresh_token' => 'an-old-refresh-token',
+        'expires_in' => now('UTC')->timestamp,
+    ]);
+
+    $token = $provider->refreshAccessToken();
+
+    expect($token['access_token'])->toBe('a-fresh-token')
+        ->and($token['refresh_token'])->toBe('a-new-refresh-token')
+        // Stored as an absolute timestamp, which is the shape tokenIsAboutToExpire() reads.
+        ->and($token['expires_in'])->toBeGreaterThan(now()->timestamp);
+
+    Http::assertSent(fn ($request) => $request['grant_type'] === 'refresh_token'
+        && $request['refresh_token'] === 'an-old-refresh-token'
+        && $request['client_id'] === 'test-client-id'
+        && $request['client_secret'] === 'test-client-secret');
+});
+
+it('keeps the stored refresh token when LinkedIn omits one from a refresh response', function () {
+    Http::fake([
+        'https://www.linkedin.com/oauth/v2/accessToken' => Http::response([
+            'access_token' => 'a-fresh-token',
+            'expires_in' => 5184000,
+        ]),
+    ]);
+
+    $provider = makeProvider(LinkedInProvider::class, 'linkedin', ['account_id' => 0]);
+
+    $provider->useAccessToken([
+        'access_token' => 'an-old-token',
+        'refresh_token' => 'the-only-refresh-token',
+        'expires_in' => now('UTC')->timestamp,
+    ]);
+
+    $token = $provider->refreshAccessToken();
+
+    // buildToken() must leave the key out rather than write a null over it, because updateToken()
+    // merges — an overwrite here would break the account on its next refresh.
+    expect($token)->not->toHaveKey('refresh_token')
+        ->and($provider->getAccessToken()['refresh_token'])->toBe('the-only-refresh-token');
+});
+
+it('reports a rejected refresh rather than throwing', function () {
+    Http::fake([
+        'https://www.linkedin.com/oauth/v2/accessToken' => Http::response([
+            'error' => 'invalid_grant',
+            'error_description' => 'The refresh token is expired',
+        ], 400),
+    ]);
+
+    $provider = makeProvider(LinkedInProvider::class, 'linkedin', ['account_id' => 0]);
+
+    $provider->useAccessToken([
+        'access_token' => 'an-old-token',
+        'refresh_token' => 'a-dead-refresh-token',
+        'expires_in' => now('UTC')->timestamp,
+    ]);
+
+    $result = $provider->refreshAccessToken();
+
+    expect($result['error'])->toBe('The refresh token is expired')
+        // The old token must survive a failed refresh, so nothing overwrites it with a null.
+        ->and($provider->getAccessToken()['access_token'])->toBe('an-old-token');
+});

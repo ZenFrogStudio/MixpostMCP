@@ -14,17 +14,18 @@ use Inovector\Mixpost\Commands\ImportAccountData;
 use Inovector\Mixpost\Commands\ProcessMetrics;
 use Inovector\Mixpost\Commands\PruneTemporaryDirectory;
 use Inovector\Mixpost\Commands\PublishAssetsCommand;
+use Inovector\Mixpost\Commands\RefreshAccessTokens;
 use Inovector\Mixpost\Commands\RunScheduledPosts;
 use Inovector\Mixpost\Events\AccountAdded;
 use Inovector\Mixpost\Events\AccountUnauthorized;
-use Inovector\Mixpost\Exceptions\MixpostExceptionHandler;
+use Inovector\Mixpost\Exceptions\MixpostLiveExceptionHandler;
 use Inovector\Mixpost\Listeners\HandleAccountImports;
 use Inovector\Mixpost\Listeners\SendAccountUnauthorizedNotification;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class MixpostServiceProvider extends PackageServiceProvider
+class MixpostLiveServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -49,6 +50,7 @@ class MixpostServiceProvider extends PackageServiceProvider
                 ClearSettingsCache::class,
                 ClearServicesCache::class,
                 RunScheduledPosts::class,
+                RefreshAccessTokens::class,
                 ImportAccountAudience::class,
                 ImportAccountData::class,
                 ProcessMetrics::class,
@@ -58,7 +60,7 @@ class MixpostServiceProvider extends PackageServiceProvider
                 $command
                     ->startWith(function (InstallCommand $command) {
                         $this->writeSeparationLine($command);
-                        $command->line('Mixpost Lite Installation. Self-hosted social media management software.');
+                        $command->line('Mixpost Live Installation. Self-hosted social media management software.');
                         $command->line('Laravel version: '.app()->version());
                         $command->line('PHP version: '.trim(phpversion()));
                         $command->line(' ');
@@ -75,7 +77,7 @@ class MixpostServiceProvider extends PackageServiceProvider
                     ->endWith(function (InstallCommand $command) {
                         $appUrl = config('app.url');
 
-                        $command->line("Visit the Mixpost UI at $appUrl/mixpost");
+                        $command->line("Visit the Mixpost Live UI at $appUrl/mixpost");
                     });
             });
     }
@@ -114,7 +116,7 @@ class MixpostServiceProvider extends PackageServiceProvider
 
     protected function registerExceptionHandler(): void
     {
-        app()->bind(ExceptionHandler::class, MixpostExceptionHandler::class);
+        app()->bind(ExceptionHandler::class, MixpostLiveExceptionHandler::class);
     }
 
     protected function writeSeparationLine(InstallCommand $command): void
