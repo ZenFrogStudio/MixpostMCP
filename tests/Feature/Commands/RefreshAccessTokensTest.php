@@ -5,9 +5,11 @@ use Illuminate\Support\Facades\Http;
 use Inovector\Mixpost\Models\Account;
 use Inovector\Mixpost\Models\Service;
 
+// No catch-all Http::fake() here: stubs match in the order they are registered, so a catch-all set
+// up in beforeEach would answer every request before a test's own fake was ever consulted — and it
+// would defeat preventStrayRequests() into the bargain. Each test fakes what it calls.
 beforeEach(function () {
     Http::preventStrayRequests();
-    Http::fake();
 
     // connect() reads the stored credentials for the provider, so an account with no configured
     // service never reaches its refresh method.

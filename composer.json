@@ -1,6 +1,6 @@
 {
     "name": "inovector/mixpost",
-    "description": "Self-hosted social media management software.",
+    "description": "Mixpost Live - self-hosted social media management software.",
     "keywords": [
         "social-media-management",
         "content-scheduling",
@@ -8,7 +8,8 @@
         "calendar-scheduling",
         "self-hosted",
         "open-sourced",
-        "mixpost"
+        "mixpost",
+        "mixpost-live"
     ],
     "homepage": "https://github.com/inovector/mixpost",
     "license": "MIT",
@@ -75,7 +76,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Inovector\\Mixpost\\MixpostServiceProvider"
+                "Inovector\\Mixpost\\MixpostLiveServiceProvider"
             ],
             "aliases": {
                 "Mixpost": "Inovector\\Mixpost\\Facades\\Mixpost"

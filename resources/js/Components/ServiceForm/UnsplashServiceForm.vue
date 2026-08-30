@@ -47,7 +47,7 @@ const save = () => {
         </template>
 
         <template #description>
-            <p>With Unsplash you can use external stock photos directly in Mixpost.</p>
+            <p>With Unsplash you can use external stock photos directly in Mixpost Live.</p>
             <p>
                 <a href="https://unsplash.com/oauth/applications" class="link" target="_blank">
                     Create an App on Unsplash</a>.

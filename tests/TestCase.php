@@ -3,7 +3,7 @@
 namespace Inovector\Mixpost\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Inovector\Mixpost\MixpostServiceProvider;
+use Inovector\Mixpost\MixpostLiveServiceProvider;
 use Laravel\Horizon\HorizonServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -22,7 +22,7 @@ class TestCase extends Orchestra
     {
         return [
             HorizonServiceProvider::class,
-            MixpostServiceProvider::class,
+            MixpostLiveServiceProvider::class,
         ];
     }
 

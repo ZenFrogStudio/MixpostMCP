@@ -13,7 +13,7 @@ use Inovector\Mixpost\Util;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
-class MixpostExceptionHandler extends ExceptionHandler
+class MixpostLiveExceptionHandler extends ExceptionHandler
 {
     public function render($request, Throwable $e): Response|JsonResponse|\Symfony\Component\HttpFoundation\Response
     {

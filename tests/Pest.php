@@ -84,6 +84,10 @@ function mediaWithProbe(string $mimeType, array $probe, array $attributes = []):
  */
 function assertWellFormedPostOptions(array $options): void
 {
+    // A provider with no per-post options — X, for one — is a legitimate answer, but the loop below
+    // would then assert nothing at all and phpunit.xml fails the run on a test that made no claim.
+    expect($options)->toBeArray();
+
     foreach ($options as $option) {
         expect($option)->toHaveKeys(['key', 'label', 'type', 'default'])
             ->and($option['key'])->toBeString()->not->toBeEmpty()

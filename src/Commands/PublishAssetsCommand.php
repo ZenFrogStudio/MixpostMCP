@@ -16,7 +16,7 @@ class PublishAssetsCommand extends Command
         $force = boolval($this->option('force'));
 
         if (! $force && File::exists(public_path('vendor/mixpost'))) {
-            $this->line('Your application already have the Mixpost assets');
+            $this->line('Your application already have the Mixpost Live assets');
 
             if (! $this->confirm('Do you want to rewrite?')) {
                 return self::FAILURE;

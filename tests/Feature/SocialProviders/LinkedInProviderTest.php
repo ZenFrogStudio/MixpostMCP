@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\SocialProviders\LinkedIn\Concerns\ManagesOAuth;
 use Inovector\Mixpost\SocialProviders\LinkedIn\LinkedInProvider;
 
+// No catch-all Http::fake() here: stubs match in the order they are registered, so a catch-all set
+// up in beforeEach would answer every request before a test's own fake was ever consulted — and it
+// would defeat preventStrayRequests() into the bargain. Each test fakes what it calls.
 beforeEach(function () {
     Http::preventStrayRequests();
-    Http::fake();
 
     $this->provider = makeProvider(LinkedInProvider::class, 'linkedin');
 });
@@ -38,7 +39,7 @@ it('carries a state parameter and stores it for the callback check', function ()
     $params = queryParams($this->provider->getAuthUrl());
 
     expect($params['state'])->not->toBeEmpty()
-        ->and(session(ManagesOAuth::STATE_SESSION_NAME))->toBe($params['state']);
+        ->and(session(LinkedInProvider::STATE_SESSION_NAME))->toBe($params['state']);
 });
 
 it('refuses a callback whose state does not match', function () {
@@ -76,6 +77,10 @@ it('rejects a video shorter than LinkedIn\'s three second minimum', function () 
 });
 
 it('lets a video inside the bounds reach the upload', function () {
+    // An empty body from initializeUpload: enough to prove the request was made, without standing up
+    // the whole upload flow.
+    Http::fake(['https://api.linkedin.com/rest/videos*' => Http::response()]);
+
     // The regression that matters: validation that is too strict blocks work that used to succeed.
     $provider = makeProvider(LinkedInProvider::class, 'linkedin', ['provider_id' => 'urn:li:person:abc'])
         ->useAccessToken(['access_token' => 'a-token']);
@@ -102,7 +107,7 @@ it('stores token expiry as an absolute timestamp that tokenIsAboutToExpire can r
     ]);
 
     $state = 'a-state';
-    session([ManagesOAuth::STATE_SESSION_NAME => $state]);
+    session([LinkedInProvider::STATE_SESSION_NAME => $state]);
 
     $token = $this->provider->requestAccessToken(['code' => 'a-code', 'state' => $state]);
 
@@ -124,7 +129,7 @@ it('only stores a refresh token when LinkedIn issues one', function () {
         ]),
     ]);
 
-    session([ManagesOAuth::STATE_SESSION_NAME => 'a-state']);
+    session([LinkedInProvider::STATE_SESSION_NAME => 'a-state']);
 
     $token = $this->provider->requestAccessToken(['code' => 'a-code', 'state' => 'a-state']);
 

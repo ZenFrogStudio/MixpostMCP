@@ -12,7 +12,7 @@ import {vTooltip} from 'floating-vue'
 import AuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import {router} from "@inertiajs/vue3";
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Mixpost';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Mixpost Live';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

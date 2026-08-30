@@ -67,11 +67,11 @@ const features = [
     },
     {
         name: 'Webhooks',
-        desc: 'A powerful feature designed to enhance your workflow by enabling real-time communication between Mixpost and your favorite external services.',
+        desc: 'A powerful feature designed to enhance your workflow by enabling real-time communication between Mixpost Live and your favorite external services.',
     },
     {
         name: 'API',
-        desc: 'An advanced feature that opens up a world of possibilities by allowing third-party services to seamlessly communicate with your Mixpost instance.',
+        desc: 'An advanced feature that opens up a world of possibilities by allowing third-party services to seamlessly communicate with your Mixpost Live instance.',
     },
     {
         name: 'White Label Logo',

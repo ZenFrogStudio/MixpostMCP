@@ -42,7 +42,7 @@ const getBody = () => {
     body += `**PHP**: ${props.tech.versions.php} \n`;
     body += `**Laravel**: ${props.tech.versions.laravel} \n`;
     body += `**Horizon**: ${props.tech.versions.horizon} \n`;
-    body += `**Mixpost Lite**: ${props.tech.versions.mixpost} \n`;
+    body += `**Mixpost Live**: ${props.tech.versions.mixpost} \n`;
 
     return body;
 }
@@ -226,7 +226,7 @@ const copyToClipboard = () => {
                         </TableRow>
                         <TableRow :hoverable="true">
                             <TableCell class="font-medium">
-                                Mixpost Lite
+                                Mixpost Live
                             </TableCell>
                             <TableCell>
                                 {{ tech.versions.mixpost }}
