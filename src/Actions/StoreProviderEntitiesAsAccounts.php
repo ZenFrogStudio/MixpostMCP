@@ -70,6 +70,28 @@ class StoreProviderEntitiesAsAccounts
         }
     }
 
+    private function storeYoutubes(array $items): void
+    {
+        $provider = SocialProviderManager::connect('youtube');
+
+        /** @var SocialProviderResponse $responseEntities */
+        $responseEntities = $provider->getEntities();
+
+        $entities = Arr::where($responseEntities->context(), function ($entity) use ($items) {
+            return in_array($entity['id'], $items);
+        });
+
+        foreach ($entities as $account) {
+            (new UpdateOrCreateAccount)(
+                providerName: 'youtube',
+                account: $account,
+                // One Google token covers every channel the account owns, including Brand Accounts,
+                // so there is no separate per-channel token to merge in.
+                accessToken: $provider->getAccessToken()
+            );
+        }
+    }
+
     private function storeLinkedins(array $items): void
     {
         $provider = SocialProviderManager::connect('linkedin');

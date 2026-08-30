@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Psr7\Response as Psr7Response;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Inovector\Mixpost\Abstracts\SocialProvider;
 use Inovector\Mixpost\Tests\TestCase;
@@ -25,14 +27,26 @@ function requestWithSession(): Request
  * Build a provider without going through SocialProviderManager, which would need real credentials
  * stored on the Services page.
  */
-function makeProvider(string $providerClass, string $provider = 'test'): SocialProvider
+function makeProvider(string $providerClass, string $provider = 'test', array $values = []): SocialProvider
 {
     return new $providerClass(
         requestWithSession(),
         'test-client-id',
         'test-client-secret',
-        "https://mixpost.test/mixpost/callback/$provider"
+        "https://mixpost.test/mixpost/callback/$provider",
+        $values
     );
+}
+
+/**
+ * A real Illuminate HTTP client response, for calling a provider's buildResponse() directly.
+ *
+ * Http::response() returns a promise for the fake handler to resolve, not a response, so it cannot
+ * be handed to buildResponse().
+ */
+function httpClientResponse(array $body, int $status = 200, array $headers = []): Response
+{
+    return new Response(new Psr7Response($status, $headers, json_encode($body)));
 }
 
 /**

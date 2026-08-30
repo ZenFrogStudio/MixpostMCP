@@ -1,6 +1,68 @@
 # Changelog
 
-All notable changes to `mixpost` will be documented in this file.
+All notable changes to Mixpost Live will be documented in this file.
+
+## 2.18.0 - 2026-08-29
+
+**Added**
+
+- **YouTube.** Channels can now be connected and videos published to them. Everything around the
+  provider had already shipped — the service, the credentials form, the composer preview, the icon,
+  the README section — so this is the piece that switches the network on.
+  - Connecting goes through Google OAuth 2.0 with `access_type=offline` and `prompt=consent`, which
+    together are what make Google issue a refresh token on a first *and* a repeat connection. A
+    `state` parameter is generated before the redirect and verified on return.
+  - A Google account can own several channels, including Brand Accounts, so connecting one opens the
+    channel picker. `StoreProviderEntitiesAsAccounts::storeYoutubes()` stores the chosen channel
+    against the single Google token, which covers all of them.
+  - Publishing is video only, one video per post, through a resumable upload. Text-only and
+    image-only posts are rejected before any API call is made, so they cost no quota. The post body
+    becomes the title and description — first line as the title, the rest as the description —
+    unless a title is set under Post options, and `<` and `>` are stripped from both because YouTube
+    rejects them outright.
+  - Privacy defaults to **Private**. An unattended scheduler publishing to the wrong channel
+    publicly is not a recoverable mistake.
+  - A generated video thumbnail is uploaded after publishing. Custom thumbnails need a verified
+    YouTube account, so a failure there is logged and the post still succeeds — the video is already
+    live by that point.
+  - A quota breach (403 `quotaExceeded`) is reported as a rate limit with the retry set to the next
+    midnight Pacific, which is when Google restores the daily allowance. An upload costs about 1,600
+    of the default 10,000 units a day, so roughly six videos.
+
+**Fixed**
+
+- `LinkedIn\Concerns\ManagesResources` carried a duplicated `getMemberAccount()` signature, which is
+  a PHP parse error — it would have taken down anything that loaded the file, including the whole
+  test suite. Found while reading the file as a pattern to copy.
+- The account entity picker checked `empty()` on a Collection, which is always false, so a provider
+  that returned no entities rendered an empty picker instead of redirecting with "The account has no
+  entities." A Google account with no YouTube channel is the ordinary way to reach that.
+
+**Changed**
+
+- `SocialProviderManager::providers()` no longer filters the registry through `class_exists()`. That
+  scaffolding existed only because `YouTubeProvider` was missing; every registered network now has a
+  class, and the registry is the plain list it was meant to be.
+
+## 2.17.0 - 2026-08-29
+
+**Changed**
+
+- The application is now called **Mixpost Live**. Everything a user sees carries the new name: the
+  browser tab title, the version row on the System Status page, the installer's console output, the
+  `mixpost:publish-assets` output, and the service setup copy for Tenor and Unsplash.
+- `MixpostServiceProvider` is now `MixpostLiveServiceProvider`, and `MixpostExceptionHandler` is now
+  `MixpostLiveExceptionHandler`. Their files were renamed to match. The Laravel auto-discovery entry
+  in `composer.json` and the provider list in `tests/TestCase.php` were updated with them.
+- `README.md` was rewritten for this fork: the upstream marketing copy, the Pro/Enterprise upsell
+  and the Packagist badges are gone, along with three header images whose `art/` directory does not
+  exist in this repository. The network setup and token-refresh documentation is unchanged apart
+  from the name. `SECURITY.md` now points reports at this repository first.
+
+Nothing else moved. The `Inovector\Mixpost` namespace, the `inovector/mixpost` package name, the
+`mixpost_*` database tables, `config/mixpost.php`, the `/mixpost` route prefix, the `mixpost.*`
+route names, the `MIXPOST_*` environment variables and the `public/vendor/mixpost` asset path are
+all as they were, so existing installations upgrade with no migration and no reconfiguration.
 
 ## 2.16.1 - 2026-08-29
 

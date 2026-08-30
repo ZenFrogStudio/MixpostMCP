@@ -19,7 +19,7 @@ it('no longer registers facebook_group', function () {
 
 it('registers the networks that have shipped', function () {
     expect(SocialProviderManager::providers())
-        ->toHaveKeys(['twitter', 'facebook_page', 'mastodon', 'instagram', 'linkedin', 'tiktok']);
+        ->toHaveKeys(['twitter', 'facebook_page', 'mastodon', 'instagram', 'linkedin', 'tiktok', 'youtube']);
 });
 
 it('has a connect method for every registered provider', function () {
@@ -40,9 +40,9 @@ it('refuses to connect a provider that is not registered', function () {
     expect(fn () => SocialProviderManager::connect('not_a_network'))
         ->toThrow(InvalidArgumentException::class);
 
-    // Any connect method whose provider is filtered out of the registry must fail the same way.
-    // While YouTubeProvider is unbuilt, connectYoutubeProvider() is exactly that case; once it
-    // ships this loop simply has nothing to iterate.
+    // Any connect method whose provider is not in the registry must fail the same way. Every
+    // shipped network is registered, so this loop has nothing to iterate today — it is here to
+    // catch the next connect method that lands ahead of its registry entry.
     $registered = array_keys(SocialProviderManager::providers());
 
     // Reflection rather than get_class_methods(), which from outside the class would only see the

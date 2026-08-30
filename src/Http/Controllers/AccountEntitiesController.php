@@ -55,7 +55,10 @@ class AccountEntitiesController extends Controller
             return $account['connected'];
         })->values();
 
-        if (empty($entities)) {
+        // A Collection is an object, so empty() was always false here and an account with nothing to
+        // pick rendered an empty picker instead of saying so. A Google account with no YouTube
+        // channel is the ordinary way to reach this.
+        if ($entities->isEmpty()) {
             return redirect()->route('mixpost.accounts.index')
                 ->with('warning', 'The account has no entities.');
         }

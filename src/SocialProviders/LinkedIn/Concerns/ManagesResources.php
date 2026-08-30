@@ -178,8 +178,6 @@ trait ManagesResources
     }
 
     protected function getMemberAccount(): SocialProviderResponse
-
-    protected function getMemberAccount(): SocialProviderResponse
     {
         $response = $this->userinfoRequest();
 

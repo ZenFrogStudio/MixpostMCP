@@ -22,7 +22,7 @@ class SocialProviderManager extends SocialProviderManagerAbstract
             return $this->providers;
         }
 
-        $providers = [
+        return $this->providers = [
             'twitter' => TwitterProvider::class,
             'facebook_page' => FacebookPageProvider::class,
             'mastodon' => MastodonProvider::class,
@@ -31,12 +31,6 @@ class SocialProviderManager extends SocialProviderManagerAbstract
             'tiktok' => TikTokProvider::class,
             'youtube' => YouTubeProvider::class,
         ];
-
-        // Temporary scaffolding: providers are added one class at a time, and a name listed above
-        // whose class is missing would fatal the Accounts page rather than simply not appearing.
-        // Instagram, LinkedIn and TikTok have landed; YouTubeProvider is the only one still
-        // outstanding. Delete this filter as soon as it exists.
-        return $this->providers = array_filter($providers, fn ($class) => class_exists($class));
     }
 
     protected function connectTwitterProvider()
