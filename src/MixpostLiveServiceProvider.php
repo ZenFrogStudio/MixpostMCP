@@ -21,6 +21,8 @@ use Inovector\Mixpost\Events\AccountUnauthorized;
 use Inovector\Mixpost\Exceptions\MixpostLiveExceptionHandler;
 use Inovector\Mixpost\Listeners\HandleAccountImports;
 use Inovector\Mixpost\Listeners\SendAccountUnauthorizedNotification;
+use Inovector\Mixpost\Mcp\MixpostServer;
+use Laravel\Mcp\Facades\Mcp;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -103,9 +105,24 @@ class MixpostLiveServiceProvider extends PackageServiceProvider
 
         $this->registerExceptionHandler();
 
+        $this->registerMcpServer();
+
         Gate::define('viewMixpost', function () {
             return true;
         });
+    }
+
+    /**
+     * laravel/mcp is optional: it needs Laravel 12.41+, while Mixpost still supports 10.47 and 11.
+     * Hosts without it simply do not get the MCP server.
+     */
+    protected function registerMcpServer(): void
+    {
+        if (! class_exists(Mcp::class)) {
+            return;
+        }
+
+        Mcp::local('mixpost', MixpostServer::class);
     }
 
     protected function bootEvents(): void

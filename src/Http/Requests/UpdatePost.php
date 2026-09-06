@@ -2,9 +2,8 @@
 
 namespace Inovector\Mixpost\Http\Requests;
 
-use Illuminate\Support\Facades\DB;
+use Inovector\Mixpost\Actions\SavePost;
 use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Util;
 
 class UpdatePost extends PostFormRequest
 {
@@ -25,23 +24,14 @@ class UpdatePost extends PostFormRequest
         });
     }
 
-    public function handle()
+    public function handle(): void
     {
-        return DB::transaction(function () {
-            if (empty($this->input('accounts')) || ! $this->scheduledAt()) {
-                $this->post->setDraft();
-            }
-
-            $this->post->accounts()->sync($this->input('accounts'));
-            $this->post->tags()->sync($this->input('tags'));
-
-            $this->post->versions()->delete();
-            $this->post->versions()->createMany($this->input('versions'));
-
-            $this->post->setScheduled(
-                datetime: $this->scheduledAt() ? Util::convertTimeToUTC($this->scheduledAt()) : null,
-                status: null,
-            );
-        });
+        (new SavePost)(
+            post: $this->post,
+            accounts: $this->input('accounts', []),
+            tags: $this->input('tags') ?? [],
+            versions: $this->input('versions'),
+            localScheduledAt: $this->scheduledAt(),
+        );
     }
 }

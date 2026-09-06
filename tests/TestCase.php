@@ -5,6 +5,7 @@ namespace Inovector\Mixpost\Tests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Inovector\Mixpost\MixpostLiveServiceProvider;
 use Laravel\Horizon\HorizonServiceProvider;
+use Laravel\Mcp\Server\McpServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -20,10 +21,19 @@ class TestCase extends Orchestra
 
     protected function getPackageProviders($app): array
     {
-        return [
+        $providers = [
             HorizonServiceProvider::class,
             MixpostLiveServiceProvider::class,
         ];
+
+        // Testbench does not run Laravel's package auto-discovery, so laravel/mcp's provider has
+        // to be named here. Without it nothing binds the tool arguments and every MCP tool sees
+        // an empty request. It is optional, hence the check.
+        if (class_exists(McpServiceProvider::class)) {
+            array_unshift($providers, McpServiceProvider::class);
+        }
+
+        return $providers;
     }
 
     public function getEnvironmentSetUp($app): void

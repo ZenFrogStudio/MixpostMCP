@@ -153,4 +153,24 @@ return [
             ],
         ],
     ],
+
+    /*
+     * Model Context Protocol server. Gives AI agents a set of tools to read your accounts and
+     * results, draft posts and schedule them. Runs over stdio: `php artisan mcp:start mixpost`.
+     * Requires the optional laravel/mcp package; without it the server is not registered.
+     */
+    'mcp' => [
+        /*
+         * Agents cannot publish immediately. Anything an agent schedules has to sit at least this
+         * many minutes in the future, so there is always a window to see it in the calendar and
+         * cancel before it goes out.
+         */
+        'min_schedule_lead_minutes' => env('MIXPOST_MCP_SCHEDULE_LEAD', 10),
+
+        /*
+         * Hard ceiling on the number of rows any list tool returns, so a broad query cannot
+         * flood the agent's context window.
+         */
+        'max_results' => 50,
+    ],
 ];

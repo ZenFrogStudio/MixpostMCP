@@ -2,6 +2,40 @@
 
 All notable changes to Mixpost Live will be documented in this file.
 
+## 2.22.0 - 2026-09-06
+
+**Added**
+
+- **An MCP server, so AI agents can draft and schedule posts.** Mixpost had no way in other than the
+  browser — no API, no tokens, and every write path buried inside an HTTP form request. It now ships
+  a Model Context Protocol server that gives Claude and other agents ten typed tools: read the
+  connected accounts and what each network allows, browse posts and how they performed, pull media in
+  from a URL, draft a post, and put it on the schedule.
+  - **stdio only.** `php artisan mcp:start mixpost`, one process per agent, launched by the agent.
+    Nothing is exposed over HTTP and no port is opened, so there is no token to mint or leak — the
+    security boundary is the machine. The flip side is that it has no authentication of its own:
+    anyone who can run that command can post to your accounts.
+  - **An agent cannot publish.** There is no publish-now tool, and `schedule_post` refuses any time
+    closer than `MIXPOST_MCP_SCHEDULE_LEAD` minutes (ten by default). Everything an agent queues
+    appears in the calendar with a window to cancel it first. It also cannot delete posts, touch
+    accounts, or change a setting.
+  - Over-length bodies are caught **before** the post is saved, named per account: *"The body is 300
+    characters, over the 280 character limit for Test Handle (twitter)."* The same check at publish
+    time would surface hours later inside a queued job.
+  - `add_media_from_url` is the only way to attach media, since files cannot be handed over MCP. It
+    reuses the media library's own public-address gate, so an agent cannot pull files off the LAN,
+    and applies the same mime and size caps as the upload form.
+- **`laravel/mcp` is optional.** It needs Laravel 12.41+, while Mixpost still supports 10.47 and 11,
+  so it is a `suggest` rather than a `require` and the server registers only when the class is there.
+  Nothing changes for anyone who does not install it.
+
+**Changed**
+
+- **Post writes moved out of the form requests** into `Actions\CreatePost` and `Actions\SavePost`,
+  joining `PublishPost` in `src/Actions/`. `StorePost` and `UpdatePost` now just validate and
+  delegate. The MCP tools run in a console process with no HTTP request to build a form request
+  from, and duplicating the writes would have let the two paths drift apart.
+
 ## 2.21.0 - 2026-08-29
 
 **Added**

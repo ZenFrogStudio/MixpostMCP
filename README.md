@@ -240,6 +240,88 @@ minutes. It renews any token due to expire within the next ten minutes and marks
 unauthorized if its refresh token has died, which lights up the Unauthorized badge on the accounts
 page. All of that depends on the cron entry above being in place.
 
+## Letting an AI agent draft and schedule posts
+
+Mixpost ships an optional MCP server, so Claude and other AI agents can read your accounts and your
+results, draft posts and put them on the schedule.
+
+It is **off unless you install the package it needs**:
+
+```
+composer require laravel/mcp
+```
+
+That needs Laravel 12.41 or newer. On anything older, Mixpost works exactly as before and the MCP
+server is simply not registered.
+
+The server runs over stdio, one process per agent, launched by the agent itself:
+
+```
+php artisan mcp:start mixpost
+```
+
+In Claude Desktop, add it to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "mixpost": {
+      "command": "php",
+      "args": ["/path-to-your-project/artisan", "mcp:start", "mixpost"]
+    }
+  }
+}
+```
+
+If your app runs in Docker, launch it through the container instead:
+
+```json
+{
+  "mcpServers": {
+    "mixpost": {
+      "command": "docker",
+      "args": ["compose", "-f", "/path-to-your-project/docker-compose.yml",
+               "exec", "-T", "app", "php", "artisan", "mcp:start", "mixpost"]
+    }
+  }
+}
+```
+
+### What an agent can do
+
+| Tool | What it does |
+| --- | --- |
+| `list_accounts` | Connected accounts, with each network's character and media limits |
+| `list_tags` | Tags available for labelling posts |
+| `list_posts` | Browse posts by status, account or keyword; published ones include a link to the live post |
+| `get_post` | One post in full — versions, media, per-network options, errors |
+| `get_account_metrics` | Daily engagement figures and a total for a date range |
+| `get_audience_growth` | Follower count over time, with the net change |
+| `add_media_from_url` | Pull an image or video into the media library from a public URL |
+| `create_post` | Draft a post, optionally with a thread and per-account overrides |
+| `update_post` | Rewrite a draft or scheduled post |
+| `schedule_post` | Put a drafted post in the publishing queue |
+
+### What an agent cannot do
+
+**There is no publish-now tool.** An agent can only put a post in the queue, and only far enough
+ahead that you have a chance to see it in the calendar and cancel. The window defaults to ten
+minutes and is set with `MIXPOST_MCP_SCHEDULE_LEAD`:
+
+```
+MIXPOST_MCP_SCHEDULE_LEAD=30
+```
+
+An agent also cannot delete posts, connect or disconnect accounts, or change any setting.
+
+### Security
+
+**The server has no authentication of its own.** It runs as your application, with the same reach as
+the scheduler, so anyone who can run `php artisan mcp:start mixpost` on that machine can post to your
+accounts. It is stdio only — nothing is exposed over HTTP and no port is opened — so the boundary is
+the machine itself. Do not wrap it in a network transport without putting real authentication in
+front of it.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for what has changed recently.
