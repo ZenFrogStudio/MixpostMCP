@@ -1,16 +1,16 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Inovector\Mixpost\Actions\CreatePost as CreatePostAction;
-use Inovector\Mixpost\Mcp\Concerns\BuildsPostPayload;
+use OneMediaLabs\MixpostMcp\Actions\CreatePost as CreatePostAction;
+use OneMediaLabs\MixpostMcp\Mcp\Concerns\BuildsPostPayload;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 
-#[Description('Draft a new post in Mixpost. It is saved as a draft and nothing is sent to any social network. Give it a date and time to make it schedulable, then call schedule_post to put it in the queue.')]
+#[Description('Draft a new post in MixpostMCP. It is saved as a draft and nothing is sent to any social network. Give it a date and time to make it schedulable, then call schedule_post to put it in the queue.')]
 class CreatePost extends Tool
 {
     use BuildsPostPayload;
@@ -55,7 +55,7 @@ class CreatePost extends Tool
             'uuid' => $post->uuid,
             'status' => 'draft',
             'scheduled_at' => $this->scheduledAt($request),
-            'edit_url' => route('mixpost.posts.edit', ['post' => $post->uuid]),
+            'edit_url' => route('mixpostmcp.posts.edit', ['post' => $post->uuid]),
             'next_step' => $this->scheduledAt($request)
                 ? 'Call schedule_post with this uuid to put it in the queue.'
                 : 'This post has no date and time yet. Call update_post or schedule_post with a date and time before it can be queued.',

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\SocialProviders\TikTok\TikTokProvider;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\TikTokProvider;
 
 beforeEach(function () {
     Http::preventStrayRequests();
@@ -35,7 +35,7 @@ it('hex-encodes the PKCE challenge rather than base64url-encoding it', function 
     // the encoding: 64 lowercase hex characters, matching the stored verifier's SHA-256 digest.
     $url = $this->provider->getAuthUrl();
 
-    $verifier = session(config('mixpost.cache_prefix').'.tiktok_code_verifier');
+    $verifier = session(config('mixpostmcp.cache_prefix').'.tiktok_code_verifier');
 
     expect(queryParams($url)['code_challenge'])
         ->toMatch('/^[0-9a-f]{64}$/')
@@ -60,7 +60,7 @@ it('carries a state parameter and stores it for the callback check', function ()
     $params = queryParams($this->provider->getAuthUrl());
 
     expect($params['state'])->not->toBeEmpty()
-        ->and(session(config('mixpost.cache_prefix').'.tiktok_oauth_state'))->toBe($params['state']);
+        ->and(session(config('mixpostmcp.cache_prefix').'.tiktok_oauth_state'))->toBe($params['state']);
 });
 
 it('rejects a text-only post without calling TikTok', function () {
@@ -164,8 +164,8 @@ it('stores token expiry as an absolute timestamp that tokenIsAboutToExpire can r
         ]),
     ]);
 
-    session([config('mixpost.cache_prefix').'.tiktok_code_verifier' => 'a-verifier']);
-    session([config('mixpost.cache_prefix').'.tiktok_oauth_state' => 'a-state']);
+    session([config('mixpostmcp.cache_prefix').'.tiktok_code_verifier' => 'a-verifier']);
+    session([config('mixpostmcp.cache_prefix').'.tiktok_oauth_state' => 'a-state']);
 
     $token = $this->provider->requestAccessToken(['code' => 'a-code', 'state' => 'a-state']);
 

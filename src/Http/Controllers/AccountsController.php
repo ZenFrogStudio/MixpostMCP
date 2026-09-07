@@ -1,19 +1,19 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Actions\UpdateOrCreateAccount;
-use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
-use Inovector\Mixpost\Enums\ServiceGroup;
-use Inovector\Mixpost\Facades\ServiceManager;
-use Inovector\Mixpost\Facades\SocialProviderManager;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Actions\UpdateOrCreateAccount;
+use OneMediaLabs\MixpostMcp\Concerns\UsesSocialProviderManager;
+use OneMediaLabs\MixpostMcp\Enums\ServiceGroup;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Facades\SocialProviderManager;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 class AccountsController extends Controller
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Inovector\Mixpost\Enums\PostStatus;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Enums\PostStatus;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class DuplicatePostController extends Controller
 {
@@ -29,6 +29,6 @@ class DuplicatePostController extends Controller
             })->toArray());
         });
 
-        return redirect()->route('mixpost.posts.index');
+        return redirect()->route('mixpostmcp.posts.index');
     }
 }

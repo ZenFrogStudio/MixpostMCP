@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Tests;
+namespace OneMediaLabs\MixpostMcp\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Inovector\Mixpost\MixpostLiveServiceProvider;
+use OneMediaLabs\MixpostMcp\MixpostMcpServiceProvider;
 use Laravel\Horizon\HorizonServiceProvider;
 use Laravel\Mcp\Server\McpServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -15,7 +15,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Inovector\\Mixpost\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'OneMediaLabs\\MixpostMcp\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
@@ -23,7 +23,7 @@ class TestCase extends Orchestra
     {
         $providers = [
             HorizonServiceProvider::class,
-            MixpostLiveServiceProvider::class,
+            MixpostMcpServiceProvider::class,
         ];
 
         // Testbench does not run Laravel's package auto-discovery, so laravel/mcp's provider has

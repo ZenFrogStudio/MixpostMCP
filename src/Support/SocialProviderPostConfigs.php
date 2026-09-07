@@ -1,8 +1,8 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
-use Inovector\Mixpost\Concerns\Makeable;
+use OneMediaLabs\MixpostMcp\Concerns\Makeable;
 use JsonSerializable;
 
 /**

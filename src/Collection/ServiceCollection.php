@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Collection;
+namespace OneMediaLabs\MixpostMcp\Collection;
 
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Enums\ServiceGroup;
+use OneMediaLabs\MixpostMcp\Enums\ServiceGroup;
 
 class ServiceCollection
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Exceptions;
+namespace OneMediaLabs\MixpostMcp\Exceptions;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -8,12 +8,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
-use Inovector\Mixpost\Http\Middleware\HandleInertiaRequests;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Http\Middleware\HandleInertiaRequests;
+use OneMediaLabs\MixpostMcp\Util;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
-class MixpostLiveExceptionHandler extends ExceptionHandler
+class MixpostMcpExceptionHandler extends ExceptionHandler
 {
     public function render($request, Throwable $e): Response|JsonResponse|\Symfony\Component\HttpFoundation\Response
     {
@@ -38,7 +38,7 @@ class MixpostLiveExceptionHandler extends ExceptionHandler
 
         $shared = (new HandleInertiaRequests)->share($request);
 
-        Inertia::setRootView('mixpost::app');
+        Inertia::setRootView('mixpostmcp::app');
         Inertia::share($shared);
 
         if ($statusCode === 403) {

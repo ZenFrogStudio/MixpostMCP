@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Http\Requests\StoreTag;
-use Inovector\Mixpost\Http\Requests\UpdateTag;
-use Inovector\Mixpost\Models\Tag;
+use OneMediaLabs\MixpostMcp\Http\Requests\StoreTag;
+use OneMediaLabs\MixpostMcp\Http\Requests\UpdateTag;
+use OneMediaLabs\MixpostMcp\Models\Tag;
 
 class TagsController extends Controller
 {

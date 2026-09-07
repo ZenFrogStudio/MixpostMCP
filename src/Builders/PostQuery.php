@@ -1,17 +1,17 @@
 <?php
 
-namespace Inovector\Mixpost\Builders;
+namespace OneMediaLabs\MixpostMcp\Builders;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Inovector\Mixpost\Builders\Filters\ExcludePostStatus;
-use Inovector\Mixpost\Builders\Filters\PostAccounts;
-use Inovector\Mixpost\Builders\Filters\PostKeyword;
-use Inovector\Mixpost\Builders\Filters\PostScheduledAt;
-use Inovector\Mixpost\Builders\Filters\PostStatus;
-use Inovector\Mixpost\Builders\Filters\PostTags;
-use Inovector\Mixpost\Contracts\Query;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Builders\Filters\ExcludePostStatus;
+use OneMediaLabs\MixpostMcp\Builders\Filters\PostAccounts;
+use OneMediaLabs\MixpostMcp\Builders\Filters\PostKeyword;
+use OneMediaLabs\MixpostMcp\Builders\Filters\PostScheduledAt;
+use OneMediaLabs\MixpostMcp\Builders\Filters\PostStatus;
+use OneMediaLabs\MixpostMcp\Builders\Filters\PostTags;
+use OneMediaLabs\MixpostMcp\Contracts\Query;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class PostQuery implements Query
 {

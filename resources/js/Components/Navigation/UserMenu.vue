@@ -25,14 +25,14 @@ const open = ref(false);
         </template>
 
         <template #content>
-            <DropdownItem :href="route('mixpost.profile.index')">
+            <DropdownItem :href="route('mixpostmcp.profile.index')">
                 <template #icon>
                     <PencilSquare/>
                 </template>
                 Edit profile
             </DropdownItem>
 
-            <DropdownItem :href="route('mixpost.logout')" linkAs="button" linkMethod="post">
+            <DropdownItem :href="route('mixpostmcp.logout')" linkAs="button" linkMethod="post">
                 <template #icon>
                     <ArrowRightOnRectangleIcon/>
                 </template>

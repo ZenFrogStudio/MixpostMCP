@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Http\Requests\ClearSystemLog;
-use Inovector\Mixpost\Http\Requests\DownloadSystemLog;
-use Inovector\Mixpost\Support\SystemLogs;
+use OneMediaLabs\MixpostMcp\Http\Requests\ClearSystemLog;
+use OneMediaLabs\MixpostMcp\Http\Requests\DownloadSystemLog;
+use OneMediaLabs\MixpostMcp\Support\SystemLogs;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SystemLogsController extends Controller

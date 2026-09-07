@@ -1,16 +1,16 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Builders\PostQuery;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Builders\PostQuery;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Post;
+use OneMediaLabs\MixpostMcp\Util;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
@@ -18,7 +18,7 @@ use Laravel\Mcp\Server\Tool;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[IsReadOnly]
-#[Description('Browse posts in Mixpost, newest first. Filter by status, account or keyword. Published posts come back with a link to the post on the network.')]
+#[Description('Browse posts in MixpostMCP, newest first. Filter by status, account or keyword. Published posts come back with a link to the post on the network.')]
 class ListPosts extends Tool
 {
     protected string $name = 'list_posts';
@@ -44,7 +44,7 @@ class ListPosts extends Tool
     {
         $limit = min(
             (int) $request->get('limit', 15),
-            (int) config('mixpost.mcp.max_results', 50)
+            (int) config('mixpostmcp.mcp.max_results', 50)
         );
 
         // Reuse the same filters the posts index uses, so an agent and the UI agree on what
@@ -65,7 +65,9 @@ class ListPosts extends Tool
             'uuid' => $post->uuid,
             'status' => Str::lower($post->status->name),
             'scheduled_at' => $this->localDateTime($post),
-            'excerpt' => Str::limit(Util::removeHtmlTags($post->versions->first()?->content[0]['body'] ?? ''), 150),
+            // The shared version, not whichever row happens to load first — an account override
+            // could otherwise show up as the excerpt for the whole post.
+            'excerpt' => Str::limit(Util::removeHtmlTags($post->versions->firstWhere('is_original', true)?->content[0]['body'] ?? ''), 150),
             'tags' => $post->tags->pluck('name'),
             'accounts' => $post->accounts->map(fn (Account $account): array => array_filter([
                 'id' => $account->id,

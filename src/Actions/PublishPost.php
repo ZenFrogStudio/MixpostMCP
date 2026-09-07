@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
 use Illuminate\Support\Facades\Bus;
-use Inovector\Mixpost\Jobs\AccountPublishPostJob;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Jobs\AccountPublishPostJob;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class PublishPost
 {

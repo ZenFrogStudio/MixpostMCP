@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
-use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Support\PostContentParser;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Concerns\UsesSocialProviderManager;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Post;
+use OneMediaLabs\MixpostMcp\Support\PostContentParser;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 class AccountPublishPost
 {

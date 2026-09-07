@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Service;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Service;
 
 // No catch-all Http::fake() here: stubs match in the order they are registered, so a catch-all set
 // up in beforeEach would answer every request before a test's own fake was ever consulted — and it
@@ -51,7 +51,7 @@ it('renews a token that is about to expire', function () {
 
     $account = expiringAccount('tiktok');
 
-    $this->artisan('mixpost:refresh-access-tokens')->assertSuccessful();
+    $this->artisan('mixpostmcp:refresh-access-tokens')->assertSuccessful();
 
     expect($account->fresh()->access_token['access_token'])->toBe('a-fresh-token')
         ->and($account->fresh()->isAuthorized())->toBeTrue();
@@ -71,7 +71,7 @@ it('stores the renewed token so the next publish uses it', function () {
 
     $account = expiringAccount('tiktok');
 
-    $this->artisan('mixpost:refresh-access-tokens');
+    $this->artisan('mixpostmcp:refresh-access-tokens');
 
     $token = $account->fresh()->access_token;
 
@@ -98,7 +98,7 @@ it('keeps the stored refresh token when the provider omits one from its response
         ],
     ]);
 
-    $this->artisan('mixpost:refresh-access-tokens');
+    $this->artisan('mixpostmcp:refresh-access-tokens');
 
     $token = $account->fresh()->access_token;
 
@@ -115,7 +115,7 @@ it('leaves a healthy token alone', function () {
         ],
     ]);
 
-    $this->artisan('mixpost:refresh-access-tokens');
+    $this->artisan('mixpostmcp:refresh-access-tokens');
 
     Http::assertNothingSent();
 });
@@ -130,7 +130,7 @@ it('marks the account unauthorized when the provider refuses the refresh', funct
 
     $account = expiringAccount('tiktok');
 
-    $this->artisan('mixpost:refresh-access-tokens');
+    $this->artisan('mixpostmcp:refresh-access-tokens');
 
     // The same signal a failed publish raises, so the accounts page shows the Unauthorized badge
     // and the user knows to reconnect.
@@ -142,7 +142,7 @@ it('skips accounts already marked unauthorized', function () {
     // nothing — only reconnecting by hand does.
     expiringAccount('tiktok', ['authorized' => false]);
 
-    $this->artisan('mixpost:refresh-access-tokens');
+    $this->artisan('mixpostmcp:refresh-access-tokens');
 
     Http::assertNothingSent();
 });
@@ -153,7 +153,7 @@ it('ignores providers that have no refresh flow', function () {
     expiringAccount('mastodon');
     expiringAccount('facebook_page');
 
-    $this->artisan('mixpost:refresh-access-tokens')->assertSuccessful();
+    $this->artisan('mixpostmcp:refresh-access-tokens')->assertSuccessful();
 
     Http::assertNothingSent();
 });
@@ -174,7 +174,7 @@ it('carries on with the sweep when one network is down', function () {
     $youtube = expiringAccount('youtube');
     $tiktok = expiringAccount('tiktok');
 
-    $this->artisan('mixpost:refresh-access-tokens')->assertSuccessful();
+    $this->artisan('mixpostmcp:refresh-access-tokens')->assertSuccessful();
 
     expect($tiktok->fresh()->access_token['access_token'])->toBe('a-fresh-token')
         // A network being down is not a dead refresh token, so the account keeps its authorization
@@ -187,10 +187,10 @@ it('is registered on the schedule every thirty minutes', function () {
     // it the same way rather than expecting the package to have done it.
     $schedule = app(Illuminate\Console\Scheduling\Schedule::class);
 
-    Inovector\Mixpost\Schedule::register($schedule);
+    OneMediaLabs\MixpostMcp\Schedule::register($schedule);
 
     $events = collect($schedule->events())
-        ->filter(fn ($event) => str_contains($event->command ?? '', 'mixpost:refresh-access-tokens'));
+        ->filter(fn ($event) => str_contains($event->command ?? '', 'mixpostmcp:refresh-access-tokens'));
 
     // Hourly would leave a window where a YouTube token — about an hour long against a ten-minute
     // lookahead — expires between two runs.

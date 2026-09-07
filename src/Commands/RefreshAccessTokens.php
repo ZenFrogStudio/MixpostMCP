@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Concerns\AccountsOption;
-use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Support\Log;
+use OneMediaLabs\MixpostMcp\Concerns\AccountsOption;
+use OneMediaLabs\MixpostMcp\Concerns\UsesSocialProviderManager;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Support\Log;
 use Throwable;
 
 /**
@@ -22,7 +22,7 @@ class RefreshAccessTokens extends Command
     use AccountsOption;
     use UsesSocialProviderManager;
 
-    public $signature = 'mixpost:refresh-access-tokens {--accounts=}';
+    public $signature = 'mixpostmcp:refresh-access-tokens {--accounts=}';
 
     public $description = 'Refresh access tokens that are about to expire';
 

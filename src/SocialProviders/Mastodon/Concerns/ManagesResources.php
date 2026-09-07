@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Mastodon\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Concerns;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Support\SocialProviderResponse;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Util;
 
 trait ManagesResources
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost;
+namespace OneMediaLabs\MixpostMcp;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
-use Inovector\Mixpost\Models\Setting;
+use OneMediaLabs\MixpostMcp\Models\Setting;
 
 class Settings
 {
@@ -83,6 +83,6 @@ class Settings
 
     private function resolveCacheKey(string $key): string
     {
-        return $this->config->get('mixpost.cache_prefix').".settings.$key";
+        return $this->config->get('mixpostmcp.cache_prefix').".settings.$key";
     }
 }

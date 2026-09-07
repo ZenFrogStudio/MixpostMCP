@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Inovector\Mixpost\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
 
 class Calendar extends FormRequest
 {

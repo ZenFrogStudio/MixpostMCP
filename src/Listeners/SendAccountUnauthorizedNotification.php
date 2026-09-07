@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Listeners;
+namespace OneMediaLabs\MixpostMcp\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
-use Inovector\Mixpost\Events\AccountUnauthorized as AccountUnauthorizedEvent;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Mail\AccountUnauthorizedMail;
+use OneMediaLabs\MixpostMcp\Events\AccountUnauthorized as AccountUnauthorizedEvent;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Mail\AccountUnauthorizedMail;
 
 class SendAccountUnauthorizedNotification implements ShouldQueue
 {

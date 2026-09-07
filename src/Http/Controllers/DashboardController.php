@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 class DashboardController extends Controller
 {

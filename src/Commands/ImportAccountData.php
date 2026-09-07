@@ -1,18 +1,18 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
-use Inovector\Mixpost\Concerns\AccountsOption;
-use Inovector\Mixpost\SocialProviders\Mastodon\Jobs\ImportMastodonPostsJob;
-use Inovector\Mixpost\SocialProviders\Meta\Jobs\ImportFacebookInsightsJob;
-use Inovector\Mixpost\SocialProviders\Twitter\Jobs\ImportTwitterPostsJob;
+use OneMediaLabs\MixpostMcp\Concerns\AccountsOption;
+use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Jobs\ImportMastodonPostsJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportFacebookInsightsJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Jobs\ImportTwitterPostsJob;
 
 class ImportAccountData extends Command
 {
     use AccountsOption;
 
-    public $signature = 'mixpost:import-account-data {--accounts=}';
+    public $signature = 'mixpostmcp:import-account-data {--accounts=}';
 
     public $description = 'Import data from social service providers';
 

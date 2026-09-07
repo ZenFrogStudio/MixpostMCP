@@ -28,7 +28,7 @@ const errors = ref({});
 const save = () => {
     errors.value = {};
 
-    router.put(route('mixpost.services.update', {service: 'linkedin'}), props.form, {
+    router.put(route('mixpostmcp.services.update', {service: 'linkedin'}), props.form, {
         preserveScroll: true,
         onSuccess() {
             notify('success', 'LinkedIn service has been saved');
@@ -51,7 +51,7 @@ const save = () => {
         <template #description>
             <a href="https://www.linkedin.com/developers/apps" class="link" target="_blank">
                 Create an App on LinkedIn</a>.
-            <ReadDocHelp :href="`${$page.props.mixpost.docs_link}/services/social/linkedin`"
+            <ReadDocHelp :href="`${$page.props.mixpostmcp.docs_link}/services/social/linkedin`"
                          class="mt-xs"/>
         </template>
 

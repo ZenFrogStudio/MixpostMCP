@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns\Job;
+namespace OneMediaLabs\MixpostMcp\Concerns\Job;
 
-use Inovector\Mixpost\Support\Log;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Support\Log;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 trait SocialProviderJobFail
 {

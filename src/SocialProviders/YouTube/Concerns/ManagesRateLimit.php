@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\YouTube\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns;
 
 use Closure;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 /**
  * Turns a YouTube Data API response into a SocialProviderResponse.

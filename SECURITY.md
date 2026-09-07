@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security issue in Mixpost Live, please report it privately rather than opening a
+If you discover a security issue in MixpostMCP, please report it privately rather than opening a
 public issue. Use GitHub's [private vulnerability reporting](../../security/advisories/new) on this
 repository.
 

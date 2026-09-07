@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Database\Factories;
+namespace OneMediaLabs\MixpostMcp\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Inovector\Mixpost\Models\Service;
+use OneMediaLabs\MixpostMcp\Models\Service;
 
 class ServiceFactory extends Factory
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
-use Inovector\Mixpost\Facades\SocialProviderManager;
+use OneMediaLabs\MixpostMcp\Facades\SocialProviderManager;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +20,7 @@ class AddAccountController extends Controller
         try {
             $provider = SocialProviderManager::connect($providerName);
         } catch (InvalidArgumentException $exception) {
-            return redirect()->route('mixpost.accounts.index')
+            return redirect()->route('mixpostmcp.accounts.index')
                 ->with('error', "The $providerName network is not available in this installation.");
         }
 

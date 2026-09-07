@@ -1,18 +1,18 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
-use Inovector\Mixpost\Concerns\AccountsOption;
-use Inovector\Mixpost\SocialProviders\Mastodon\Jobs\ImportMastodonFollowersJob;
-use Inovector\Mixpost\SocialProviders\Meta\Jobs\ImportFacebookPageFollowersJob;
-use Inovector\Mixpost\SocialProviders\Twitter\Jobs\ImportTwitterFollowersJob;
+use OneMediaLabs\MixpostMcp\Concerns\AccountsOption;
+use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Jobs\ImportMastodonFollowersJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportFacebookPageFollowersJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Jobs\ImportTwitterFollowersJob;
 
 class ImportAccountAudience extends Command
 {
     use AccountsOption;
 
-    public $signature = 'mixpost:import-account-audience {--accounts=}';
+    public $signature = 'mixpostmcp:import-account-audience {--accounts=}';
 
     public $description = 'Import audience(count of followers, fans...etc.) for the social providers';
 

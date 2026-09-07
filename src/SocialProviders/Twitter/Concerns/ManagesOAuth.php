@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Twitter\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Concerns;
 
 trait ManagesOAuth
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\YouTube\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;

@@ -65,15 +65,15 @@ const canSchedule = computed(() => {
 const schedule = (postNow = false) => {
     isLoading.value = true;
 
-    axios.post(route('mixpost.posts.schedule', {post: postId.value}), {
+    axios.post(route('mixpostmcp.posts.schedule', {post: postId.value}), {
         postNow
     }).then((response) => {
         notify('success', response.data, {
             name: 'View in calendar',
-            href: route('mixpost.calendar', {date: props.form.date})
+            href: route('mixpostmcp.calendar', {date: props.form.date})
         });
 
-        router.visit(route('mixpost.posts.index'));
+        router.visit(route('mixpostmcp.posts.index'));
     }).catch((error) => {
         handleValidationError(error);
     }).finally(() => {
@@ -96,7 +96,7 @@ const handleValidationError = (error) => {
     }
 
     if (mustRefreshPage) {
-        router.visit(route('mixpost.posts.edit', {post: postId.value}));
+        router.visit(route('mixpostmcp.posts.edit', {post: postId.value}));
     }
 }
 

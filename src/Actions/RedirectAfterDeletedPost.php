@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Enums\PostStatus;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Enums\PostStatus;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class RedirectAfterDeletedPost
 {
@@ -16,7 +16,7 @@ class RedirectAfterDeletedPost
 
         if ($hasFilterFailedStatus) {
             if (! Post::failed()->exists()) {
-                return redirect()->route('mixpost.posts.index');
+                return redirect()->route('mixpostmcp.posts.index');
             }
 
             return redirect()->back();

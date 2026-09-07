@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class PostContentParser
 {

@@ -15,7 +15,7 @@ defineOptions({layout: MinimalLayout});
         {{ $page.props.text }}
 
         <div class="mt-lg">
-            <Link :href="route('mixpost.dashboard')">
+            <Link :href="route('mixpostmcp.dashboard')">
                 <SecondaryButton>Go home</SecondaryButton>
             </Link>
         </div>

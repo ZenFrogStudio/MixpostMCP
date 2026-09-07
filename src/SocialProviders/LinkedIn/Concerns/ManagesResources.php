@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\LinkedIn\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Support\MediaProbe;
-use Inovector\Mixpost\Support\SocialProviderResponse;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Support\MediaProbe;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Util;
 
 trait ManagesResources
 {

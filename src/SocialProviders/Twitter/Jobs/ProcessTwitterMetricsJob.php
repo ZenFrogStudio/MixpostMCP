@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Twitter\Jobs;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Jobs;
 
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -9,9 +9,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\ImportedPost;
-use Inovector\Mixpost\Models\Metric;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\ImportedPost;
+use OneMediaLabs\MixpostMcp\Models\Metric;
 
 class ProcessTwitterMetricsJob implements ShouldQueue
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Exceptions;
+namespace OneMediaLabs\MixpostMcp\Exceptions;
 
 use Exception;
 

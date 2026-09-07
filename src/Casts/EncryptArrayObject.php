@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Casts;
+namespace OneMediaLabs\MixpostMcp\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Casts\ArrayObject;

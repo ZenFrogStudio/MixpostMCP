@@ -3,9 +3,9 @@
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\SocialProviders\Twitter\TwitterProvider;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\TwitterProvider;
 
 /**
  * Media upload against X's v2 chunked endpoint.

@@ -1,18 +1,18 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Carbon;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Models\Post;
+use OneMediaLabs\MixpostMcp\Util;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 
-#[Description('Put a drafted Mixpost post into the publishing queue at a given date and time. There is no way to publish immediately: the time has to be far enough ahead for a human to review it in the calendar first.')]
+#[Description('Put a drafted MixpostMCP post into the publishing queue at a given date and time. There is no way to publish immediately: the time has to be far enough ahead for a human to review it in the calendar first.')]
 class SchedulePost extends Tool
 {
     protected string $name = 'schedule_post';
@@ -58,7 +58,7 @@ class SchedulePost extends Tool
             return Response::error('That post has no date and time yet. Pass `date` and `time` to set one.');
         }
 
-        $lead = (int) config('mixpost.mcp.min_schedule_lead_minutes', 10);
+        $lead = (int) config('mixpostmcp.mcp.min_schedule_lead_minutes', 10);
 
         if ($scheduledAt->lt(Carbon::now()->utc()->addMinutes($lead))) {
             return Response::error("Posts scheduled through MCP have to be at least $lead minutes ahead, so there is time to review them before they go out. Pick a later time.");
@@ -76,7 +76,7 @@ class SchedulePost extends Tool
             'uuid' => $post->uuid,
             'status' => 'scheduled',
             'scheduled_at' => $scheduledAt->tz(Settings::get('timezone'))->format('Y-m-d H:i'),
-            'edit_url' => route('mixpost.posts.edit', ['post' => $post->uuid]),
+            'edit_url' => route('mixpostmcp.posts.edit', ['post' => $post->uuid]),
         ]);
     }
 

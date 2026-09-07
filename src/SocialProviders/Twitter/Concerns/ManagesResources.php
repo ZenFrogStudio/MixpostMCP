@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Twitter\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Concerns;
 
 use Abraham\TwitterOAuth\Consumer;
 use Abraham\TwitterOAuth\HmacSha1;
@@ -12,10 +12,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Exceptions\TwitterMediaUploadRateLimit;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Exceptions\TwitterMediaUploadRateLimit;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 trait ManagesResources
 {

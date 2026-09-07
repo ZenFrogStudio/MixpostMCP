@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Events\AccountAdded;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Support\MediaUploader;
+use OneMediaLabs\MixpostMcp\Events\AccountAdded;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Support\MediaUploader;
 
 class UpdateOrCreateAccount
 {
@@ -44,7 +44,7 @@ class UpdateOrCreateAccount
         file_put_contents($file, $contents);
 
         $file = new UploadedFile($file, $info['basename']);
-        $path = "mixpost/avatars/$providerName";
+        $path = "mixpostmcp/avatars/$providerName";
 
         $upload = MediaUploader::fromFile($file)->path($path)->upload();
 

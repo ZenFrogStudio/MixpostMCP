@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Inovector\Mixpost\Contracts\MediaConversion;
-use Inovector\Mixpost\Models\Media;
+use OneMediaLabs\MixpostMcp\Contracts\MediaConversion;
+use OneMediaLabs\MixpostMcp\Models\Media;
 
 class MediaUploader
 {
@@ -21,7 +21,7 @@ class MediaUploader
     public function __construct(UploadedFile $file)
     {
         $this->setFile($file);
-        $this->disk(config('mixpost.disk'));
+        $this->disk(config('mixpostmcp.disk'));
     }
 
     public static function fromFile(UploadedFile $file): static

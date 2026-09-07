@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Twitter\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Concerns;
 
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 trait ManagesRateLimit
 {

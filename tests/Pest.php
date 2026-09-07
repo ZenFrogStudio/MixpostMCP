@@ -3,9 +3,9 @@
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
-use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Tests\TestCase;
+use OneMediaLabs\MixpostMcp\Abstracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);
 
@@ -17,7 +17,7 @@ uses(TestCase::class)->in(__DIR__);
  */
 function requestWithSession(): Request
 {
-    $request = Request::create('https://mixpost.test/mixpost/accounts');
+    $request = Request::create('https://mixpostmcp.test/mixpostmcp/accounts');
 
     $request->setLaravelSession(app('session.store'));
 
@@ -34,7 +34,7 @@ function makeProvider(string $providerClass, string $provider = 'test', array $v
         requestWithSession(),
         'test-client-id',
         'test-client-secret',
-        "https://mixpost.test/mixpost/callback/$provider",
+        "https://mixpostmcp.test/mixpostmcp/callback/$provider",
         $values
     );
 }

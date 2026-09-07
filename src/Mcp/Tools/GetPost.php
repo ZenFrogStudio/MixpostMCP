@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Models\PostVersion;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Models\Post;
+use OneMediaLabs\MixpostMcp\Models\PostVersion;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
@@ -17,7 +17,7 @@ use Laravel\Mcp\Server\Tool;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[IsReadOnly]
-#[Description('Read one Mixpost post in full: every version, the attached media, the per-network options and any errors the networks returned.')]
+#[Description('Read one MixpostMCP post in full: every version, the attached media, the per-network options and any errors the networks returned.')]
 class GetPost extends Tool
 {
     protected string $name = 'get_post';

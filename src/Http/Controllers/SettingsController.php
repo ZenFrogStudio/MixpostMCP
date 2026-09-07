@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Http\Requests\SaveSettings;
-use Inovector\Mixpost\Support\TimezoneList;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Http\Requests\SaveSettings;
+use OneMediaLabs\MixpostMcp\Support\TimezoneList;
 
 class SettingsController extends Controller
 {

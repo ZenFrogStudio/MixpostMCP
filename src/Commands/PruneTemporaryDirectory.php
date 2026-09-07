@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Inovector\Mixpost\Support\MediaTemporaryDirectory;
+use OneMediaLabs\MixpostMcp\Support\MediaTemporaryDirectory;
 
 class PruneTemporaryDirectory extends Command
 {
-    public $signature = 'mixpost:prune-temporary-directory {--hours=2}';
+    public $signature = 'mixpostmcp:prune-temporary-directory {--hours=2}';
 
     public $description = 'Prune temporary directory';
 

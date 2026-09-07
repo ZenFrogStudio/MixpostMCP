@@ -1,20 +1,20 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\LinkedIn;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Services\LinkedInService;
-use Inovector\Mixpost\SocialProviders\LinkedIn\Concerns\ManagesLinkedInMedia;
-use Inovector\Mixpost\SocialProviders\LinkedIn\Concerns\ManagesOAuth;
-use Inovector\Mixpost\SocialProviders\LinkedIn\Concerns\ManagesRateLimit;
-use Inovector\Mixpost\SocialProviders\LinkedIn\Concerns\ManagesResources;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Abstracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Services\LinkedInService;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Concerns\ManagesLinkedInMedia;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Concerns\ManagesOAuth;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Concerns\ManagesRateLimit;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Concerns\ManagesResources;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Util;
 
 class LinkedInProvider extends SocialProvider
 {

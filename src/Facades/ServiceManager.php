@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Facades;
+namespace OneMediaLabs\MixpostMcp\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Inovector\Mixpost\Collection\ServiceCollection;
+use OneMediaLabs\MixpostMcp\Collection\ServiceCollection;
 
 /**
  * @method static ServiceCollection services()
@@ -19,12 +19,12 @@ use Inovector\Mixpost\Collection\ServiceCollection;
  * @method static void forget(string $name)
  * @method static void retrievalAction(callable $action)
  *
- * @see \Inovector\Mixpost\ServiceManager
+ * @see \OneMediaLabs\MixpostMcp\ServiceManager
  */
 class ServiceManager extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'MixpostServiceManager';
+        return 'MixpostMcpServiceManager';
     }
 }

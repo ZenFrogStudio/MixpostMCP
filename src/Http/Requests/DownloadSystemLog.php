@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Inovector\Mixpost\Support\SystemLogs;
+use OneMediaLabs\MixpostMcp\Support\SystemLogs;
 
 class DownloadSystemLog extends FormRequest
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Models\Tag;
-use Inovector\Mixpost\Rules\HexRule;
+use OneMediaLabs\MixpostMcp\Models\Tag;
+use OneMediaLabs\MixpostMcp\Rules\HexRule;
 
 class StoreTag extends FormRequest
 {

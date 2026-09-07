@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

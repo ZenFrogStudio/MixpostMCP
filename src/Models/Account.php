@@ -1,17 +1,17 @@
 <?php
 
-namespace Inovector\Mixpost\Models;
+namespace OneMediaLabs\MixpostMcp\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Inovector\Mixpost\Casts\AccountMediaCast;
-use Inovector\Mixpost\Casts\EncryptArrayObject;
-use Inovector\Mixpost\Concerns\Model\HasUuid;
-use Inovector\Mixpost\Events\AccountUnauthorized;
-use Inovector\Mixpost\Facades\SocialProviderManager;
-use Inovector\Mixpost\SocialProviders\Mastodon\MastodonProvider;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Casts\AccountMediaCast;
+use OneMediaLabs\MixpostMcp\Casts\EncryptArrayObject;
+use OneMediaLabs\MixpostMcp\Concerns\Model\HasUuid;
+use OneMediaLabs\MixpostMcp\Events\AccountUnauthorized;
+use OneMediaLabs\MixpostMcp\Facades\SocialProviderManager;
+use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\MastodonProvider;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
 
 class Account extends Model
 {

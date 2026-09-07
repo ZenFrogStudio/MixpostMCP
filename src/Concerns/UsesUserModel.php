@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns;
+namespace OneMediaLabs\MixpostMcp\Concerns;
 
-use Inovector\Mixpost\Models\User;
+use OneMediaLabs\MixpostMcp\Models\User;
 
 trait UsesUserModel
 {
     public static function getUserClass(): string
     {
-        return config('mixpost.user_model', User::class);
+        return config('mixpostmcp.user_model', User::class);
     }
 }

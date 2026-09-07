@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
-use Inovector\Mixpost\Actions\SavePost;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Actions\SavePost;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class UpdatePost extends PostFormRequest
 {

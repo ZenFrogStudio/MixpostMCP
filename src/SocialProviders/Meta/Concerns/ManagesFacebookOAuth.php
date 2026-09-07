@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns;
 
 trait ManagesFacebookOAuth
 {

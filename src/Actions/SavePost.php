@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Models\Post;
+use OneMediaLabs\MixpostMcp\Util;
 
 class SavePost
 {
@@ -12,7 +12,7 @@ class SavePost
      * The update counterpart of CreatePost. Extracted from the UpdatePost form request for the
      * same reason: the MCP server has no HTTP request to build a form request from.
      *
-     * $localScheduledAt is a "Y-m-d H:i" string in the timezone from Mixpost's settings, not UTC.
+     * $localScheduledAt is a "Y-m-d H:i" string in the timezone from MixpostMCP's settings, not UTC.
      */
     public function __invoke(Post $post, array $accounts, array $tags, array $versions, ?string $localScheduledAt = null): void
     {

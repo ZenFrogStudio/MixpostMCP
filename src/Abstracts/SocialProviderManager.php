@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Abstracts;
+namespace OneMediaLabs\MixpostMcp\Abstracts;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Contracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Contracts\SocialProvider;
 use InvalidArgumentException;
 
 abstract class SocialProviderManager

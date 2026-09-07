@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,19 +11,19 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Actions\RedirectAfterDeletedPost;
-use Inovector\Mixpost\Builders\PostQuery;
-use Inovector\Mixpost\Facades\ServiceManager;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Http\Requests\StorePost;
-use Inovector\Mixpost\Http\Requests\UpdatePost;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Http\Resources\PostResource;
-use Inovector\Mixpost\Http\Resources\TagResource;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Models\Tag;
-use Inovector\Mixpost\Support\EagerLoadPostVersionsMedia;
+use OneMediaLabs\MixpostMcp\Actions\RedirectAfterDeletedPost;
+use OneMediaLabs\MixpostMcp\Builders\PostQuery;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Http\Requests\StorePost;
+use OneMediaLabs\MixpostMcp\Http\Requests\UpdatePost;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Http\Resources\PostResource;
+use OneMediaLabs\MixpostMcp\Http\Resources\TagResource;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Post;
+use OneMediaLabs\MixpostMcp\Models\Tag;
+use OneMediaLabs\MixpostMcp\Support\EagerLoadPostVersionsMedia;
 
 class PostsController extends Controller
 {
@@ -78,7 +78,7 @@ class PostsController extends Controller
     {
         $post = $storePost->handle();
 
-        return redirect()->route('mixpost.posts.edit', ['post' => $post->uuid]);
+        return redirect()->route('mixpostmcp.posts.edit', ['post' => $post->uuid]);
     }
 
     public function edit(Request $request): Response

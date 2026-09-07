@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Integrations\Unsplash;
+namespace OneMediaLabs\MixpostMcp\Integrations\Unsplash;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Services\UnsplashService;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Services\UnsplashService;
+use OneMediaLabs\MixpostMcp\Util;
 
 class Unsplash
 {

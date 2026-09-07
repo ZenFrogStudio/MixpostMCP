@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Actions\UpdateOrCreateService;
-use Inovector\Mixpost\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Actions\UpdateOrCreateService;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
 
 class SaveService extends FormRequest
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Database\Factories;
+namespace OneMediaLabs\MixpostMcp\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Enums\PostScheduleStatus;
-use Inovector\Mixpost\Enums\PostStatus;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Enums\PostScheduleStatus;
+use OneMediaLabs\MixpostMcp\Enums\PostStatus;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class PostFactory extends Factory
 {

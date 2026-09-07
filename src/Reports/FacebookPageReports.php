@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Reports;
+namespace OneMediaLabs\MixpostMcp\Reports;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Inovector\Mixpost\Abstracts\Report;
-use Inovector\Mixpost\Enums\FacebookInsightType;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\FacebookInsight;
+use OneMediaLabs\MixpostMcp\Abstracts\Report;
+use OneMediaLabs\MixpostMcp\Enums\FacebookInsightType;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\FacebookInsight;
 
 class FacebookPageReports extends Report
 {

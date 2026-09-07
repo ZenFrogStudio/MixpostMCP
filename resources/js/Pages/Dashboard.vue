@@ -49,7 +49,7 @@ const fetch = () => {
     isLoading.value = true;
     NProgress.start();
 
-    axios.get(route('mixpost.reports'), {
+    axios.get(route('mixpostmcp.reports'), {
         params: appContext.dashboard_filter
     }).then(function (response) {
         data.value = response.data;
@@ -122,7 +122,7 @@ watch(appContext.dashboard_filter, () => {
                 </div>
                 <div v-else>
                     <p class="mb-xs">You don't have an social account, please add at least one.</p>
-                    <Link :href="route('mixpost.accounts.index')">
+                    <Link :href="route('mixpostmcp.accounts.index')">
                         <PrimaryButton>Add accounts</PrimaryButton>
                     </Link>
                 </div>

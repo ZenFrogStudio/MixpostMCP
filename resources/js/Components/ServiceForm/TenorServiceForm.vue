@@ -27,7 +27,7 @@ const errors = ref({});
 const save = () => {
     errors.value = {};
 
-    router.put(route('mixpost.services.update', {service: 'tenor'}), props.form, {
+    router.put(route('mixpostmcp.services.update', {service: 'tenor'}), props.form, {
         preserveScroll: true,
         onSuccess() {
             notify('success', 'Tenor service have been saved');
@@ -48,12 +48,12 @@ const save = () => {
         </template>
 
         <template #description>
-            <p>With Tenor you can use GIF's directly in Mixpost Live.</p>
+            <p>With Tenor you can use GIF's directly in MixpostMCP.</p>
             <p>
                 <a href="https://console.cloud.google.com/" class="link" target="_blank">
                   Create an App on Google Console</a>.
             </p>
-            <ReadDocHelp :href="`${$page.props.mixpost.docs_link}/services/media/tenor`"
+            <ReadDocHelp :href="`${$page.props.mixpostmcp.docs_link}/services/media/tenor`"
                          class="mt-xs"/>
         </template>
 

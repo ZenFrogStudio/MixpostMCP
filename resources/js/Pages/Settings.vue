@@ -17,7 +17,7 @@ const form = useForm(props.settings);
 const {notify} = useNotifications();
 
 const save = () => {
-    form.put(route('mixpost.settings.update'), {
+    form.put(route('mixpostmcp.settings.update'), {
         onSuccess() {
             notify('success', 'Settings have been saved');
         }

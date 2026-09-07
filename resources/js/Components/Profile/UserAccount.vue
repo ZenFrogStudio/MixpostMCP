@@ -16,7 +16,7 @@ const form = useForm({
     email: user.value.email,
 });
 const save = () => {
-    form.put(route('mixpost.profile.updateUser'), {
+    form.put(route('mixpostmcp.profile.updateUser'), {
         preserveScroll: true,
         onSuccess() {
             notify('success', 'Account info have been updated');

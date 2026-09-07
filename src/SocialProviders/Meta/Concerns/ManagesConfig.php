@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns;
 
-use Inovector\Mixpost\Facades\ServiceManager;
-use Inovector\Mixpost\Services\FacebookService;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Services\FacebookService;
 
 trait ManagesConfig
 {

@@ -1,22 +1,22 @@
 # Changelog
 
-All notable changes to Mixpost Live will be documented in this file.
+All notable changes to MixpostMCP will be documented in this file.
 
 ## 2.22.0 - 2026-09-06
 
 **Added**
 
-- **An MCP server, so AI agents can draft and schedule posts.** Mixpost had no way in other than the
+- **An MCP server, so AI agents can draft and schedule posts.** MixpostMCP had no way in other than the
   browser — no API, no tokens, and every write path buried inside an HTTP form request. It now ships
   a Model Context Protocol server that gives Claude and other agents ten typed tools: read the
   connected accounts and what each network allows, browse posts and how they performed, pull media in
   from a URL, draft a post, and put it on the schedule.
-  - **stdio only.** `php artisan mcp:start mixpost`, one process per agent, launched by the agent.
+  - **stdio only.** `php artisan mcp:start mixpostmcp`, one process per agent, launched by the agent.
     Nothing is exposed over HTTP and no port is opened, so there is no token to mint or leak — the
     security boundary is the machine. The flip side is that it has no authentication of its own:
     anyone who can run that command can post to your accounts.
   - **An agent cannot publish.** There is no publish-now tool, and `schedule_post` refuses any time
-    closer than `MIXPOST_MCP_SCHEDULE_LEAD` minutes (ten by default). Everything an agent queues
+    closer than `MIXPOSTMCP_SCHEDULE_LEAD` minutes (ten by default). Everything an agent queues
     appears in the calendar with a window to cancel it first. It also cannot delete posts, touch
     accounts, or change a setting.
   - Over-length bodies are caught **before** the post is saved, named per account: *"The body is 300
@@ -25,16 +25,73 @@ All notable changes to Mixpost Live will be documented in this file.
   - `add_media_from_url` is the only way to attach media, since files cannot be handed over MCP. It
     reuses the media library's own public-address gate, so an agent cannot pull files off the LAN,
     and applies the same mime and size caps as the upload form.
-- **`laravel/mcp` is optional.** It needs Laravel 12.41+, while Mixpost still supports 10.47 and 11,
-  so it is a `suggest` rather than a `require` and the server registers only when the class is there.
-  Nothing changes for anyone who does not install it.
+- **`laravel/mcp` is optional.** It needs Laravel 12.41+, while MixpostMCP still supports 10.47 and
+  11, so it is a `suggest` rather than a `require` and the server registers only when the class is
+  there. Nothing changes for anyone who does not install it.
 
 **Changed**
+
+- **The application is now called MixpostMCP, and this rename goes all the way down.** Unlike the
+  2.17.0 rename, which was cosmetic, this one moves the identifiers as well:
+
+  | Was | Is now |
+  | --- | --- |
+  | `Inovector\Mixpost` namespace | `OneMediaLabs\MixpostMcp` |
+  | `inovector/mixpost` package | `onemedialabs/mixpostmcp` |
+  | `MixpostLiveServiceProvider` | `MixpostMcpServiceProvider` |
+  | `MixpostLiveExceptionHandler` | `MixpostMcpExceptionHandler` |
+  | `config/mixpost.php` | `config/mixpostmcp.php` |
+  | `/mixpost` route prefix | `/mixpostmcp` |
+  | `mixpost.*` route names | `mixpostmcp.*` |
+  | `mixpost:*` artisan commands | `mixpostmcp:*` |
+  | `mixpost::` view namespace | `mixpostmcp::` |
+  | `MIXPOST_*` env vars | `MIXPOSTMCP_*` |
+  | `public/vendor/mixpost` assets | `public/vendor/mixpostmcp` |
+  | `viewMixpost` gate | `viewMixpostMcp` |
+  | `mixpostAssets()` helper | `mixpostMcpAssets()` |
+
+  **The `mixpost_*` database tables are untouched**, so there is no migration and no data to move.
+  Media already in the library keeps working: the `path` column stores each file's own location, so
+  existing rows are unaffected and only new uploads land under `mixpostmcp/`.
+
+  **This is a breaking upgrade.** Every `use Inovector\Mixpost\...` in a host application has to
+  change, `MIXPOST_*` entries in `.env` have to be renamed, bookmarks to `/mixpost` move to
+  `/mixpostmcp`, the cron entry and any queue tooling calling `mixpost:*` commands need the new
+  prefix, and assets must be re-published with `php artisan mixpostmcp:publish-assets`.
+
+- **A dead facade alias was dropped.** `composer.json` aliased `Mixpost` to
+  `Inovector\Mixpost\Facades\Mixpost`, a class that has never existed in this repository. The three
+  real facades — `Settings`, `ServiceManager`, `SocialProviderManager` — are unaffected, though
+  their container binding keys are now prefixed `MixpostMcp`.
 
 - **Post writes moved out of the form requests** into `Actions\CreatePost` and `Actions\SavePost`,
   joining `PublishPost` in `src/Actions/`. `StorePost` and `UpdatePost` now just validate and
   delegate. The MCP tools run in a console process with no HTTP request to build a form request
   from, and duplicating the writes would have let the two paths drift apart.
+
+**Fixed**
+
+- **`Util::isPublicDomainUrl()` could be walked around.** It is the gate in front of every
+  server-side fetch of a user-supplied URL — stock images, GIFs, and now `add_media_from_url` for AI
+  agents — and it only checked for a literal IP or the word `localhost`. A bracketed IPv6 literal
+  (`http://[::1]/`) passed because `parse_url()` keeps the brackets, and any hostname that
+  *resolves* to a private address passed because nothing resolved it. It now resolves the host and
+  requires every address to be public, refuses non-http schemes, and refuses `*.localhost`.
+  `add_media_from_url` also re-checks every redirect hop, since a public URL is free to 302 to a
+  private one.
+- **The System Status page checked for a queue connection nothing uses.** It wanted a connection
+  literally named `mixpost-redis`, a convention from upstream's install guide that this fork never
+  documented, so the row was red on every install. It now checks the thing Horizon needs — that the
+  default queue connection is Redis — and gains a second row, **Publish queue**, that goes red when
+  no Horizon supervisor lists `publish-post`. That queue is where every publish is batched, and a
+  stack can look entirely healthy while never sending a post if it is missing. The bug-report copy
+  on that page also printed `undefined` for the FFmpeg line.
+- **`add_media_from_url` streams to disk** instead of reading the whole file into a string and
+  base64 round-tripping it, which for a 200 MB video meant three or four copies in memory at once.
+- **`list_posts` excerpts come from the shared version**, not whichever version row loaded first,
+  so an account-specific override no longer shows up as the excerpt for the whole post.
+- **Help links on the Status page pointed at `docs.mixpostmcp.app`**, a domain that does not exist —
+  a casualty of the rename. They point at upstream's docs again, which still apply.
 
 ## 2.21.0 - 2026-08-29
 

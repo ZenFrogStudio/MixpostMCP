@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Models;
+namespace OneMediaLabs\MixpostMcp\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;

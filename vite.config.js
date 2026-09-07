@@ -36,12 +36,12 @@ export default defineConfig(({command, mode}) => {
     }
 
     return {
-        publicDir: 'vendor/mixpost',
+        publicDir: 'vendor/mixpostmcp',
         plugins: [
             laravel({
                 input: 'resources/js/app.js',
                 publicDirectory: 'resources/dist',
-                buildDirectory: 'vendor/mixpost',
+                buildDirectory: 'vendor/mixpostmcp',
                 refresh: true
             }),
             vue({

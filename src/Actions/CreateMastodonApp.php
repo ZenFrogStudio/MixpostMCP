@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -14,7 +14,7 @@ class CreateMastodonApp
         try {
             $configuration = Http::post("https:/$serverName/api/v1/apps", [
                 'client_name' => config('app.name'),
-                'redirect_uris' => route('mixpost.callbackSocialProvider', ['provider' => 'mastodon']),
+                'redirect_uris' => route('mixpostmcp.callbackSocialProvider', ['provider' => 'mastodon']),
                 'scopes' => 'read write',
             ])->json();
 

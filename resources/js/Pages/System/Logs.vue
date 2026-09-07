@@ -38,7 +38,7 @@ const activeLogItem = computed(() => {
 });
 
 const clear = () => {
-    router.delete(route('mixpost.system.logs.clear'), {
+    router.delete(route('mixpostmcp.system.logs.clear'), {
         data: {
             filename: activeLogItem.value.name
         }
@@ -77,7 +77,7 @@ const clear = () => {
                     </template>
 
                     <div class="mt-md">
-                        <a :href="route('mixpost.system.logs.download', {filename: activeLogItem.name})"
+                        <a :href="route('mixpostmcp.system.logs.download', {filename: activeLogItem.name})"
                            target="_blank">
                             <PrimaryButton class="mr-xs rtl:mr-0 rtl:ml-xs">Download</PrimaryButton>
                         </a>

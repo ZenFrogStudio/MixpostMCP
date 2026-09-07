@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\SocialProviders\LinkedIn\LinkedInProvider;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\LinkedInProvider;
 
 // No catch-all Http::fake() here: stubs match in the order they are registered, so a catch-all set
 // up in beforeEach would answer every request before a test's own fake was ever consulted — and it
@@ -32,7 +32,7 @@ it('sends the callback URL and client id LinkedIn was configured with', function
 
     expect($params['response_type'])->toBe('code')
         ->and($params['client_id'])->toBe('test-client-id')
-        ->and($params['redirect_uri'])->toBe('https://mixpost.test/mixpost/callback/linkedin');
+        ->and($params['redirect_uri'])->toBe('https://mixpostmcp.test/mixpostmcp/callback/linkedin');
 });
 
 it('carries a state parameter and stores it for the callback check', function () {

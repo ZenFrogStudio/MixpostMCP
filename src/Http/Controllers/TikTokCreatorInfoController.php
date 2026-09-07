@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Concerns\UsesSocialProviderManager;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 /**
  * Serves one TikTok creator's live posting constraints to the post composer.

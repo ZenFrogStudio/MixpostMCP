@@ -71,7 +71,7 @@ onUnmounted(() => {
 })
 
 watch(() => cloneDeep(filter.value), throttle(() => {
-    router.get(route('mixpost.posts.index'), pickBy(filter.value), {
+    router.get(route('mixpostmcp.posts.index'), pickBy(filter.value), {
         preserveState: true,
         only: ['posts', 'filter']
     });
@@ -85,7 +85,7 @@ const {notify} = useNotifications();
 const confirmationDeletion = ref(false);
 
 const deletePosts = () => {
-    router.delete(route('mixpost.posts.multipleDelete'), {
+    router.delete(route('mixpostmcp.posts.multipleDelete'), {
         data: {
             posts: selectedRecords.value,
             status: filter.value.status

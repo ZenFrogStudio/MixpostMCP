@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;

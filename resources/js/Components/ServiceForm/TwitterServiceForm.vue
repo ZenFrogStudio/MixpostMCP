@@ -29,7 +29,7 @@ const errors = ref({});
 const save = () => {
     errors.value = {};
 
-    router.put(route('mixpost.services.update', {service: 'twitter'}), props.form, {
+    router.put(route('mixpostmcp.services.update', {service: 'twitter'}), props.form, {
         preserveScroll: true,
         onSuccess() {
             notify('success', 'Twitter service have been saved');
@@ -52,7 +52,7 @@ const save = () => {
         <template #description>
             <a href="https://developer.twitter.com/en/portal/projects-and-apps" class="link" target="_blank">
                 Create an App on Twitter</a>.
-            <ReadDocHelp :href="`${$page.props.mixpost.docs_link}/services/social/x`"
+            <ReadDocHelp :href="`${$page.props.mixpostmcp.docs_link}/services/social/x`"
                          class="mt-xs"/>
         </template>
 

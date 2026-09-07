@@ -18,13 +18,13 @@ axios.interceptors.response.use(response => response, async error => {
 
     if (status === 419) {
         // Refresh session token
-        const responseCsrfToken = await axios.get('/mixpost/refresh-csrf-token', {
+        const responseCsrfToken = await axios.get('/mixpostmcp/refresh-csrf-token', {
             headers: {
                 'Accept': 'text/html',
             },
         })
 
-        const isLoginResponse = responseCsrfToken.request.responseURL.includes('/mixpost/login');
+        const isLoginResponse = responseCsrfToken.request.responseURL.includes('/mixpostmcp/login');
 
         if (isLoginResponse) {
             window.location.reload();

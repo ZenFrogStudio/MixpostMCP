@@ -28,7 +28,7 @@ const any = computed(() => {
             <p class="mt-xs italic">Click on the button below to configure the third-party services.</p>
         </Alert>
 
-        <Link :href="route('mixpost.services.index')" class="inline-block">
+        <Link :href="route('mixpostmcp.services.index')" class="inline-block">
             <PrimaryButton>Configure services</PrimaryButton>
         </Link>
     </div>

@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Http\Requests\SchedulePost;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Http\Requests\SchedulePost;
+use OneMediaLabs\MixpostMcp\Util;
 
 class SchedulePostController extends Controller
 {

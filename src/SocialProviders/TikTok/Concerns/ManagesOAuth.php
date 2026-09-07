@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\TikTok\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\SocialProviders\TikTok\TikTokProvider;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\TikTokProvider;
+use OneMediaLabs\MixpostMcp\Util;
 
 /**
  * The authorization half of the TikTok integration: build the consent URL with a PKCE challenge,

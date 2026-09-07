@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Util;
 use Spatie\TemporaryDirectory\TemporaryDirectory as BaseTemporaryDirectory;
 
 class MediaTemporaryDirectory
@@ -15,7 +15,7 @@ class MediaTemporaryDirectory
 
     public static function getParentTemporaryDirectoryPath()
     {
-        return Util::config('temporary_directory_path') ?? storage_path('mixpost-media/temp');
+        return Util::config('temporary_directory_path') ?? storage_path('mixpostmcp-media/temp');
     }
 
     public static function getTemporaryDirectoryPath(): string

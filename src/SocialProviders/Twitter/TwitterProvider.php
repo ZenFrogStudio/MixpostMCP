@@ -1,17 +1,17 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Twitter;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Twitter;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Http\Request;
-use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Services\TwitterService;
-use Inovector\Mixpost\SocialProviders\Twitter\Concerns\ManagesOAuth;
-use Inovector\Mixpost\SocialProviders\Twitter\Concerns\ManagesRateLimit;
-use Inovector\Mixpost\SocialProviders\Twitter\Concerns\ManagesResources;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Abstracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Services\TwitterService;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Concerns\ManagesOAuth;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Concerns\ManagesRateLimit;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Concerns\ManagesResources;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Util;
 
 class TwitterProvider extends SocialProvider
 {

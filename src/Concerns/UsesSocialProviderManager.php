@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns;
+namespace OneMediaLabs\MixpostMcp\Concerns;
 
-use Inovector\Mixpost\Contracts\SocialProvider;
-use Inovector\Mixpost\Facades\SocialProviderManager;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Contracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Facades\SocialProviderManager;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 trait UsesSocialProviderManager
 {

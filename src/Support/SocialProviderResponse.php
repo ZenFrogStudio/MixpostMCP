@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
 
 class SocialProviderResponse
 {

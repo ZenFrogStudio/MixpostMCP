@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Models;
+namespace OneMediaLabs\MixpostMcp\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Inovector\Mixpost\Concerns\Model\HasUuid;
-use Inovector\Mixpost\Enums\PostScheduleStatus;
-use Inovector\Mixpost\Enums\PostStatus;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Concerns\Model\HasUuid;
+use OneMediaLabs\MixpostMcp\Enums\PostScheduleStatus;
+use OneMediaLabs\MixpostMcp\Enums\PostStatus;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 class Post extends Model
 {

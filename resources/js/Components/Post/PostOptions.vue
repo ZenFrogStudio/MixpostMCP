@@ -129,7 +129,7 @@ watch(() => tiktokAccountIds.value.join(','), (ids) => {
     }
 
     Promise.all(tiktokAccountIds.value.map(id =>
-        axios.get(route('mixpost.accounts.tiktokCreatorInfo', {account: id}))
+        axios.get(route('mixpostmcp.accounts.tiktokCreatorInfo', {account: id}))
             .then(response => response.data)
             .catch(() => null)
     )).then(results => {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Services;
+namespace OneMediaLabs\MixpostMcp\Services;
 
 use Illuminate\Validation\Rule;
-use Inovector\Mixpost\Abstracts\Service;
-use Inovector\Mixpost\Enums\ServiceGroup;
+use OneMediaLabs\MixpostMcp\Abstracts\Service;
+use OneMediaLabs\MixpostMcp\Enums\ServiceGroup;
 
 class TwitterService extends Service
 {

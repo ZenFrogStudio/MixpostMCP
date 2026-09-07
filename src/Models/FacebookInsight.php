@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Models;
+namespace OneMediaLabs\MixpostMcp\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Inovector\Mixpost\Enums\FacebookInsightType;
+use OneMediaLabs\MixpostMcp\Enums\FacebookInsightType;
 
 class FacebookInsight extends Model
 {

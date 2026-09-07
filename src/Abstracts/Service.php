@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Abstracts;
+namespace OneMediaLabs\MixpostMcp\Abstracts;
 
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Contracts\Service as ServiceContract;
-use Inovector\Mixpost\Enums\ServiceGroup;
-use Inovector\Mixpost\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Contracts\Service as ServiceContract;
+use OneMediaLabs\MixpostMcp\Enums\ServiceGroup;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
 
 abstract class Service implements ServiceContract
 {

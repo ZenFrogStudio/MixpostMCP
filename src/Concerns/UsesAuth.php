@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns;
+namespace OneMediaLabs\MixpostMcp\Concerns;
 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -15,6 +15,6 @@ trait UsesAuth
 
     public static function getAuthGuardName(): ?string
     {
-        return config('mixpost.auth_guard');
+        return config('mixpostmcp.auth_guard');
     }
 }

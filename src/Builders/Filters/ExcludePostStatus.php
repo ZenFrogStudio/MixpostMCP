@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Builders\Filters;
+namespace OneMediaLabs\MixpostMcp\Builders\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
-use Inovector\Mixpost\Contracts\Filter;
-use Inovector\Mixpost\Enums\PostStatus as PostStatusEnum;
+use OneMediaLabs\MixpostMcp\Contracts\Filter;
+use OneMediaLabs\MixpostMcp\Enums\PostStatus as PostStatusEnum;
 
 class ExcludePostStatus implements Filter
 {

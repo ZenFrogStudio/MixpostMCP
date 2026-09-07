@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\YouTube\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\SocialProviders\YouTube\YouTubeProvider;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\SocialProviders\YouTube\YouTubeProvider;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 /**
  * Reads the channels a Google account owns and publishes to the connected one.
@@ -132,7 +132,7 @@ trait ManagesResources
         $response = $this->apiRequest()->delete(YouTubeProvider::API_URL.'/videos?id='.urlencode($id));
 
         // 204 is the success answer and 404 means it is already gone. Neither should stop the post
-        // being removed from Mixpost Live.
+        // being removed from MixpostMCP.
         if (in_array($response->status(), [204, 404], true)) {
             return $this->response(SocialProviderResponseStatus::OK, []);
         }
@@ -168,7 +168,7 @@ trait ManagesResources
         // media is a bare URL with no file behind it.
         if ($video->disk === 'external_media' || (int) $video->size <= 0) {
             return $this->response(SocialProviderResponseStatus::ERROR, [
-                "The video {$video->name} is not stored in Mixpost Live, so its file cannot be uploaded to YouTube.",
+                "The video {$video->name} is not stored in MixpostMCP, so its file cannot be uploaded to YouTube.",
             ]);
         }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Audience;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Audience;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
@@ -12,7 +12,7 @@ use Laravel\Mcp\Server\Tool;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[IsReadOnly]
-#[Description('Read the follower count Mixpost recorded for one account over time, with the net change across the range.')]
+#[Description('Read the follower count MixpostMCP recorded for one account over time, with the net change across the range.')]
 class GetAudienceGrowth extends Tool
 {
     protected string $name = 'get_audience_growth';

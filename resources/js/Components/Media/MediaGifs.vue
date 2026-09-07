@@ -33,7 +33,7 @@ const {
     deselectAll,
     isSelected,
     createObserver
-} = useMedia('mixpost.media.fetchGifs');
+} = useMedia('mixpostmcp.media.fetchGifs');
 
 onMounted(() => {
     if (enabled.value) {
@@ -71,7 +71,7 @@ defineExpose({selected, deselectAll})
             You have not configured Tenor service.
         </Alert>
 
-        <Link :href="route('mixpost.services.index')" class="block mt-md">
+        <Link :href="route('mixpostmcp.services.index')" class="block mt-md">
             <PrimaryButton>Click to configure</PrimaryButton>
         </Link>
     </template>

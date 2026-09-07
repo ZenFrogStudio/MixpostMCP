@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Enums;
+namespace OneMediaLabs\MixpostMcp\Enums;
 
 enum PostStatus: int
 {

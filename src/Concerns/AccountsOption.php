@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns;
+namespace OneMediaLabs\MixpostMcp\Concerns;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 trait AccountsOption
 {

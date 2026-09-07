@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns;
+namespace OneMediaLabs\MixpostMcp\Concerns;
 
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 trait UsesSocialProviderResponse
 {

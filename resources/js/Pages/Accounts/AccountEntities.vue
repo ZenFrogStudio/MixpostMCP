@@ -29,7 +29,7 @@ const save = () => {
         return;
     }
 
-    router.post(route('mixpost.accounts.entities.store', {provider: props.provider}), {
+    router.post(route('mixpostmcp.accounts.entities.store', {provider: props.provider}), {
         'items': form.value.selected
     });
 }

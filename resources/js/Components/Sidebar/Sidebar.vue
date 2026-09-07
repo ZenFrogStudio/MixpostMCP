@@ -23,13 +23,13 @@ import UpgradePro from "../Pro/UpgradePro.vue";
 <template>
     <div class="w-full h-full flex flex-col py-2xl bg-white border-r border-gray-200">
         <div class="relative mb-12 px-xl">
-            <Link :href="route('mixpost.dashboard')">
+            <Link :href="route('mixpostmcp.dashboard')">
                 <Logo class="h-12"/>
             </Link>
         </div>
 
         <div class="flex px-xl">
-            <DarkButtonLink :href="route('mixpost.posts.create')" class="w-full">
+            <DarkButtonLink :href="route('mixpostmcp.posts.create')" class="w-full">
                 <PlusIcon class="mr-xs"/>
                 Create post
             </DarkButtonLink>
@@ -37,7 +37,7 @@ import UpgradePro from "../Pro/UpgradePro.vue";
 
         <div class="flex flex-col space-y-lg overflow-y-auto px-xl mt-2xl h-full">
             <MenuGroupBody>
-                <MenuItem :url="route('mixpost.dashboard')" :active="$page.component === 'Dashboard'">
+                <MenuItem :url="route('mixpostmcp.dashboard')" :active="$page.component === 'Dashboard'">
                     <template #icon>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor" stroke-width="2">
@@ -49,27 +49,27 @@ import UpgradePro from "../Pro/UpgradePro.vue";
                 </MenuItem>
             </MenuGroupBody>
             <MenuDelimiter/>
-            <MenuGroupHeader :create-url="route('mixpost.posts.create')" class="mt-lg">
+            <MenuGroupHeader :create-url="route('mixpostmcp.posts.create')" class="mt-lg">
                 Content
                 <template #icon>
                     <PlusIcon/>
                 </template>
             </MenuGroupHeader>
             <MenuGroupBody>
-                <MenuItem :url="route('mixpost.posts.index')"
+                <MenuItem :url="route('mixpostmcp.posts.index')"
                           :active="$page.component === 'Posts/Index'">
                     <template #icon>
                         <GridIcon/>
                     </template>
                     Posts
                 </MenuItem>
-                <MenuItem :url="route('mixpost.calendar')" :active="$page.component === 'Calendar'">
+                <MenuItem :url="route('mixpostmcp.calendar')" :active="$page.component === 'Calendar'">
                     <template #icon>
                         <CalendarIcon/>
                     </template>
                     Calendar
                 </MenuItem>
-                <MenuItem :url="route('mixpost.media.index')" :active="$page.component === 'Media'">
+                <MenuItem :url="route('mixpostmcp.media.index')" :active="$page.component === 'Media'">
                     <template #icon>
                         <PhotoIcon/>
                     </template>
@@ -77,23 +77,23 @@ import UpgradePro from "../Pro/UpgradePro.vue";
                 </MenuItem>
             </MenuGroupBody>
             <MenuDelimiter/>
-            <MenuGroupHeader :create-url="route('mixpost.posts.create')">
+            <MenuGroupHeader :create-url="route('mixpostmcp.posts.create')">
                 Configuration
             </MenuGroupHeader>
             <MenuGroupBody>
-                <MenuItem :url="route('mixpost.accounts.index')" :active="$page.component === 'Accounts/Accounts'">
+                <MenuItem :url="route('mixpostmcp.accounts.index')" :active="$page.component === 'Accounts/Accounts'">
                     <template #icon>
                         <ShareIcon/>
                     </template>
                     Social Accounts
                 </MenuItem>
-                <MenuItem :url="route('mixpost.services.index')" :active="$page.component === 'Services'">
+                <MenuItem :url="route('mixpostmcp.services.index')" :active="$page.component === 'Services'">
                     <template #icon>
                         <ServerStackIcon/>
                     </template>
                     Services
                 </MenuItem>
-                <MenuItem :url="route('mixpost.settings.index')" :active="$page.component === 'Settings'">
+                <MenuItem :url="route('mixpostmcp.settings.index')" :active="$page.component === 'Settings'">
                     <template #icon>
                         <CogIcon/>
                     </template>
@@ -105,13 +105,13 @@ import UpgradePro from "../Pro/UpgradePro.vue";
                 System
             </MenuGroupHeader>
             <MenuGroupBody>
-                <MenuItem :url="route('mixpost.system.status')" :active="$page.component === 'System/Status'">
+                <MenuItem :url="route('mixpostmcp.system.status')" :active="$page.component === 'System/Status'">
                     <template #icon>
                         <InformationCircle/>
                     </template>
                     Status
                 </MenuItem>
-                <MenuItem :url="route('mixpost.system.logs.index')" :active="$page.component === 'System/Logs'">
+                <MenuItem :url="route('mixpostmcp.system.logs.index')" :active="$page.component === 'System/Logs'">
                     <template #icon>
                         <Document/>
                     </template>
@@ -135,7 +135,7 @@ import UpgradePro from "../Pro/UpgradePro.vue";
         <div class="absolute bottom-0 mb-sm w-full">
             <MenuDelimiter/>
             <div class="flex flex-col items-start px-xl mt-sm">
-                <div class="text-sm text-gray-500 mb-xs">Lite version: {{ $page.props.mixpost.version }}</div>
+                <div class="text-sm text-gray-500 mb-xs">Lite version: {{ $page.props.mixpostmcp.version }}</div>
                 <UpgradePro>
                     <template #trigger>
                         <ProLabel name="Unlock Pro Features" icon="lock-open"/>

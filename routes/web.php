@@ -3,43 +3,43 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
-use Inovector\Mixpost\Http\Controllers\AccountEntitiesController;
-use Inovector\Mixpost\Http\Controllers\AccountsController;
-use Inovector\Mixpost\Http\Controllers\AddAccountController;
-use Inovector\Mixpost\Http\Controllers\AuthenticatedController;
-use Inovector\Mixpost\Http\Controllers\CalendarController;
-use Inovector\Mixpost\Http\Controllers\CallbackSocialProviderController;
-use Inovector\Mixpost\Http\Controllers\CreateMastodonAppController;
-use Inovector\Mixpost\Http\Controllers\DashboardController;
-use Inovector\Mixpost\Http\Controllers\DeletePostsController;
-use Inovector\Mixpost\Http\Controllers\DuplicatePostController;
-use Inovector\Mixpost\Http\Controllers\MediaController;
-use Inovector\Mixpost\Http\Controllers\MediaDownloadExternalController;
-use Inovector\Mixpost\Http\Controllers\MediaFetchGifsController;
-use Inovector\Mixpost\Http\Controllers\MediaFetchStockController;
-use Inovector\Mixpost\Http\Controllers\MediaFetchUploadsController;
-use Inovector\Mixpost\Http\Controllers\MediaUploadFileController;
-use Inovector\Mixpost\Http\Controllers\PostsController;
-use Inovector\Mixpost\Http\Controllers\ProfileController;
-use Inovector\Mixpost\Http\Controllers\ReportsController;
-use Inovector\Mixpost\Http\Controllers\SchedulePostController;
-use Inovector\Mixpost\Http\Controllers\ServicesController;
-use Inovector\Mixpost\Http\Controllers\SettingsController;
-use Inovector\Mixpost\Http\Controllers\SystemLogsController;
-use Inovector\Mixpost\Http\Controllers\SystemStatusController;
-use Inovector\Mixpost\Http\Controllers\TagsController;
-use Inovector\Mixpost\Http\Controllers\TikTokCreatorInfoController;
-use Inovector\Mixpost\Http\Controllers\UpdateAuthUserController;
-use Inovector\Mixpost\Http\Controllers\UpdateAuthUserPasswordController;
-use Inovector\Mixpost\Http\Middleware\Auth as MixpostAuthMiddleware;
-use Inovector\Mixpost\Http\Middleware\HandleInertiaRequests;
+use OneMediaLabs\MixpostMcp\Http\Controllers\AccountEntitiesController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\AccountsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\AddAccountController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\AuthenticatedController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\CalendarController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\CallbackSocialProviderController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\CreateMastodonAppController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\DashboardController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\DeletePostsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\DuplicatePostController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\MediaController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\MediaDownloadExternalController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\MediaFetchGifsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\MediaFetchStockController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\MediaFetchUploadsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\MediaUploadFileController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\PostsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\ProfileController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\ReportsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\SchedulePostController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\ServicesController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\SettingsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\SystemLogsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\SystemStatusController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\TagsController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\TikTokCreatorInfoController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\UpdateAuthUserController;
+use OneMediaLabs\MixpostMcp\Http\Controllers\UpdateAuthUserPasswordController;
+use OneMediaLabs\MixpostMcp\Http\Middleware\Auth as MixpostAuthMiddleware;
+use OneMediaLabs\MixpostMcp\Http\Middleware\HandleInertiaRequests;
 
 Route::middleware([
     'web',
     MixpostAuthMiddleware::class,
     HandleInertiaRequests::class,
-])->prefix('mixpost')
-    ->name('mixpost.')
+])->prefix('mixpostmcp')
+    ->name('mixpostmcp.')
     ->group(function () {
         Route::get('/', DashboardController::class)->name('dashboard');
         Route::get('reports', ReportsController::class)->name('reports');

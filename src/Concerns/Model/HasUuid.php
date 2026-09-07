@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns\Model;
+namespace OneMediaLabs\MixpostMcp\Concerns\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;

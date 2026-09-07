@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Listeners;
+namespace OneMediaLabs\MixpostMcp\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Artisan;
-use Inovector\Mixpost\Commands\ImportAccountAudience;
-use Inovector\Mixpost\Commands\ImportAccountData;
-use Inovector\Mixpost\Commands\ProcessMetrics;
+use OneMediaLabs\MixpostMcp\Commands\ImportAccountAudience;
+use OneMediaLabs\MixpostMcp\Commands\ImportAccountData;
+use OneMediaLabs\MixpostMcp\Commands\ProcessMetrics;
 
 class HandleAccountImports implements ShouldQueue
 {

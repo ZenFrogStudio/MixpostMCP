@@ -1,17 +1,17 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Concerns;
+namespace OneMediaLabs\MixpostMcp\Mcp\Concerns;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Validator;
-use Inovector\Mixpost\Http\Requests\PostFormRequest;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Http\Requests\PostFormRequest;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Util;
 use Laravel\Mcp\Request;
 
 /**
  * Shared by the create_post and update_post tools, which take the same input and turn it into the
- * `versions` structure Mixpost stores.
+ * `versions` structure MixpostMCP stores.
  */
 trait BuildsPostPayload
 {

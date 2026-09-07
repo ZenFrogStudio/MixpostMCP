@@ -1,9 +1,9 @@
-# Mixpost Live
+# MixpostMCP
 
 **Self-hosted social media management.** Write once, tailor per network, schedule it, and watch how
 it performed — all from a calendar you own, on a server you control.
 
-Mixpost Live is a fork of [Mixpost Lite](https://github.com/inovector/mixpost), extended with
+MixpostMCP is a fork of [Mixpost Lite](https://github.com/inovector/mixpost), extended with
 first-class support for Instagram, LinkedIn and TikTok alongside the networks it already handled.
 
 ## What it does
@@ -28,7 +28,7 @@ written once.
 
 ## Installation
 
-Mixpost Live installs the same way as upstream Mixpost Lite, so the
+MixpostMCP installs the same way as upstream Mixpost Lite, so the
 [Mixpost Lite documentation](https://docs.mixpost.app/lite/) covers getting a server up and running.
 The package name, config file, routes and database tables are unchanged from upstream, so you can
 follow it step for step.
@@ -39,22 +39,22 @@ network, and keeping those connections alive.
 ## Connecting social networks
 
 Every network needs an app of your own in that network's developer portal. You put the app's
-credentials on Mixpost Live's **Services** page, and you register Mixpost Live's callback URL on the app.
+credentials on MixpostMCP's **Services** page, and you register MixpostMCP's callback URL on the app.
 
 The callback URL is always the same shape:
 
 ```
-https://<your-domain>/mixpost/callback/<provider>
+https://<your-domain>/mixpostmcp/callback/<provider>
 ```
 
 | Network | Provider key | Callback URL to register | Developer portal |
 | --- | --- | --- | --- |
-| Facebook Page | `facebook_page` | `https://<your-domain>/mixpost/callback/facebook_page` | [Meta for Developers](https://developers.facebook.com/apps) |
-| Instagram | `instagram` | `https://<your-domain>/mixpost/callback/instagram` | Same Meta app as Facebook |
-| X (Twitter) | `twitter` | `https://<your-domain>/mixpost/callback/twitter` | [X Developer Portal](https://developer.x.com/en/portal/dashboard) |
-| LinkedIn | `linkedin` | `https://<your-domain>/mixpost/callback/linkedin` | [LinkedIn Developers](https://www.linkedin.com/developers/apps) |
-| TikTok | `tiktok` | `https://<your-domain>/mixpost/callback/tiktok` | [TikTok for Developers](https://developers.tiktok.com/) |
-| YouTube | `youtube` | `https://<your-domain>/mixpost/callback/youtube` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
+| Facebook Page | `facebook_page` | `https://<your-domain>/mixpostmcp/callback/facebook_page` | [Meta for Developers](https://developers.facebook.com/apps) |
+| Instagram | `instagram` | `https://<your-domain>/mixpostmcp/callback/instagram` | Same Meta app as Facebook |
+| X (Twitter) | `twitter` | `https://<your-domain>/mixpostmcp/callback/twitter` | [X Developer Portal](https://developer.x.com/en/portal/dashboard) |
+| LinkedIn | `linkedin` | `https://<your-domain>/mixpostmcp/callback/linkedin` | [LinkedIn Developers](https://www.linkedin.com/developers/apps) |
+| TikTok | `tiktok` | `https://<your-domain>/mixpostmcp/callback/tiktok` | [TikTok for Developers](https://developers.tiktok.com/) |
+| YouTube | `youtube` | `https://<your-domain>/mixpostmcp/callback/youtube` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
 
 Register **both** Facebook Page and Instagram callback URLs on the same Meta app — they are two
 different URLs even though they share one app.
@@ -67,7 +67,7 @@ as a trailing slash.
 
 Create an app at [Meta for Developers](https://developers.facebook.com/apps), choose the
 **Business** app type, and add the **Facebook Login** product. Put the App ID and App Secret on
-Mixpost Live's **Services** page under Facebook, and add the callback URL to Facebook Login's **Valid
+MixpostMCP's **Services** page under Facebook, and add the callback URL to Facebook Login's **Valid
 OAuth Redirect URIs**.
 
 Permissions to request: `business_management`, `pages_show_list`, `pages_manage_posts`,
@@ -86,29 +86,29 @@ permissions, register the `instagram` callback URL alongside the `facebook_page`
 
 **Only Instagram Business or Creator accounts that are linked to a Facebook Page will appear in the
 account picker.** Personal Instagram accounts are not supported by the Graph API, and a Business
-account with no Page linked to it is invisible to Mixpost Live — it will not show up, and there is no
+account with no Page linked to it is invisible to MixpostMCP — it will not show up, and there is no
 error message explaining why. Link the Page in the Instagram app under *Settings → Account type and
 tools* before you try to connect.
 
-**Your Mixpost Live installation must be reachable from the public internet.** Meta downloads your
-images and videos from a URL your server hands it, so publishing will fail if Mixpost Live runs on
+**Your MixpostMCP installation must be reachable from the public internet.** Meta downloads your
+images and videos from a URL your server hands it, so publishing will fail if MixpostMCP runs on
 `localhost`, on a private network, or behind an access gateway such as Cloudflare Access. Your
 media disk must also serve files publicly.
 
 ### X (Twitter)
 
 Create a Project and an App in the [X Developer Portal](https://developer.x.com/en/portal/dashboard),
-then put the **API Key** and **API Secret** on Mixpost Live's **Services** page. Under the app's **User
+then put the **API Key** and **API Secret** on MixpostMCP's **Services** page. Under the app's **User
 authentication settings**, turn on OAuth 1.0a, set **App permissions** to *Read and write*, set the
 **Type of App** to *Web App*, and add the callback URL.
 
 Also set the **Tier** on the Services page to match your app's actual access level in the portal.
-It is not cosmetic — the tier decides whether Mixpost Live publishes through API v1.1 or v2, and it is
+It is not cosmetic — the tier decides whether MixpostMCP publishes through API v1.1 or v2, and it is
 what tells you how many posts you may make.
 
 **Free-tier write caps are low enough to matter.** A free app is limited to roughly 1,500 posts a
 month; Basic to roughly 50,000 app-wide. Once you hit the cap X rejects every publish for the rest
-of the billing cycle, and from Mixpost Live that looks like posts failing for no reason. Check your
+of the billing cycle, and from MixpostMCP that looks like posts failing for no reason. Check your
 usage in the portal dashboard before assuming something is broken.
 
 **Media uploads use the v2 endpoint.** X sunset the v1.1 upload host on 9 June 2025, so photos, GIFs
@@ -116,7 +116,7 @@ and video all go through `POST https://api.x.com/2/media/upload` as an INIT / AP
 STATUS sequence.
 
 X documents two contradictory shapes for that flow, so to save the next person re-deriving it:
-Mixpost Live uses the **single-URL form**, sending `command=INIT|APPEND|FINALIZE` as multipart form
+MixpostMCP uses the **single-URL form**, sending `command=INIT|APPEND|FINALIZE` as multipart form
 fields to `/2/media/upload`, per the [chunked upload
 quickstart](https://docs.x.com/x-api/media/quickstart/media-upload-chunked). The alternative — the
 REST paths `/2/media/upload/initialize`, `/append` and `/{id}/finalize` in the API reference — is
@@ -131,13 +131,13 @@ Two things to know if uploads fail:
   *Read and write* in the Developer Portal, then reconnect the account so a new token is issued.
 - **Uploads eat your posting allowance.** On the free tier the INIT and FINALIZE steps share the
   same 17-per-24-hours budget as `POST /2/tweets`, so a single video costs three requests. When X
-  rate limits an upload, Mixpost Live releases the job and retries later rather than failing the post.
+  rate limits an upload, MixpostMCP releases the job and retries later rather than failing the post.
 
 ### LinkedIn
 
 Create an app at [LinkedIn Developers](https://www.linkedin.com/developers/apps), then put its
-Client ID and Client Secret on Mixpost Live's **Services** page. Add your callback URL
-(`https://your-mixpost-url/mixpost/callback/linkedin`) to the app's **Authorized redirect URLs**.
+Client ID and Client Secret on MixpostMCP's **Services** page. Add your callback URL
+(`https://your-mixpostmcp-url/mixpostmcp/callback/linkedin`) to the app's **Authorized redirect URLs**.
 
 Your app needs these products:
 
@@ -147,7 +147,7 @@ Your app needs these products:
 | Share on LinkedIn | `w_member_social` — posting as yourself | Yes |
 | Community Management API | `r_organization_admin`, `w_organization_social` — listing and posting as company pages | Only for company pages |
 
-**The Community Management API has to be approved before you connect.** Mixpost Live always asks for the
+**The Community Management API has to be approved before you connect.** MixpostMCP always asks for the
 organization scopes, and LinkedIn refuses the whole authorization if the app is not approved for
 them — it does not quietly drop them. If approval is still pending, either finish it first or
 remove the two `*_organization_*` entries from `$scopes` in
@@ -160,8 +160,8 @@ them, so most self-hosted installs will need to reconnect the account when the t
 ### TikTok
 
 Create an app at [TikTok for Developers](https://developers.tiktok.com/), then put its **Client Key**
-and **Client Secret** on Mixpost Live's **Services** page. Add your callback URL
-(`https://your-mixpost-url/mixpost/callback/tiktok`) to the app's redirect URIs.
+and **Client Secret** on MixpostMCP's **Services** page. Add your callback URL
+(`https://your-mixpostmcp-url/mixpostmcp/callback/tiktok`) to the app's redirect URIs.
 
 Your app needs the **Login Kit** and **Content Posting API** products, with the `user.info.basic`,
 `video.publish` and `video.upload` scopes.
@@ -170,7 +170,7 @@ Your app needs the **Login Kit** and **Content Posting API** products, with the 
 Unaudited apps may only post with `SELF_ONLY` viewership, are limited to 5 creators in any 24 hour
 window, and require those creators' accounts to be set to private. Nothing fails — the upload
 succeeds, TikTok reports the post as published, and nobody but the creator can see it. Posts made
-while unaudited stay private permanently, so run the audit before you rely on this. Mixpost Live warns
+while unaudited stay private permanently, so run the audit before you rely on this. MixpostMCP warns
 you in the post composer when TikTok offers a creator no audience other than "Only me".
 
 TikTok posts here are **video only**; one video per post, up to 4 GB. Photo posts are a separate
@@ -185,7 +185,7 @@ refresh being scheduled; an account will otherwise stop posting the day after yo
 
 Create a project in the [Google Cloud Console](https://console.cloud.google.com/apis/credentials),
 enable the **YouTube Data API v3**, and create an **OAuth client ID** of type *Web application*.
-Put the client ID and client secret on Mixpost Live's **Services** page and add the callback URL to the
+Put the client ID and client secret on MixpostMCP's **Services** page and add the callback URL to the
 client's **Authorised redirect URIs**. Scopes: `youtube.upload` and `youtube.readonly`.
 
 A Google account can own several channels, including Brand Accounts, so connecting one asks you to
@@ -205,7 +205,7 @@ then the video is already live.
 
 **Uploading costs about 1,600 quota units, against a default quota of 10,000 units per day** — so
 roughly six videos a day before uploads start failing. Beyond that you need a quota increase from
-Google, which is a review process, not a form. Mixpost Live reports a breach as a rate limit and
+Google, which is a review process, not a form. MixpostMCP reports a breach as a rate limit and
 schedules the retry for the next midnight Pacific time, which is when Google restores the allowance.
 
 While the OAuth consent screen is in **Testing**, refresh tokens expire after 7 days and every
@@ -214,7 +214,7 @@ verification if you use the `youtube.upload` scope.
 
 ## Keeping accounts connected
 
-**The Laravel scheduler must actually be running.** Mixpost Live's scheduled work — publishing queued
+**The Laravel scheduler must actually be running.** MixpostMCP's scheduled work — publishing queued
 posts, importing metrics, and refreshing access tokens — all runs from it. Add this to your
 server's crontab:
 
@@ -224,6 +224,36 @@ server's crontab:
 
 Without it nothing publishes at its scheduled time, and connected accounts quietly stop working as
 their tokens expire.
+
+**And your application has to register the schedule.** MixpostMCP ships its scheduled work as one
+registrar rather than adding tasks on its own, so `routes/console.php` needs this:
+
+```php
+use Illuminate\Console\Scheduling\Schedule;
+use OneMediaLabs\MixpostMcp\Schedule as MixpostMcpSchedule;
+
+MixpostMcpSchedule::register(app(Schedule::class));
+```
+
+Miss this and everything looks healthy — the scheduler runs, the queue runs, `php artisan
+schedule:list` is simply empty — while every post you schedule sits in the calendar and never goes
+out.
+
+**And Horizon has to work the `publish-post` queue.** Every publish is batched onto that queue, not
+the default one. Horizon's published `config/horizon.php` only lists `default`, so add it, and give
+the supervisor enough time for a video upload:
+
+```php
+'supervisor-1' => [
+    'queue' => ['default', 'publish-post'],
+    'timeout' => 900,
+    // ...
+],
+```
+
+Then restart Horizon. The **System Status** page has a *Publish queue* row that turns red when no
+supervisor lists it, because this is the second way a stack can look entirely healthy and never
+send a post.
 
 Three networks issue short-lived access tokens and depend on scheduled refresh:
 
@@ -235,14 +265,14 @@ Three networks issue short-lived access tokens and depend on scheduled refresh:
 | Facebook / Instagram | about 60 days | Exchanged for a long-lived token when you connect, so no refresh needed |
 | Mastodon | does not expire | Nothing |
 
-The sweep is `mixpost:refresh-access-tokens`, registered in `src/Schedule.php` to run every thirty
+The sweep is `mixpostmcp:refresh-access-tokens`, registered in `src/Schedule.php` to run every thirty
 minutes. It renews any token due to expire within the next ten minutes and marks an account
 unauthorized if its refresh token has died, which lights up the Unauthorized badge on the accounts
 page. All of that depends on the cron entry above being in place.
 
 ## Letting an AI agent draft and schedule posts
 
-Mixpost ships an optional MCP server, so Claude and other AI agents can read your accounts and your
+MixpostMCP ships an optional MCP server, so Claude and other AI agents can read your accounts and your
 results, draft posts and put them on the schedule.
 
 It is **off unless you install the package it needs**:
@@ -251,13 +281,13 @@ It is **off unless you install the package it needs**:
 composer require laravel/mcp
 ```
 
-That needs Laravel 12.41 or newer. On anything older, Mixpost works exactly as before and the MCP
+That needs Laravel 12.41 or newer. On anything older, MixpostMCP works exactly as before and the MCP
 server is simply not registered.
 
 The server runs over stdio, one process per agent, launched by the agent itself:
 
 ```
-php artisan mcp:start mixpost
+php artisan mcp:start mixpostmcp
 ```
 
 In Claude Desktop, add it to `claude_desktop_config.json`:
@@ -265,9 +295,9 @@ In Claude Desktop, add it to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "mixpost": {
+    "mixpostmcp": {
       "command": "php",
-      "args": ["/path-to-your-project/artisan", "mcp:start", "mixpost"]
+      "args": ["/path-to-your-project/artisan", "mcp:start", "mixpostmcp"]
     }
   }
 }
@@ -278,10 +308,10 @@ If your app runs in Docker, launch it through the container instead:
 ```json
 {
   "mcpServers": {
-    "mixpost": {
+    "mixpostmcp": {
       "command": "docker",
       "args": ["compose", "-f", "/path-to-your-project/docker-compose.yml",
-               "exec", "-T", "app", "php", "artisan", "mcp:start", "mixpost"]
+               "exec", "-T", "app", "php", "artisan", "mcp:start", "mixpostmcp"]
     }
   }
 }
@@ -306,10 +336,10 @@ If your app runs in Docker, launch it through the container instead:
 
 **There is no publish-now tool.** An agent can only put a post in the queue, and only far enough
 ahead that you have a chance to see it in the calendar and cancel. The window defaults to ten
-minutes and is set with `MIXPOST_MCP_SCHEDULE_LEAD`:
+minutes and is set with `MIXPOSTMCP_SCHEDULE_LEAD`:
 
 ```
-MIXPOST_MCP_SCHEDULE_LEAD=30
+MIXPOSTMCP_SCHEDULE_LEAD=30
 ```
 
 An agent also cannot delete posts, connect or disconnect accounts, or change any setting.
@@ -317,7 +347,7 @@ An agent also cannot delete posts, connect or disconnect accounts, or change any
 ### Security
 
 **The server has no authentication of its own.** It runs as your application, with the same reach as
-the scheduler, so anyone who can run `php artisan mcp:start mixpost` on that machine can post to your
+the scheduler, so anyone who can run `php artisan mcp:start mixpostmcp` on that machine can post to your
 accounts. It is stdio only — nothing is exposed over HTTP and no port is opened — so the boundary is
 the machine itself. Do not wrap it in a network transport without putting real authentication in
 front of it.
@@ -341,11 +371,11 @@ Please see [SECURITY.md](SECURITY.md) for how to report a security vulnerability
 
 ## Credits
 
-Mixpost Live is built on [Mixpost](https://github.com/inovector/mixpost) by
+MixpostMCP is built on [Mixpost](https://github.com/inovector/mixpost) by
 [Dima Botezatu](https://github.com/lao9s) and [Inovector](https://inovector.com), and on the work of
 [its contributors](https://github.com/inovector/mixpost/graphs/contributors). Thank you.
 
 ## License
 
-Mixpost Live is licensed under the [MIT License](LICENSE.md), as is the Mixpost project it is
+MixpostMCP is licensed under the [MIT License](LICENSE.md), as is the Mixpost project it is
 derived from.

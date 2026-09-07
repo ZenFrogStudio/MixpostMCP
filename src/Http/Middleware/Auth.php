@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Middleware;
+namespace OneMediaLabs\MixpostMcp\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as AuthFacade;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
-use Inovector\Mixpost\Concerns\UsesAuth;
-use Inovector\Mixpost\Concerns\UsesUserModel;
-use Inovector\Mixpost\Models\User;
+use OneMediaLabs\MixpostMcp\Concerns\UsesAuth;
+use OneMediaLabs\MixpostMcp\Concerns\UsesUserModel;
+use OneMediaLabs\MixpostMcp\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
 class Auth
@@ -26,7 +26,7 @@ class Auth
             return $this->redirect($request);
         }
 
-        if (! Gate::allows('viewMixpost')) {
+        if (! Gate::allows('viewMixpostMcp')) {
             abort(403);
         }
 
@@ -45,7 +45,7 @@ class Auth
         if (! $request->expectsJson()) {
             $request->session()->put('url.intended', url()->current());
 
-            return Inertia::location(route(config('mixpost.redirect_unauthorized_users_to_route')));
+            return Inertia::location(route(config('mixpostmcp.redirect_unauthorized_users_to_route')));
         }
 
         return response()->json('Unauthenticated.', Response::HTTP_UNAUTHORIZED);

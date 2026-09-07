@@ -1,7 +1,7 @@
 <?php
 
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\SocialProviders\Twitter\TwitterProvider;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\TwitterProvider;
 
 /**
  * There is no getAuthUrl() test here on purpose. TwitterProvider drives the twitteroauth SDK, which
@@ -46,7 +46,7 @@ it('reads allow_mixing from the media_limit block it is declared in', function (
     // The path used to be `social_provider_options.twitter.allow_mixing`, which does not exist —
     // the value silently fell back to the built-in default, so editing the published config did
     // nothing.
-    config()->set('mixpost.social_provider_options.twitter.media_limit.allow_mixing', true);
+    config()->set('mixpostmcp.social_provider_options.twitter.media_limit.allow_mixing', true);
 
     expect(TwitterProvider::postConfigs()->jsonSerialize()['media_limit']['max']['allow_mixing']['default'])
         ->toBeTrue();

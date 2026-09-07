@@ -1,17 +1,17 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
-use Inovector\Mixpost\Concerns\AccountsOption;
-use Inovector\Mixpost\SocialProviders\Mastodon\Jobs\ProcessMastodonMetricsJob;
-use Inovector\Mixpost\SocialProviders\Twitter\Jobs\ProcessTwitterMetricsJob;
+use OneMediaLabs\MixpostMcp\Concerns\AccountsOption;
+use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Jobs\ProcessMastodonMetricsJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Jobs\ProcessTwitterMetricsJob;
 
 class ProcessMetrics extends Command
 {
     use AccountsOption;
 
-    public $signature = 'mixpost:process-metrics {--accounts=}';
+    public $signature = 'mixpostmcp:process-metrics {--accounts=}';
 
     public $description = 'Process metrics for the social providers';
 

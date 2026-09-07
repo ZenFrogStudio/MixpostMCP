@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
-use Inovector\Mixpost\Models\Tag;
+use OneMediaLabs\MixpostMcp\Models\Tag;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[IsReadOnly]
-#[Description('List the tags available for labelling posts in Mixpost.')]
+#[Description('List the tags available for labelling posts in MixpostMCP.')]
 class ListTags extends Tool
 {
     protected string $name = 'list_tags';

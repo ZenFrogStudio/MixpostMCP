@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Concerns\Job;
+namespace OneMediaLabs\MixpostMcp\Concerns\Job;
 
 use Carbon\Carbon;
 use DateTime;
@@ -25,10 +25,10 @@ trait HasSocialProviderJobRateLimit
                 default => $this->account->provider,
             };
 
-            return "mixpost-$platform-api-limit";
+            return "mixpostmcp-$platform-api-limit";
         }
 
-        return "mixpost-{$this->account->id}-api-limit";
+        return "mixpostmcp-{$this->account->id}-api-limit";
     }
 
     public function rateLimitExpiration()

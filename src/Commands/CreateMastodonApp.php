@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
-use Inovector\Mixpost\Actions\CreateMastodonApp as CreateMastodonAppAction;
-use Inovector\Mixpost\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Actions\CreateMastodonApp as CreateMastodonAppAction;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
 
 class CreateMastodonApp extends Command
 {
-    public $signature = 'mixpost:create-mastodon-app {server}';
+    public $signature = 'mixpostmcp:create-mastodon-app {server}';
 
     public $description = 'Create new mastodon application for a server';
 

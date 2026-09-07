@@ -1,16 +1,16 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\YouTube\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\SocialProviders\YouTube\YouTubeProvider;
-use Inovector\Mixpost\Support\SocialProviderResponse;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\SocialProviders\YouTube\YouTubeProvider;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Util;
 
 /**
  * Moves one video file into YouTube with a resumable upload, then sets its thumbnail.
@@ -225,13 +225,13 @@ trait ManagesYouTubeVideoUpload
                 ->post(YouTubeProvider::UPLOAD_URL.'/thumbnails/set?videoId='.urlencode($videoId));
 
             if ($response->failed()) {
-                Log::warning("Mixpost Live could not set the YouTube thumbnail for video $videoId.", [
+                Log::warning("MixpostMCP could not set the YouTube thumbnail for video $videoId.", [
                     'status' => $response->status(),
                     'reason' => Arr::get($response->json() ?? [], 'error.errors.0.reason'),
                 ]);
             }
         } catch (\Throwable $exception) {
-            Log::warning("Mixpost Live could not set the YouTube thumbnail for video $videoId.", [
+            Log::warning("MixpostMCP could not set the YouTube thumbnail for video $videoId.", [
                 'exception' => $exception->getMessage(),
             ]);
         }

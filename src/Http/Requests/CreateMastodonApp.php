@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Inovector\Mixpost\Actions\CreateMastodonApp as CreateMastodonAppAction;
-use Inovector\Mixpost\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Actions\CreateMastodonApp as CreateMastodonAppAction;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateMastodonApp extends FormRequest

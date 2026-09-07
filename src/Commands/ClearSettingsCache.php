@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
-use Inovector\Mixpost\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
 
 class ClearSettingsCache extends Command
 {
-    public $signature = 'mixpost:clear-settings-cache';
+    public $signature = 'mixpostmcp:clear-settings-cache';
 
     public $description = 'Clear the settings from cache';
 

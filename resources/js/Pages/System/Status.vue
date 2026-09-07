@@ -25,6 +25,7 @@ const getBody = () => {
     body += `**Debug Mode**: ${props.health.debug ? 'Enabled' : 'Disabled'} \n`
     body += `**Horizon**: ${props.health.horizon_status} \n`
     body += `**Queue connection**: ${props.health.has_queue_connection ? 'Ok' : 'Not ok'} \n`
+    body += `**Publish queue**: ${props.health.publish_queue_supervised ? 'Ok' : 'Not ok'} \n`
     body += `**Schedule**: ${props.health.last_scheduled_run.message} \n`
 
     body += `\n`;
@@ -35,14 +36,14 @@ const getBody = () => {
     body += `*Log Channel**: ${props.tech.log_channel} \n`;
     body += `**Cache Driver**: ${props.tech.cache_driver} \n`;
     body += `**User agent**: ${props.tech.user_agent} \n`;
-    body += `**FFmpeg**: ${props.ffmpeg_status} \n`;
+    body += `**FFmpeg**: ${props.tech.ffmpeg_status} \n`;
     if (props.tech.versions.mysql) {
         body += `**MySql**: ${props.tech.versions.mysql} \n`;
     }
     body += `**PHP**: ${props.tech.versions.php} \n`;
     body += `**Laravel**: ${props.tech.versions.laravel} \n`;
     body += `**Horizon**: ${props.tech.versions.horizon} \n`;
-    body += `**Mixpost Live**: ${props.tech.versions.mixpost} \n`;
+    body += `**MixpostMCP**: ${props.tech.versions.mixpostmcp} \n`;
 
     return body;
 }
@@ -101,7 +102,7 @@ const copyToClipboard = () => {
                                 <span v-if="health.horizon_status === 'Inactive'">
                                     <span class="block">Inactive</span>
                                     Read the <a
-                                    :href="`${$page.props.mixpost.docs_link}/lite/installation/laravel-package#5-install-horizon`">documentation</a>.
+                                    :href="`${$page.props.mixpostmcp.docs_link}/lite/installation/laravel-package#5-install-horizon`">documentation</a>.
                                 </span>
                                 <span v-else>
                                     {{ health.horizon_status }}
@@ -116,12 +117,27 @@ const copyToClipboard = () => {
                             </TableCell>
                             <TableCell>
                                 <span
-                                    v-if="health.has_queue_connection">Queue connection settings for mixpost-redis exist.</span>
+                                    v-if="health.has_queue_connection">The default queue connection is Redis.</span>
                                 <span v-else>
-                                    <span class="block">No valid <span class="font-medium">queue connection</span> found.</span>
-                                    <span class="block">Configure a queue connection with the <span class="font-medium">mixpost-redis</span> key.</span>
+                                    <span class="block">The default <span class="font-medium">queue connection</span> is not Redis, so Horizon cannot run jobs.</span>
+                                    <span class="block">Set <span class="font-medium">QUEUE_CONNECTION=redis</span> in your <span class="font-medium">.env</span>.</span>
                                      Read the <a
-                                    :href="`${$page.props.mixpost.docs_link}/lite/installation/laravel-package#5-install-horizon`">documentation</a>.
+                                    :href="`${$page.props.mixpostmcp.docs_link}/lite/installation/laravel-package#5-install-horizon`">documentation</a>.
+                               </span>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow :hoverable="true">
+                            <TableCell>
+                                <Badge :variant="health.publish_queue_supervised ? 'success'  : 'error'">
+                                    Publish queue
+                                </Badge>
+                            </TableCell>
+                            <TableCell>
+                                <span
+                                    v-if="health.publish_queue_supervised">A Horizon supervisor is working the <span class="font-medium">publish-post</span> queue.</span>
+                                <span v-else>
+                                    <span class="block">No Horizon supervisor lists the <span class="font-medium">publish-post</span> queue, so scheduled posts will never be sent.</span>
+                                    <span class="block">Add <span class="font-medium">'publish-post'</span> to the <span class="font-medium">queue</span> array of a supervisor in <span class="font-medium">config/horizon.php</span>, then restart Horizon.</span>
                                </span>
                             </TableCell>
                         </TableRow>
@@ -226,10 +242,10 @@ const copyToClipboard = () => {
                         </TableRow>
                         <TableRow :hoverable="true">
                             <TableCell class="font-medium">
-                                Mixpost Live
+                                MixpostMCP
                             </TableCell>
                             <TableCell>
-                                {{ tech.versions.mixpost }}
+                                {{ tech.versions.mixpostmcp }}
                             </TableCell>
                         </TableRow>
                     </template>

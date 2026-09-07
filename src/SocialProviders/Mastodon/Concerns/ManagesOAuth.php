@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Mastodon\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Concerns;
 
 use Illuminate\Support\Facades\Http;
 

@@ -2,8 +2,8 @@
 
 use Illuminate\Support\HtmlString;
 
-if (! function_exists('mixpostAssets')) {
-    function mixpostAssets(): HtmlString
+if (! function_exists('mixpostMcpAssets')) {
+    function mixpostMcpAssets(): HtmlString
     {
         $hot = __DIR__.'/../resources/dist/hot';
 
@@ -19,7 +19,7 @@ if (! function_exists('mixpostAssets')) {
             );
         }
 
-        $manifestPath = public_path('vendor/mixpost/manifest.json');
+        $manifestPath = public_path('vendor/mixpostmcp/manifest.json');
 
         if (! file_exists($manifestPath)) {
             return new HtmlString(<<<'HTML'
@@ -31,8 +31,8 @@ if (! function_exists('mixpostAssets')) {
         $manifest = json_decode(file_get_contents($manifestPath), true);
 
         return new HtmlString(<<<HTML
-                <script type="module" src="/vendor/mixpost/{$manifest['resources/js/app.js']['file']}"></script>
-                <link rel="stylesheet" href="/vendor/mixpost/{$manifest['resources/js/app.js']['css'][0]}">
+                <script type="module" src="/vendor/mixpostmcp/{$manifest['resources/js/app.js']['file']}"></script>
+                <link rel="stylesheet" href="/vendor/mixpostmcp/{$manifest['resources/js/app.js']['css'][0]}">
             HTML
         );
     }

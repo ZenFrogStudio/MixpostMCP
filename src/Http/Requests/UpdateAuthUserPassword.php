@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Inovector\Mixpost\Concerns\UsesAuth;
-use Inovector\Mixpost\Concerns\UsesUserModel;
-use Inovector\Mixpost\Rules\CheckUserPasswordRule;
+use OneMediaLabs\MixpostMcp\Concerns\UsesAuth;
+use OneMediaLabs\MixpostMcp\Concerns\UsesUserModel;
+use OneMediaLabs\MixpostMcp\Rules\CheckUserPasswordRule;
 
 class UpdateAuthUserPassword extends FormRequest
 {

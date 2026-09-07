@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Abstracts;
+namespace OneMediaLabs\MixpostMcp\Abstracts;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Contracts\MediaConversion as MediaConversionContract;
-use Inovector\Mixpost\Support\MediaConversionData;
+use OneMediaLabs\MixpostMcp\Contracts\MediaConversion as MediaConversionContract;
+use OneMediaLabs\MixpostMcp\Support\MediaConversionData;
 
 abstract class MediaConversion implements MediaConversionContract
 {

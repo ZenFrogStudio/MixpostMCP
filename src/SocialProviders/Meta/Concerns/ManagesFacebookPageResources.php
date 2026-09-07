@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 trait ManagesFacebookPageResources
 {

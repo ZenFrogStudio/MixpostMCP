@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Models;
+namespace OneMediaLabs\MixpostMcp\Models;
 
 use Exception;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Concerns\Model\HasUuid;
-use Inovector\Mixpost\Support\MediaFilesystem;
-use Inovector\Mixpost\Support\MediaTemporaryDirectory;
+use OneMediaLabs\MixpostMcp\Concerns\Model\HasUuid;
+use OneMediaLabs\MixpostMcp\Support\MediaFilesystem;
+use OneMediaLabs\MixpostMcp\Support\MediaTemporaryDirectory;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\LinkedIn\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -126,7 +126,7 @@ trait ManagesOAuth
     /**
      * A single-use random value put in the session before the redirect and compared on return.
      * Without it, a third party could hand the user a crafted callback URL and attach their own
-     * LinkedIn account to this Mixpost Live install.
+     * LinkedIn account to this MixpostMCP install.
      */
     protected function verifyState(mixed $state): ?string
     {

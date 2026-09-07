@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\File;
-use Inovector\Mixpost\MediaConversions\MediaImageResizeConversion;
-use Inovector\Mixpost\MediaConversions\MediaVideoThumbConversion;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Support\MediaUploader;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\MediaConversions\MediaImageResizeConversion;
+use OneMediaLabs\MixpostMcp\MediaConversions\MediaVideoThumbConversion;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Support\MediaUploader;
+use OneMediaLabs\MixpostMcp\Util;
 
 class MediaUploadFile extends FormRequest
 {
@@ -71,15 +71,15 @@ class MediaUploadFile extends FormRequest
         }
 
         if ($this->isImage()) {
-            $max = config('mixpost.max_file_size.image');
+            $max = config('mixpostmcp.max_file_size.image');
         }
 
         if ($this->isGif()) {
-            $max = config('mixpost.max_file_size.gif');
+            $max = config('mixpostmcp.max_file_size.gif');
         }
 
         if ($this->isVideo()) {
-            $max = config('mixpost.max_file_size.video');
+            $max = config('mixpostmcp.max_file_size.video');
         }
 
         return $max;

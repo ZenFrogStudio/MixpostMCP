@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Http\Requests\MediaUploadFile;
-use Inovector\Mixpost\Http\Resources\MediaResource;
+use OneMediaLabs\MixpostMcp\Http\Requests\MediaUploadFile;
+use OneMediaLabs\MixpostMcp\Http\Resources\MediaResource;
 
 class MediaUploadFileController extends Controller
 {

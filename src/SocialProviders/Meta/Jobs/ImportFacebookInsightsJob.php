@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta\Jobs;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
@@ -11,15 +11,15 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Concerns\Job\HasSocialProviderJobRateLimit;
-use Inovector\Mixpost\Concerns\Job\SocialProviderException;
-use Inovector\Mixpost\Concerns\Job\SocialProviderJobFail;
-use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
-use Inovector\Mixpost\Enums\FacebookInsightType;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\FacebookInsight;
-use Inovector\Mixpost\SocialProviders\Meta\FacebookPageProvider;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Concerns\Job\HasSocialProviderJobRateLimit;
+use OneMediaLabs\MixpostMcp\Concerns\Job\SocialProviderException;
+use OneMediaLabs\MixpostMcp\Concerns\Job\SocialProviderJobFail;
+use OneMediaLabs\MixpostMcp\Concerns\UsesSocialProviderManager;
+use OneMediaLabs\MixpostMcp\Enums\FacebookInsightType;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\FacebookInsight;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\FacebookPageProvider;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 class ImportFacebookInsightsJob implements ShouldQueue
 {

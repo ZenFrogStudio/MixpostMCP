@@ -1,21 +1,21 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\MediaConversions\MediaImageResizeConversion;
-use Inovector\Mixpost\MediaConversions\MediaVideoThumbConversion;
-use Inovector\Mixpost\Support\File;
-use Inovector\Mixpost\Support\MediaUploader;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\MediaConversions\MediaImageResizeConversion;
+use OneMediaLabs\MixpostMcp\MediaConversions\MediaVideoThumbConversion;
+use OneMediaLabs\MixpostMcp\Support\File;
+use OneMediaLabs\MixpostMcp\Support\MediaUploader;
+use OneMediaLabs\MixpostMcp\Util;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 
-#[Description('Download an image or video from a public URL into the Mixpost media library and return its id, for use in the media_ids of create_post or update_post. Files cannot be uploaded directly over MCP, so this is the only way to attach media.')]
+#[Description('Download an image or video from a public URL into the MixpostMCP media library and return its id, for use in the media_ids of create_post or update_post. Files cannot be uploaded directly over MCP, so this is the only way to attach media.')]
 class AddMediaFromUrl extends Tool
 {
     protected string $name = 'add_media_from_url';
@@ -39,13 +39,37 @@ class AddMediaFromUrl extends Tool
             return Response::error("The URL [$url] is not a public address, so it will not be fetched.");
         }
 
-        $response = Http::timeout(60)->get($url);
+        // Streamed straight to a temp file. Reading a 200 MB video into a string and then base64
+        // round-tripping it, the way the stock-image path does for small JPEGs, would hold three
+        // to four copies in memory at once.
+        $tempPath = tempnam(sys_get_temp_dir(), 'mixpostmcp-');
+
+        app()->terminating(fn () => @unlink($tempPath));
+
+        try {
+            $response = Http::timeout(60)
+                ->withOptions([
+                    'sink' => $tempPath,
+                    'allow_redirects' => [
+                        'max' => 5,
+                        // A public URL can 302 to a private one. Every hop gets the same gate.
+                        'on_redirect' => function ($request, $response, $uri): void {
+                            if (! Util::isPublicDomainUrl((string) $uri)) {
+                                throw new \RuntimeException("Redirected to a non-public address [$uri].");
+                            }
+                        },
+                    ],
+                ])
+                ->get($url);
+        } catch (\Throwable $e) {
+            return Response::error("Could not download [$url]. ".$e->getMessage());
+        }
 
         if (! $response->successful()) {
             return Response::error("Could not download [$url]. The server answered with HTTP {$response->status()}.");
         }
 
-        $file = File::fromBase64(base64_encode($response->body()));
+        $file = File::fromPath($tempPath, basename(parse_url($url, PHP_URL_PATH) ?: '') ?: 'download');
 
         if (! in_array($file->getMimeType(), Util::config('mime_types'), true)) {
             return Response::error("Files of type [{$file->getMimeType()}] are not accepted. Allowed types: ".implode(', ', Util::config('mime_types')).'.');
@@ -60,7 +84,7 @@ class AddMediaFromUrl extends Tool
         }
 
         $media = MediaUploader::fromFile($file)
-            ->path('mixpost/'.now()->format('m-Y'))
+            ->path('mixpostmcp/'.now()->format('m-Y'))
             ->conversions([
                 MediaImageResizeConversion::name('thumb')->width(430),
                 MediaVideoThumbConversion::name('thumb')->atSecond(5),
@@ -81,9 +105,9 @@ class AddMediaFromUrl extends Tool
     protected function sizeLimitKb(string $mimeType): ?int
     {
         return match (true) {
-            Str::after($mimeType, '/') === 'gif' => config('mixpost.max_file_size.gif'),
-            Str::before($mimeType, '/') === 'image' => config('mixpost.max_file_size.image'),
-            Str::before($mimeType, '/') === 'video' => config('mixpost.max_file_size.video'),
+            Str::after($mimeType, '/') === 'gif' => config('mixpostmcp.max_file_size.gif'),
+            Str::before($mimeType, '/') === 'image' => config('mixpostmcp.max_file_size.image'),
+            Str::before($mimeType, '/') === 'video' => config('mixpostmcp.max_file_size.video'),
             default => null,
         };
     }

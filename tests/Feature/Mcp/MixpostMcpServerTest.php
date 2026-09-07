@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Enums\PostStatus;
-use Inovector\Mixpost\Mcp\MixpostServer;
-use Inovector\Mixpost\Mcp\Tools\AddMediaFromUrl;
-use Inovector\Mixpost\Mcp\Tools\CreatePost;
-use Inovector\Mixpost\Mcp\Tools\GetPost;
-use Inovector\Mixpost\Mcp\Tools\ListAccounts;
-use Inovector\Mixpost\Mcp\Tools\ListPosts;
-use Inovector\Mixpost\Mcp\Tools\SchedulePost;
-use Inovector\Mixpost\Mcp\Tools\UpdatePost;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Enums\PostStatus;
+use OneMediaLabs\MixpostMcp\Mcp\MixpostServer;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\AddMediaFromUrl;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\CreatePost;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\GetPost;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\ListAccounts;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\ListPosts;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\SchedulePost;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\UpdatePost;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 beforeEach(function () {
     // laravel/mcp needs Laravel 12.41+, so on a testbench 9 run it will not have been installed.
@@ -149,7 +149,7 @@ it('schedules a post far enough ahead to be reviewed', function () {
 it('refuses to schedule inside the review window', function () {
     // The whole point of the lead time: nothing an agent queues can go out before a human
     // could plausibly see it in the calendar.
-    config()->set('mixpost.mcp.min_schedule_lead_minutes', 30);
+    config()->set('mixpostmcp.mcp.min_schedule_lead_minutes', 30);
 
     $account = twitterAccount();
     $when = now()->addMinutes(5);

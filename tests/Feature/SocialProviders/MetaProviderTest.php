@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\SocialProviders\Meta\FacebookPageProvider;
-use Inovector\Mixpost\SocialProviders\Meta\InstagramProvider;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\FacebookPageProvider;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\InstagramProvider;
 
 beforeEach(function () {
     Http::preventStrayRequests();
@@ -35,7 +35,7 @@ it('sends the callback URL Instagram was configured with', function () {
 
     expect($params['response_type'])->toBe('code')
         ->and($params['client_id'])->toBe('test-client-id')
-        ->and($params['redirect_uri'])->toBe('https://mixpost.test/mixpost/callback/instagram');
+        ->and($params['redirect_uri'])->toBe('https://mixpostmcp.test/mixpostmcp/callback/instagram');
 });
 
 it('rejects a text-only Instagram post without calling the Graph API', function () {

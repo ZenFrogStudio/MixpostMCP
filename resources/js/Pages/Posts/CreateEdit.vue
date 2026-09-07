@@ -66,7 +66,7 @@ const postAccounts = computed(() => {
 });
 
 const store = (data) => {
-    router.post(route('mixpost.posts.store'), data, {
+    router.post(route('mixpostmcp.posts.store'), data, {
         onSuccess() {
             triedToSave.value = true;
             // After redirect to the edit mode, it's necessary to track the tag changes
@@ -78,7 +78,7 @@ const store = (data) => {
 const update = (data) => {
     isLoading.value = true;
 
-    axios.put(route('mixpost.posts.update', {post: props.post.id}), data)
+    axios.put(route('mixpostmcp.posts.update', {post: props.post.id}), data)
         .then(() => {
             hasError.value = false;
         }).catch((error) => {
@@ -98,7 +98,7 @@ const update = (data) => {
         }
 
         if (mustRefreshPage) {
-            router.visit(route('mixpost.posts.edit', {post: props.post.id}));
+            router.visit(route('mixpostmcp.posts.edit', {post: props.post.id}));
         }
     }).finally(() => {
         triedToSave.value = true;

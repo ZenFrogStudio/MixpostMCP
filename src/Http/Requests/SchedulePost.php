@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class SchedulePost extends FormRequest
 {

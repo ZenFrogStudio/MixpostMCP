@@ -48,7 +48,7 @@ const canAdd = (provider, service = null) => {
 }
 
 const updateAccount = (accountId) => {
-    router.put(route('mixpost.accounts.update', {account: accountId}), {}, {
+    router.put(route('mixpostmcp.accounts.update', {account: accountId}), {}, {
         preserveScroll: true,
         onSuccess(response) {
             if (response.props.flash.error) {
@@ -61,7 +61,7 @@ const updateAccount = (accountId) => {
 }
 
 const deleteAccount = () => {
-    router.delete(route('mixpost.accounts.delete', {account: confirmationAccountDeletion.value}), {
+    router.delete(route('mixpostmcp.accounts.delete', {account: confirmationAccountDeletion.value}), {
         preserveScroll: true,
         onStart() {
             accountIsDeleting.value = true;

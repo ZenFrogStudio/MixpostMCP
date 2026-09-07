@@ -1,8 +1,8 @@
 <?php
 
-namespace Inovector\Mixpost\Contracts;
+namespace OneMediaLabs\MixpostMcp\Contracts;
 
-use Inovector\Mixpost\Enums\ServiceGroup;
+use OneMediaLabs\MixpostMcp\Enums\ServiceGroup;
 
 interface Service
 {

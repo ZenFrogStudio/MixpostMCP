@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\MediaConversions;
+namespace OneMediaLabs\MixpostMcp\MediaConversions;
 
-use Inovector\Mixpost\Abstracts\MediaConversion;
-use Inovector\Mixpost\Support\MediaConversionData;
+use OneMediaLabs\MixpostMcp\Abstracts\MediaConversion;
+use OneMediaLabs\MixpostMcp\Support\MediaConversionData;
 use Intervention\Image\Facades\Image;
 
 class MediaImageResizeConversion extends MediaConversion

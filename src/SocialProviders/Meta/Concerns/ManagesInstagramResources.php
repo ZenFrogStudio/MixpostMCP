@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Support\MediaProbe;
-use Inovector\Mixpost\Support\SocialProviderResponse;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Support\MediaProbe;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Util;
 
 trait ManagesInstagramResources
 {
@@ -143,7 +143,7 @@ trait ManagesInstagramResources
 
             if (! Util::isPublicDomainUrl($url)) {
                 return $this->response(SocialProviderResponseStatus::ERROR, [
-                    "Instagram downloads media from a URL rather than accepting an upload, so \"$item->name\" must be reachable from the public internet. It currently resolves to \"$url\", which Instagram cannot reach. Host your media on a public domain or a remote disk and point `mixpost.disk` at it.",
+                    "Instagram downloads media from a URL rather than accepting an upload, so \"$item->name\" must be reachable from the public internet. It currently resolves to \"$url\", which Instagram cannot reach. Host your media on a public domain or a remote disk and point `mixpostmcp.disk` at it.",
                 ]);
             }
 

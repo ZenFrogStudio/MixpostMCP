@@ -1,19 +1,19 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Builders\PostQuery;
-use Inovector\Mixpost\Http\Requests\Calendar;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Http\Resources\PostResource;
-use Inovector\Mixpost\Http\Resources\TagResource;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Tag;
-use Inovector\Mixpost\Support\EagerLoadPostVersionsMedia;
+use OneMediaLabs\MixpostMcp\Builders\PostQuery;
+use OneMediaLabs\MixpostMcp\Http\Requests\Calendar;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Http\Resources\PostResource;
+use OneMediaLabs\MixpostMcp\Http\Resources\TagResource;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Tag;
+use OneMediaLabs\MixpostMcp\Support\EagerLoadPostVersionsMedia;
 
 class CalendarController extends Controller
 {

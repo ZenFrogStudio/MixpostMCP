@@ -1,17 +1,17 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\YouTube;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\YouTube;
 
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Services\YouTubeService;
-use Inovector\Mixpost\SocialProviders\YouTube\Concerns\ManagesOAuth;
-use Inovector\Mixpost\SocialProviders\YouTube\Concerns\ManagesRateLimit;
-use Inovector\Mixpost\SocialProviders\YouTube\Concerns\ManagesResources;
-use Inovector\Mixpost\SocialProviders\YouTube\Concerns\ManagesYouTubeVideoUpload;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Abstracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Services\YouTubeService;
+use OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns\ManagesOAuth;
+use OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns\ManagesRateLimit;
+use OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns\ManagesResources;
+use OneMediaLabs\MixpostMcp\SocialProviders\YouTube\Concerns\ManagesYouTubeVideoUpload;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Util;
 
 /**
  * Connects a YouTube channel through Google OAuth 2.0 and publishes videos to it with the YouTube

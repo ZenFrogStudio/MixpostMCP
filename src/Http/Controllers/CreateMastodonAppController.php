@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Http\Requests\CreateMastodonApp;
+use OneMediaLabs\MixpostMcp\Http\Requests\CreateMastodonApp;
 
 class CreateMastodonAppController extends Controller
 {

@@ -38,7 +38,7 @@ const {
     deselectAll,
     isSelected,
     createObserver
-} = useMedia('mixpost.media.fetchStock');
+} = useMedia('mixpostmcp.media.fetchStock');
 
 onMounted(() => {
     if(enabled.value) {
@@ -82,7 +82,7 @@ defineExpose({selected, deselectAll})
             You have not configured Unsplash service.
         </Alert>
 
-        <Link :href="route('mixpost.services.index')" class="block mt-md">
+        <Link :href="route('mixpostmcp.services.index')" class="block mt-md">
             <PrimaryButton>Click to configure</PrimaryButton>
         </Link>
     </template>

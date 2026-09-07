@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Models;
+namespace OneMediaLabs\MixpostMcp\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Inovector\Mixpost\Facades\Settings as SettingsFacade;
+use OneMediaLabs\MixpostMcp\Facades\Settings as SettingsFacade;
 
 class Setting extends Model
 {

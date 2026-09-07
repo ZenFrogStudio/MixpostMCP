@@ -26,7 +26,7 @@ const errors = ref({});
 const save = () => {
     errors.value = {};
 
-    router.put(route('mixpost.services.update', {service: 'unsplash'}), props.form, {
+    router.put(route('mixpostmcp.services.update', {service: 'unsplash'}), props.form, {
         preserveScroll: true,
         onSuccess() {
             notify('success', 'Unsplash service have been saved');
@@ -47,7 +47,7 @@ const save = () => {
         </template>
 
         <template #description>
-            <p>With Unsplash you can use external stock photos directly in Mixpost Live.</p>
+            <p>With Unsplash you can use external stock photos directly in MixpostMCP.</p>
             <p>
                 <a href="https://unsplash.com/oauth/applications" class="link" target="_blank">
                     Create an App on Unsplash</a>.

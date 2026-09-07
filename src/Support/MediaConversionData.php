@@ -1,8 +1,8 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
-use Inovector\Mixpost\Contracts\MediaConversion;
+use OneMediaLabs\MixpostMcp\Contracts\MediaConversion;
 
 class MediaConversionData
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Rules;
+namespace OneMediaLabs\MixpostMcp\Rules;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Translation\Translator;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\TikTok\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\SocialProviders\TikTok\TikTokProvider;
-use Inovector\Mixpost\Support\SocialProviderResponse;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\TikTokProvider;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Util;
 
 /**
  * Moves one video file into TikTok and waits for the post to actually exist.

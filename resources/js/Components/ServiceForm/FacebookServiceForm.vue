@@ -29,7 +29,7 @@ const errors = ref({});
 const save = () => {
     errors.value = {};
 
-    router.put(route('mixpost.services.update', {service: 'facebook'}), props.form, {
+    router.put(route('mixpostmcp.services.update', {service: 'facebook'}), props.form, {
         preserveScroll: true,
         onSuccess() {
             notify('success', 'Facebook service has been saved');
@@ -58,7 +58,7 @@ const save = () => {
                 Instagram connects through this same Meta app, so these credentials also enable
                 Instagram. There is no separate Instagram tab.
             </p>
-            <ReadDocHelp :href="`${$page.props.mixpost.docs_link}/services/social/facebook/`"
+            <ReadDocHelp :href="`${$page.props.mixpostmcp.docs_link}/services/social/facebook/`"
                          class="mt-xs"/>
         </template>
 

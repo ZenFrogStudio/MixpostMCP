@@ -35,7 +35,7 @@ const props = defineProps({
 
 const emit = defineEmits(['mediaSelect'])
 
-const mimeTypes = usePage().props.mixpost.mime_types;
+const mimeTypes = usePage().props.mixpostmcp.mime_types;
 
 const input = ref(null);
 
@@ -147,7 +147,7 @@ const uploadFile = (file) => {
     formData.append("file", file);
 
     return new Promise((resolve, reject) => {
-        axios.post(route('mixpost.media.upload'), formData)
+        axios.post(route('mixpostmcp.media.upload'), formData)
             .then(function (response) {
                 resolve(response.data);
             })

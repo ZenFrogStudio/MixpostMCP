@@ -1,16 +1,16 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\TikTok;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\TikTok;
 
-use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Services\TikTokService;
-use Inovector\Mixpost\SocialProviders\TikTok\Concerns\ManagesOAuth;
-use Inovector\Mixpost\SocialProviders\TikTok\Concerns\ManagesRateLimit;
-use Inovector\Mixpost\SocialProviders\TikTok\Concerns\ManagesResources;
-use Inovector\Mixpost\SocialProviders\TikTok\Concerns\ManagesTikTokVideoUpload;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Abstracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Services\TikTokService;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns\ManagesOAuth;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns\ManagesRateLimit;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns\ManagesResources;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns\ManagesTikTokVideoUpload;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Util;
 
 /**
  * Connects a single TikTok creator account through OAuth 2.0 with PKCE and publishes videos to it

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -9,9 +9,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Http\Resources\MediaResource;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Services\TenorService;
+use OneMediaLabs\MixpostMcp\Http\Resources\MediaResource;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Services\TenorService;
 use Symfony\Component\HttpFoundation\Response;
 
 class MediaFetchGifsController extends Controller
@@ -24,11 +24,11 @@ class MediaFetchGifsController extends Controller
             abort(Response::HTTP_FORBIDDEN);
         }
 
-        $terms = config('mixpost.external_media_terms');
+        $terms = config('mixpostmcp.external_media_terms');
 
         $items = Http::get('https://tenor.googleapis.com/v2/search', [
             'key' => $clientId,
-            'client_key' => Str::slug(Config::get('app.name', 'mixpost'), '_'),
+            'client_key' => Str::slug(Config::get('app.name', 'mixpostmcp'), '_'),
             'q' => $request->query('keyword', Arr::random($terms)),
             'limit' => 30,
         ]);

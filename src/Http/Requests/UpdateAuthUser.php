@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Inovector\Mixpost\Concerns\UsesAuth;
-use Inovector\Mixpost\Concerns\UsesUserModel;
+use OneMediaLabs\MixpostMcp\Concerns\UsesAuth;
+use OneMediaLabs\MixpostMcp\Concerns\UsesUserModel;
 
 class UpdateAuthUser extends FormRequest
 {

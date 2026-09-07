@@ -17,7 +17,7 @@ const open = ref(false);
 
 const createApp = () => {
     return new Promise((resolve, reject) => {
-        axios.post(route('mixpost.services.createMastodonApp'), {server: server.value})
+        axios.post(route('mixpostmcp.services.createMastodonApp'), {server: server.value})
             .then(() => {
                 resolve();
             }).catch(function (error) {
@@ -29,7 +29,7 @@ const createApp = () => {
 const oAuthRedirect = () => {
     isLoading.value = true;
 
-    router.post(route('mixpost.accounts.add', {provider: 'mastodon'}), {server: server.value}, {
+    router.post(route('mixpostmcp.accounts.add', {provider: 'mastodon'}), {server: server.value}, {
         onSuccess() {
             isLoading.value = false;
         }

@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Support\MediaProbe;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Support\MediaProbe;
 
 beforeEach(function () {
     Storage::fake('public');
@@ -10,8 +10,8 @@ beforeEach(function () {
     // Nothing in this file should reach ffmpeg, and pointing both binaries at a path that does not
     // exist turns "an image never gets probed with ffprobe" into something a test can prove rather
     // than something a comment claims.
-    config()->set('mixpost.ffmpeg_path', '/nonexistent/ffmpeg');
-    config()->set('mixpost.ffprobe_path', '/nonexistent/ffprobe');
+    config()->set('mixpostmcp.ffmpeg_path', '/nonexistent/ffmpeg');
+    config()->set('mixpostmcp.ffprobe_path', '/nonexistent/ffprobe');
 });
 
 /**

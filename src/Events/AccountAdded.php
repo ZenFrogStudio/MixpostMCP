@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Events;
+namespace OneMediaLabs\MixpostMcp\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 class AccountAdded
 {

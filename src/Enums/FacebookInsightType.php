@@ -1,8 +1,8 @@
 <?php
 
-namespace Inovector\Mixpost\Enums;
+namespace OneMediaLabs\MixpostMcp\Enums;
 
-use Inovector\Mixpost\Concerns\Enum\EnumHandyMethods;
+use OneMediaLabs\MixpostMcp\Concerns\Enum\EnumHandyMethods;
 
 enum FacebookInsightType: int
 {

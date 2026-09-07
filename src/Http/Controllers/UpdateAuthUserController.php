@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Http\Requests\UpdateAuthUser;
+use OneMediaLabs\MixpostMcp\Http\Requests\UpdateAuthUser;
 
 class UpdateAuthUserController extends Controller
 {

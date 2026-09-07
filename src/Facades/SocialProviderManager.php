@@ -1,20 +1,20 @@
 <?php
 
-namespace Inovector\Mixpost\Facades;
+namespace OneMediaLabs\MixpostMcp\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Inovector\Mixpost\Contracts\SocialProvider connect(string $provider, array $values = [])
- * @method static \Inovector\Mixpost\Contracts\SocialProvider useAccessToken(array $token = [])
+ * @method static \OneMediaLabs\MixpostMcp\Contracts\SocialProvider connect(string $provider, array $values = [])
+ * @method static \OneMediaLabs\MixpostMcp\Contracts\SocialProvider useAccessToken(array $token = [])
  * @method static array providers()
  *
- * @see \Inovector\Mixpost\Abstracts\SocialProviderManager
+ * @see \OneMediaLabs\MixpostMcp\Abstracts\SocialProviderManager
  */
 class SocialProviderManager extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'MixpostSocialProviderManager';
+        return 'MixpostMcpSocialProviderManager';
     }
 }

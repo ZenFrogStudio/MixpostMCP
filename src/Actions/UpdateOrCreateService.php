@@ -1,8 +1,8 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
-use Inovector\Mixpost\Models\Service;
+use OneMediaLabs\MixpostMcp\Models\Service;
 
 class UpdateOrCreateService
 {

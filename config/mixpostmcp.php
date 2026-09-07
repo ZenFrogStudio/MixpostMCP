@@ -4,12 +4,12 @@ return [
     /*
     * This option controls the default authentication "guard" for the Mixpost routes
     */
-    'auth_guard' => env('MIXPOST_AUTH_GUARD', 'web'),
+    'auth_guard' => env('MIXPOSTMCP_AUTH_GUARD', 'web'),
 
     /*
     * If you use another model for users, you can change it here.
     */
-    'user_model' => \Inovector\Mixpost\Models\User::class,
+    'user_model' => \OneMediaLabs\MixpostMcp\Models\User::class,
 
     /*
      * Mixpost will redirect unauthorized users to the route name specified here
@@ -20,7 +20,7 @@ return [
      * The disk on which to store added files.
      * Choose one or more of the disks you've configured in config/filesystems.php.
      */
-    'disk' => env('MIXPOST_DISK', 'public'),
+    'disk' => env('MIXPOSTMCP_DISK', 'public'),
 
     /*
      * Indicate that the uploaded file should be no more than the given number of kilobytes.
@@ -48,7 +48,7 @@ return [
 
     /*
      * The path where to store temporary files while performing image conversions.
-     * If set to null, storage_path('mixpost-media/temp') will be used.
+     * If set to null, storage_path('mixpostmcp-media/temp') will be used.
      */
     'temporary_directory_path' => null,
 
@@ -61,14 +61,14 @@ return [
     /*
      * Define cache prefix
      */
-    'cache_prefix' => env('MIXPOST_CACHE_PREFIX', 'mixpost'),
+    'cache_prefix' => env('MIXPOSTMCP_CACHE_PREFIX', 'mixpostmcp'),
 
     /*
      * Define log channel
      * Captures connection errors with social networks or third parties used in Mixpost in a separate channel.
      * Leave blank if you want to use Laravel's default log channel
      */
-    'log_channel' => env('MIXPOST_LOG_CHANNEL'),
+    'log_channel' => env('MIXPOSTMCP_LOG_CHANNEL'),
 
     /*
      * The media component is integrated with third-party services Unsplash.com and Tenor.com
@@ -165,7 +165,7 @@ return [
          * many minutes in the future, so there is always a window to see it in the calendar and
          * cancel before it goes out.
          */
-        'min_schedule_lead_minutes' => env('MIXPOST_MCP_SCHEDULE_LEAD', 10),
+        'min_schedule_lead_minutes' => env('MIXPOSTMCP_SCHEDULE_LEAD', 10),
 
         /*
          * Hard ceiling on the number of rows any list tool returns, so a broad query cannot

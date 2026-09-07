@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Models\PostVersion;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Models\PostVersion;
 
 class DeleteMedia extends FormRequest
 {

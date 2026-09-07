@@ -1,9 +1,9 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
-use Inovector\Mixpost\Actions\CreatePost;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Actions\CreatePost;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class StorePost extends PostFormRequest
 {

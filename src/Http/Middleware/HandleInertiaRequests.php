@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Middleware;
+namespace OneMediaLabs\MixpostMcp\Http\Middleware;
 
 use Composer\InstalledVersions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Inertia\Middleware;
-use Inovector\Mixpost\Concerns\UsesAuth;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Http\Resources\UserResource;
-use Inovector\Mixpost\Models\User;
+use OneMediaLabs\MixpostMcp\Concerns\UsesAuth;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Http\Resources\UserResource;
+use OneMediaLabs\MixpostMcp\Models\User;
 use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
@@ -21,7 +21,7 @@ class HandleInertiaRequests extends Middleware
      *
      * @var string
      */
-    protected $rootView = 'mixpost::app';
+    protected $rootView = 'mixpostmcp::app';
 
     /**
      * Determine the current asset version.
@@ -30,7 +30,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function version(Request $request)
     {
-        if (file_exists($manifest = public_path('vendor/mixpost/manifest.json'))) {
+        if (file_exists($manifest = public_path('vendor/mixpostmcp/manifest.json'))) {
             return md5_file($manifest);
         }
 
@@ -63,10 +63,11 @@ class HandleInertiaRequests extends Middleware
                 'name' => Config::get('app.name'),
                 'horizon_path' => Config::get('horizon.path'),
             ],
-            'mixpost' => [
+            'mixpostmcp' => [
+                // Upstream's docs. The install and network-setup guides there still apply to this fork.
                 'docs_link' => 'https://docs.mixpost.app',
-                'version' => InstalledVersions::getVersion('inovector/mixpost'),
-                'mime_types' => Config::get('mixpost.mime_types'),
+                'version' => InstalledVersions::getVersion('onemedialabs/mixpostmcp'),
+                'mime_types' => Config::get('mixpostmcp.mime_types'),
                 'settings' => [
                     'timezone' => Settings::get('timezone'),
                     'time_format' => Settings::get('time_format'),

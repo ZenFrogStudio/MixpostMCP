@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\MediaConversions;
+namespace OneMediaLabs\MixpostMcp\MediaConversions;
 
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
 use Illuminate\Support\Facades\File;
-use Inovector\Mixpost\Abstracts\MediaConversion;
-use Inovector\Mixpost\Support\MediaConversionData;
-use Inovector\Mixpost\Support\MediaFilesystem;
-use Inovector\Mixpost\Support\MediaTemporaryDirectory;
+use OneMediaLabs\MixpostMcp\Abstracts\MediaConversion;
+use OneMediaLabs\MixpostMcp\Support\MediaConversionData;
+use OneMediaLabs\MixpostMcp\Support\MediaFilesystem;
+use OneMediaLabs\MixpostMcp\Support\MediaTemporaryDirectory;
 
 class MediaVideoThumbConversion extends MediaConversion
 {
@@ -48,8 +48,8 @@ class MediaVideoThumbConversion extends MediaConversion
 
         // Convert
         $ffmpeg = FFMpeg::create([
-            'ffmpeg.binaries' => config('mixpost.ffmpeg_path'),
-            'ffprobe.binaries' => config('mixpost.ffprobe_path'),
+            'ffmpeg.binaries' => config('mixpostmcp.ffmpeg_path'),
+            'ffprobe.binaries' => config('mixpostmcp.ffprobe_path'),
         ]);
 
         $video = $ffmpeg->open($file);

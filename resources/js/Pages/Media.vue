@@ -68,7 +68,7 @@ const use = () => {
 const {versionContentObject} = usePostVersions();
 
 const createPost = (media) => {
-    router.post(route('mixpost.posts.store'), {
+    router.post(route('mixpostmcp.posts.store'), {
         versions: [
             {
                 account_id: 0,

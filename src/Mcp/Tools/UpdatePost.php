@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Inovector\Mixpost\Actions\SavePost;
-use Inovector\Mixpost\Mcp\Concerns\BuildsPostPayload;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Actions\SavePost;
+use OneMediaLabs\MixpostMcp\Mcp\Concerns\BuildsPostPayload;
+use OneMediaLabs\MixpostMcp\Models\Post;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
@@ -13,7 +13,7 @@ use Laravel\Mcp\Server\Tool;
 use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
 
 #[IsDestructive]
-#[Description('Rewrite a draft or scheduled post in Mixpost. This replaces the whole post — accounts, body, media and tags — so send the complete content, not just the parts that change. Posts that have already been published or failed cannot be edited.')]
+#[Description('Rewrite a draft or scheduled post in MixpostMCP. This replaces the whole post — accounts, body, media and tags — so send the complete content, not just the parts that change. Posts that have already been published or failed cannot be edited.')]
 class UpdatePost extends Tool
 {
     use BuildsPostPayload;
@@ -78,7 +78,7 @@ class UpdatePost extends Tool
         return Response::json([
             'uuid' => $post->uuid,
             'scheduled_at' => $this->scheduledAt($request),
-            'edit_url' => route('mixpost.posts.edit', ['post' => $post->uuid]),
+            'edit_url' => route('mixpostmcp.posts.edit', ['post' => $post->uuid]),
         ]);
     }
 }

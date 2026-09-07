@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Database\Factories;
+namespace OneMediaLabs\MixpostMcp\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 class AccountFactory extends Factory
 {

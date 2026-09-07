@@ -87,7 +87,7 @@ const store = () => {
         return nonUsedColors[random(0, nonUsedColors.length - 1)]
     }
 
-    router.post(route('mixpost.tags.store'), {
+    router.post(route('mixpostmcp.tags.store'), {
         name: searchText.value,
         hex_color: pickRandomColor()
     }, {

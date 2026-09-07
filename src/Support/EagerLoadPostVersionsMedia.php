@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Inovector\Mixpost\Models\Media;
+use OneMediaLabs\MixpostMcp\Models\Media;
 
 class EagerLoadPostVersionsMedia
 {

@@ -1,22 +1,22 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp;
+namespace OneMediaLabs\MixpostMcp\Mcp;
 
-use Inovector\Mixpost\Mcp\Tools\AddMediaFromUrl;
-use Inovector\Mixpost\Mcp\Tools\CreatePost;
-use Inovector\Mixpost\Mcp\Tools\GetAccountMetrics;
-use Inovector\Mixpost\Mcp\Tools\GetAudienceGrowth;
-use Inovector\Mixpost\Mcp\Tools\GetPost;
-use Inovector\Mixpost\Mcp\Tools\ListAccounts;
-use Inovector\Mixpost\Mcp\Tools\ListPosts;
-use Inovector\Mixpost\Mcp\Tools\ListTags;
-use Inovector\Mixpost\Mcp\Tools\SchedulePost;
-use Inovector\Mixpost\Mcp\Tools\UpdatePost;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\AddMediaFromUrl;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\CreatePost;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\GetAccountMetrics;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\GetAudienceGrowth;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\GetPost;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\ListAccounts;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\ListPosts;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\ListTags;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\SchedulePost;
+use OneMediaLabs\MixpostMcp\Mcp\Tools\UpdatePost;
 use Laravel\Mcp\Server;
 
 class MixpostServer extends Server
 {
-    protected string $name = 'Mixpost';
+    protected string $name = 'MixpostMCP';
 
     protected string $version = '2.22.0';
 
@@ -24,7 +24,7 @@ class MixpostServer extends Server
      * The house rules, stated up front so an agent does not have to discover them by failing.
      */
     protected string $instructions = <<<'MARKDOWN'
-        Mixpost is a self-hosted social media manager. These tools let you read the connected
+        MixpostMCP is a self-hosted social media manager. These tools let you read the connected
         accounts and their results, draft posts, and put them on the schedule.
 
         Rules of the road:
@@ -37,7 +37,7 @@ class MixpostServer extends Server
           that is deliberate, so do not look for one or try to work around it.
         - Media cannot be uploaded directly. Use `add_media_from_url` with a public URL, then pass
           the returned id in `media_ids`.
-        - All dates and times are in the user's local timezone as configured in Mixpost, not UTC.
+        - All dates and times are in the user's local timezone as configured in MixpostMCP, not UTC.
         MARKDOWN;
 
     protected function boot(): void

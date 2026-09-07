@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Resources;
+namespace OneMediaLabs\MixpostMcp\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Inovector\Mixpost\Facades\Settings;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Facades\Settings;
+use OneMediaLabs\MixpostMcp\Util;
 
 class PostResource extends JsonResource
 {

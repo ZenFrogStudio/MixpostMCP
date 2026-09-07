@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Http\Resources\MediaResource;
-use Inovector\Mixpost\Integrations\Unsplash\Unsplash;
-use Inovector\Mixpost\Models\Media;
+use OneMediaLabs\MixpostMcp\Http\Resources\MediaResource;
+use OneMediaLabs\MixpostMcp\Integrations\Unsplash\Unsplash;
+use OneMediaLabs\MixpostMcp\Models\Media;
 
 class MediaFetchStockController extends Controller
 {

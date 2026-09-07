@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Database\Factories;
+namespace OneMediaLabs\MixpostMcp\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Models\Tag;
+use OneMediaLabs\MixpostMcp\Models\Tag;
 
 class TagFactory extends Factory
 {

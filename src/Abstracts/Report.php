@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\Abstracts;
+namespace OneMediaLabs\MixpostMcp\Abstracts;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Inovector\Mixpost\Contracts\ProviderReports;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Audience;
+use OneMediaLabs\MixpostMcp\Contracts\ProviderReports;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Audience;
 
 abstract class Report implements ProviderReports
 {

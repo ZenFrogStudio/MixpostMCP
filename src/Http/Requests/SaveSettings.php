@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Inovector\Mixpost\Facades\Settings as SettingsFacade;
-use Inovector\Mixpost\Models\Setting as SettingModel;
+use OneMediaLabs\MixpostMcp\Facades\Settings as SettingsFacade;
+use OneMediaLabs\MixpostMcp\Models\Setting as SettingModel;
 
 class SaveSettings extends FormRequest
 {

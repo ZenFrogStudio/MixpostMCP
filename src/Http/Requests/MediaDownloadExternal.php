@@ -1,16 +1,16 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Integrations\Unsplash\Jobs\TriggerDownloadJob;
-use Inovector\Mixpost\MediaConversions\MediaImageResizeConversion;
-use Inovector\Mixpost\Support\File;
-use Inovector\Mixpost\Support\MediaUploader;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Integrations\Unsplash\Jobs\TriggerDownloadJob;
+use OneMediaLabs\MixpostMcp\MediaConversions\MediaImageResizeConversion;
+use OneMediaLabs\MixpostMcp\Support\File;
+use OneMediaLabs\MixpostMcp\Support\MediaUploader;
+use OneMediaLabs\MixpostMcp\Util;
 
 class MediaDownloadExternal extends FormRequest
 {
@@ -57,7 +57,7 @@ class MediaDownloadExternal extends FormRequest
 
             $file = File::fromBase64(base64_encode($result->body()));
 
-            $media = MediaUploader::fromFile($file)->path("mixpost/$now")->conversions([
+            $media = MediaUploader::fromFile($file)->path("mixpostmcp/$now")->conversions([
                 MediaImageResizeConversion::name('thumb')->width(430),
             ])->uploadAndInsert();
 

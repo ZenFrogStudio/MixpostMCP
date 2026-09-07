@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\SocialProviders\YouTube\YouTubeProvider;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\SocialProviders\YouTube\YouTubeProvider;
 
 beforeEach(function () {
     Http::preventStrayRequests();

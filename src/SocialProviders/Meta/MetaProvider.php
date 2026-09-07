@@ -1,17 +1,17 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta;
 
 use Illuminate\Http\Request;
-use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Services\FacebookService;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\ManagesConfig;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\ManagesMetaResources;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\ManagesRateLimit;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\MetaOauth;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Abstracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Services\FacebookService;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\ManagesConfig;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\ManagesMetaResources;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\ManagesRateLimit;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\MetaOauth;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Util;
 
 class MetaProvider extends SocialProvider
 {

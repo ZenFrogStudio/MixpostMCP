@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Mastodon;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Mastodon;
 
 use Illuminate\Http\Request;
-use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\SocialProviders\Mastodon\Concerns\ManagesOAuth;
-use Inovector\Mixpost\SocialProviders\Mastodon\Concerns\ManagesRateLimit;
-use Inovector\Mixpost\SocialProviders\Mastodon\Concerns\ManagesResources;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Abstracts\SocialProvider;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Concerns\ManagesOAuth;
+use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Concerns\ManagesRateLimit;
+use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Concerns\ManagesResources;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Util;
 
 class MastodonProvider extends SocialProvider
 {

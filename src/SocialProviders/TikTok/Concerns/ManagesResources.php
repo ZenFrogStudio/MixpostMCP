@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\TikTok\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\SocialProviders\TikTok\TikTokProvider;
-use Inovector\Mixpost\Support\MediaProbe;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\SocialProviders\TikTok\TikTokProvider;
+use OneMediaLabs\MixpostMcp\Support\MediaProbe;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 /**
  * Reads the connected creator and publishes to them.
@@ -151,7 +151,7 @@ trait ManagesResources
     /**
      * TikTok's Content Posting API has no delete endpoint — a published video can only be removed
      * by the creator in the app. Reporting OK matches how FacebookPageProvider and MastodonProvider
-     * handle the same gap: deleting the post in Mixpost Live should not fail because the network cannot
+     * handle the same gap: deleting the post in MixpostMCP should not fail because the network cannot
      * follow.
      */
     public function deletePost($id): SocialProviderResponse
@@ -193,7 +193,7 @@ trait ManagesResources
         // bytes have to be readable from here. External media is a bare URL with no file behind it.
         if ($video->disk === 'external_media' || (int) $video->size <= 0) {
             return $this->response(SocialProviderResponseStatus::ERROR, [
-                "The video {$video->name} is not stored in Mixpost Live, so its file cannot be uploaded to TikTok.",
+                "The video {$video->name} is not stored in MixpostMCP, so its file cannot be uploaded to TikTok.",
             ]);
         }
 

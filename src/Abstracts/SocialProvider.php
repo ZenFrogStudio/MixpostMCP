@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\Abstracts;
+namespace OneMediaLabs\MixpostMcp\Abstracts;
 
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Concerns\UsesSocialProviderResponse;
-use Inovector\Mixpost\Contracts\SocialProvider as SocialProviderContract;
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Concerns\UsesSocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Contracts\SocialProvider as SocialProviderContract;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 abstract class SocialProvider implements SocialProviderContract
 {

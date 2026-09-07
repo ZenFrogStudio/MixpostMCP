@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Resources;
+namespace OneMediaLabs\MixpostMcp\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

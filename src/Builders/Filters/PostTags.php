@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Builders\Filters;
+namespace OneMediaLabs\MixpostMcp\Builders\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Contracts\Filter;
+use OneMediaLabs\MixpostMcp\Contracts\Filter;
 
 class PostTags implements Filter
 {

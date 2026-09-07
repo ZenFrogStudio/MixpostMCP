@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Facades;
+namespace OneMediaLabs\MixpostMcp\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Facade;
  * @method static void forgetAll()
  * @method static void put(string $name, mixed $default = null)
  *
- * @see \Inovector\Mixpost\Settings
+ * @see \OneMediaLabs\MixpostMcp\Settings
  */
 class Settings extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'MixpostSettings';
+        return 'MixpostMcpSettings';
     }
 }

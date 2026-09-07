@@ -70,7 +70,7 @@ watch(() => cloneDeep(filter.value), throttle(() => {
 }, 300))
 
 const fetchPosts = (data) => {
-    router.get(route('mixpost.calendar', data), {}, {
+    router.get(route('mixpostmcp.calendar', data), {}, {
         preserveState: true,
         only: ['posts']
     });

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Laravel\Horizon\Contracts\MasterSupervisorRepository;
 

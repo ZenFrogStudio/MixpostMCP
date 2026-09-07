@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta;
 
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Services\FacebookService;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\ManagesFacebookOAuth;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\ManagesInstagramResources;
-use Inovector\Mixpost\Support\SocialProviderPostConfigs;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Services\FacebookService;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\ManagesFacebookOAuth;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\ManagesInstagramResources;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderPostConfigs;
+use OneMediaLabs\MixpostMcp\Util;
 
 class InstagramProvider extends MetaProvider
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Mcp\Tools;
+namespace OneMediaLabs\MixpostMcp\Mcp\Tools;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Metric;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Metric;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
@@ -12,7 +12,7 @@ use Laravel\Mcp\Server\Tool;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[IsReadOnly]
-#[Description('Read the daily engagement figures Mixpost has collected for one account, plus a total for the range. The available figures differ per network (likes, retweets and impressions on X; reactions and reach on a Facebook page).')]
+#[Description('Read the daily engagement figures MixpostMCP has collected for one account, plus a total for the range. The available figures differ per network (likes, retweets and impressions on X; reactions and reach on a Facebook page).')]
 class GetAccountMetrics extends Tool
 {
     protected string $name = 'get_account_metrics';
@@ -56,7 +56,7 @@ class GetAccountMetrics extends Tool
             'account' => ['id' => $account->id, 'name' => $account->name, 'provider' => $account->provider],
             'from' => $from,
             'to' => $to,
-            // Mixpost stores one row per day per account. Nothing back-fills days that were
+            // MixpostMCP stores one row per day per account. Nothing back-fills days that were
             // never imported, so gaps mean "not collected", not "zero".
             'daily' => $rows->map(fn (Metric $metric): array => [
                 'date' => $metric->date->format('Y-m-d'),

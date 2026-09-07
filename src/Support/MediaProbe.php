@@ -1,15 +1,15 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use FFMpeg\FFProbe;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Util;
 use Throwable;
 
 /**
  * How long a file runs and how big its frame is — the two properties every network writes its media
- * rules against, and the only ones Mixpost Live does not already record when a file is uploaded.
+ * rules against, and the only ones MixpostMCP does not already record when a file is uploaded.
  *
  * Measuring is best effort. A file on a remote disk would have to be downloaded first, and ffmpeg is
  * an optional dependency, so `for()` returns null rather than guessing. Callers treat null as

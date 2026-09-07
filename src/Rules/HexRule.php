@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Rules;
+namespace OneMediaLabs\MixpostMcp\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 

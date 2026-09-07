@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Database\Factories;
+namespace OneMediaLabs\MixpostMcp\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Metric;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Metric;
 
 class MetricFactory extends Factory
 {

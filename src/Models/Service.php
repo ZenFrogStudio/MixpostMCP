@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Models;
+namespace OneMediaLabs\MixpostMcp\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Inovector\Mixpost\Casts\EncryptArrayObject;
-use Inovector\Mixpost\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Casts\EncryptArrayObject;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
 
 class Service extends Model
 {

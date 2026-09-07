@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Illuminate\Http\File as HttpFile;
 use Illuminate\Http\UploadedFile;
@@ -38,5 +38,22 @@ class File
 
         // return UploadedFile object
         return $file;
+    }
+
+    /**
+     * Wrap a file that already exists on disk. The caller owns the file's lifetime; nothing here
+     * deletes it.
+     */
+    public static function fromPath(string $path, ?string $originalName = null): UploadedFile
+    {
+        $file = new HttpFile($path);
+
+        return new UploadedFile(
+            $file->getPathname(),
+            $originalName ?: $file->getFilename(),
+            $file->getMimeType(),
+            0,
+            true // Not from a real HTTP POST, so skip is_uploaded_file().
+        );
     }
 }

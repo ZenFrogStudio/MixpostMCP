@@ -28,7 +28,7 @@ const errors = ref({});
 const save = () => {
     errors.value = {};
 
-    router.put(route('mixpost.services.update', {service: 'tiktok'}), props.form, {
+    router.put(route('mixpostmcp.services.update', {service: 'tiktok'}), props.form, {
         preserveScroll: true,
         onSuccess() {
             notify('success', 'TikTok service has been saved');
@@ -51,7 +51,7 @@ const save = () => {
         <template #description>
             <a href="https://developers.tiktok.com/apps" class="link" target="_blank">
                 Create an App on TikTok</a>.
-            <ReadDocHelp :href="`${$page.props.mixpost.docs_link}/services/social/tiktok`"
+            <ReadDocHelp :href="`${$page.props.mixpostmcp.docs_link}/services/social/tiktok`"
                          class="mt-xs"/>
         </template>
 

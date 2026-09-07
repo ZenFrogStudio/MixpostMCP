@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Actions\RedirectAfterDeletedPost;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Actions\RedirectAfterDeletedPost;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class DeletePostsController extends Controller
 {

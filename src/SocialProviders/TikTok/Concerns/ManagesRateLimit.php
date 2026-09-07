@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\TikTok\Concerns;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\TikTok\Concerns;
 
 use Closure;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 /**
  * Turns a TikTok HTTP response into a SocialProviderResponse.

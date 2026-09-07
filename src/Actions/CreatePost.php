@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Inovector\Mixpost\Enums\PostStatus;
-use Inovector\Mixpost\Models\Post;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Enums\PostStatus;
+use OneMediaLabs\MixpostMcp\Models\Post;
+use OneMediaLabs\MixpostMcp\Util;
 
 class CreatePost
 {
@@ -13,7 +13,7 @@ class CreatePost
      * Lives here rather than in the StorePost form request so callers without an HTTP request —
      * the MCP server runs in a console process — can create posts through the same path.
      *
-     * $localScheduledAt is a "Y-m-d H:i" string in the timezone from Mixpost's settings, not UTC.
+     * $localScheduledAt is a "Y-m-d H:i" string in the timezone from MixpostMCP's settings, not UTC.
      */
     public function __invoke(array $accounts, array $tags, array $versions, ?string $localScheduledAt = null): Post
     {

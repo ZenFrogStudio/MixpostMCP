@@ -1,8 +1,8 @@
 <?php
 
-namespace Inovector\Mixpost\Contracts;
+namespace OneMediaLabs\MixpostMcp\Contracts;
 
-use Inovector\Mixpost\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Account;
 
 interface ProviderReports
 {

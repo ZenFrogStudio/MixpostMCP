@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Contracts;
+namespace OneMediaLabs\MixpostMcp\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Resources;
+namespace OneMediaLabs\MixpostMcp\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Util;
+use OneMediaLabs\MixpostMcp\Models\Media;
+use OneMediaLabs\MixpostMcp\Util;
 
 class PostVersionResource extends JsonResource
 {
@@ -28,12 +28,12 @@ class PostVersionResource extends JsonResource
 
     protected function isIndexPage(): bool
     {
-        return request()->route()->getName() === 'mixpost.posts.index';
+        return request()->route()->getName() === 'mixpostmcp.posts.index';
     }
 
     protected function isCalendarPage(): bool
     {
-        return request()->route()->getName() === 'mixpost.calendar';
+        return request()->route()->getName() === 'mixpostmcp.calendar';
     }
 
     protected function content(): Collection

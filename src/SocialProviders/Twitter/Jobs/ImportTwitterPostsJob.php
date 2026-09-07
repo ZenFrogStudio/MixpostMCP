@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Twitter\Jobs;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Jobs;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
@@ -10,13 +10,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Concerns\Job\HasSocialProviderJobRateLimit;
-use Inovector\Mixpost\Concerns\Job\SocialProviderException;
-use Inovector\Mixpost\Concerns\Job\SocialProviderJobFail;
-use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\ImportedPost;
-use Inovector\Mixpost\SocialProviders\Twitter\TwitterProvider;
+use OneMediaLabs\MixpostMcp\Concerns\Job\HasSocialProviderJobRateLimit;
+use OneMediaLabs\MixpostMcp\Concerns\Job\SocialProviderException;
+use OneMediaLabs\MixpostMcp\Concerns\Job\SocialProviderJobFail;
+use OneMediaLabs\MixpostMcp\Concerns\UsesSocialProviderManager;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\ImportedPost;
+use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\TwitterProvider;
 
 class ImportTwitterPostsJob implements ShouldQueue
 {

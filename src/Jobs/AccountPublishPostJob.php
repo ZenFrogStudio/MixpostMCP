@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Jobs;
+namespace OneMediaLabs\MixpostMcp\Jobs;
 
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -8,10 +8,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Inovector\Mixpost\Actions\AccountPublishPost;
-use Inovector\Mixpost\Concerns\Job\HasSocialProviderJobRateLimit;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Models\Post;
+use OneMediaLabs\MixpostMcp\Actions\AccountPublishPost;
+use OneMediaLabs\MixpostMcp\Concerns\Job\HasSocialProviderJobRateLimit;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Post;
 
 class AccountPublishPostJob implements ShouldQueue
 {

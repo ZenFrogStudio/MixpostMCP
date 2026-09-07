@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Enums\ServiceGroup;
-use Inovector\Mixpost\Facades\ServiceManager;
-use Inovector\Mixpost\Http\Requests\DeleteMedia;
+use OneMediaLabs\MixpostMcp\Enums\ServiceGroup;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Http\Requests\DeleteMedia;
 
 class MediaController extends Controller
 {

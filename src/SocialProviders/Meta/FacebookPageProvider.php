@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\SocialProviders\Meta;
+namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta;
 
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\ManagesFacebookOAuth;
-use Inovector\Mixpost\SocialProviders\Meta\Concerns\ManagesFacebookPageResources;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\ManagesFacebookOAuth;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns\ManagesFacebookPageResources;
 
 class FacebookPageProvider extends MetaProvider
 {

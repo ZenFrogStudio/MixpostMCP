@@ -1,10 +1,10 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Inovector\Mixpost\Http\Requests\Reports;
+use OneMediaLabs\MixpostMcp\Http\Requests\Reports;
 
 class ReportsController extends Controller
 {

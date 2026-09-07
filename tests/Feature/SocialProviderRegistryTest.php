@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Facades\SocialProviderManager;
+use OneMediaLabs\MixpostMcp\Facades\SocialProviderManager;
 
 it('registers only providers whose class exists', function () {
     // A registered name with no class behind it fatals the Accounts page rather than simply not
@@ -14,7 +14,7 @@ it('registers only providers whose class exists', function () {
 it('no longer registers facebook_group', function () {
     // There has never been a FacebookGroupProvider; the config block and UI were dead weight.
     expect(SocialProviderManager::providers())->not->toHaveKey('facebook_group')
-        ->and(config('mixpost.social_provider_options'))->not->toHaveKey('facebook_group');
+        ->and(config('mixpostmcp.social_provider_options'))->not->toHaveKey('facebook_group');
 });
 
 it('registers the networks that have shipped', function () {

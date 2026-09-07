@@ -1,12 +1,12 @@
 <?php
 
-namespace Inovector\Mixpost\Contracts;
+namespace OneMediaLabs\MixpostMcp\Contracts;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Inovector\Mixpost\Http\Resources\AccountResource;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Http\Resources\AccountResource;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 interface SocialProvider
 {

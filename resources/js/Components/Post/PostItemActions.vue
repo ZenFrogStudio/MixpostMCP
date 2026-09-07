@@ -36,7 +36,7 @@ const filterStatus = computed(() => {
 const {notify} = useNotifications();
 
 const deletePost = () => {
-    router.delete(route('mixpost.posts.delete', {post: props.itemId, status: filterStatus.value}), {
+    router.delete(route('mixpostmcp.posts.delete', {post: props.itemId, status: filterStatus.value}), {
         onSuccess() {
             confirmationDeletion.value = false;
             notify('success', 'Post deleted')
@@ -47,7 +47,7 @@ const deletePost = () => {
 }
 
 const duplicate = () => {
-    router.post(route('mixpost.posts.duplicate', {post: props.itemId}), {}, {
+    router.post(route('mixpostmcp.posts.duplicate', {post: props.itemId}), {}, {
         onSuccess() {
             notify('success', 'Post duplicated')
         }
@@ -57,7 +57,7 @@ const duplicate = () => {
 <template>
     <div>
         <div class="flex flex-row items-center gap-xs">
-            <PureButtonLink :href="route('mixpost.posts.edit', {post: itemId})" v-tooltip="'Edit'">
+            <PureButtonLink :href="route('mixpostmcp.posts.edit', {post: itemId})" v-tooltip="'Edit'">
                 <PencilSquareIcon/>
             </PureButtonLink>
 

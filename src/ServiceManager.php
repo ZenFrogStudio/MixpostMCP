@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost;
+namespace OneMediaLabs\MixpostMcp;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -8,17 +8,17 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Collection\ServiceCollection;
-use Inovector\Mixpost\Exceptions\ServiceNotRegistered;
-use Inovector\Mixpost\Models\Service as ServiceModel;
-use Inovector\Mixpost\Services\FacebookService;
-use Inovector\Mixpost\Services\LinkedInService;
-use Inovector\Mixpost\Services\TenorService;
-use Inovector\Mixpost\Services\TikTokService;
-use Inovector\Mixpost\Services\TwitterService;
-use Inovector\Mixpost\Services\UnsplashService;
-use Inovector\Mixpost\Services\YouTubeService;
-use Inovector\Mixpost\Support\Log;
+use OneMediaLabs\MixpostMcp\Collection\ServiceCollection;
+use OneMediaLabs\MixpostMcp\Exceptions\ServiceNotRegistered;
+use OneMediaLabs\MixpostMcp\Models\Service as ServiceModel;
+use OneMediaLabs\MixpostMcp\Services\FacebookService;
+use OneMediaLabs\MixpostMcp\Services\LinkedInService;
+use OneMediaLabs\MixpostMcp\Services\TenorService;
+use OneMediaLabs\MixpostMcp\Services\TikTokService;
+use OneMediaLabs\MixpostMcp\Services\TwitterService;
+use OneMediaLabs\MixpostMcp\Services\UnsplashService;
+use OneMediaLabs\MixpostMcp\Services\YouTubeService;
+use OneMediaLabs\MixpostMcp\Support\Log;
 
 class ServiceManager
 {
@@ -224,7 +224,7 @@ class ServiceManager
 
     protected function resolveCacheKey(string $name): string
     {
-        return $this->config->get('mixpost.cache_prefix').".services.$name";
+        return $this->config->get('mixpostmcp.cache_prefix').".services.$name";
     }
 
     protected function logDecryptionError(string $name, DecryptException $exception): void

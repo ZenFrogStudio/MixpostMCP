@@ -3,7 +3,7 @@ import {usePage} from "@inertiajs/vue3";
 
 const useSettings = () => {
     const settings = computed(() => {
-        return usePage().props.mixpost.settings;
+        return usePage().props.mixpostmcp.settings;
     });
 
     const getSetting = (name) => {

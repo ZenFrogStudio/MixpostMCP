@@ -1,14 +1,14 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Requests;
+namespace OneMediaLabs\MixpostMcp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Inovector\Mixpost\Contracts\ProviderReports;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Reports\FacebookPageReports;
-use Inovector\Mixpost\Reports\MastodonReports;
-use Inovector\Mixpost\Reports\TwitterReports;
+use OneMediaLabs\MixpostMcp\Contracts\ProviderReports;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Reports\FacebookPageReports;
+use OneMediaLabs\MixpostMcp\Reports\MastodonReports;
+use OneMediaLabs\MixpostMcp\Reports\TwitterReports;
 
 class Reports extends FormRequest
 {

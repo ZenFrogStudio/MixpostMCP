@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Support;
+namespace OneMediaLabs\MixpostMcp\Support;
 
 use Illuminate\Support\Facades\Log as LogFacade;
 
@@ -23,7 +23,7 @@ class Log
 
     protected static function stack(): array
     {
-        if ($channel = config('mixpost.log_channel')) {
+        if ($channel = config('mixpostmcp.log_channel')) {
             return [$channel];
         }
 

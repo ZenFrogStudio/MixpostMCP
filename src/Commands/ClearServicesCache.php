@@ -1,13 +1,13 @@
 <?php
 
-namespace Inovector\Mixpost\Commands;
+namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
-use Inovector\Mixpost\Facades\ServiceManager;
+use OneMediaLabs\MixpostMcp\Facades\ServiceManager;
 
 class ClearServicesCache extends Command
 {
-    public $signature = 'mixpost:clear-services-cache';
+    public $signature = 'mixpostmcp:clear-services-cache';
 
     public $description = 'Clear the services from cache';
 

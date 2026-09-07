@@ -1,11 +1,11 @@
 <?php
 
-namespace Inovector\Mixpost\Actions;
+namespace OneMediaLabs\MixpostMcp\Actions;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Facades\SocialProviderManager;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Facades\SocialProviderManager;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 use InvalidArgumentException;
 
 class StoreProviderEntitiesAsAccounts

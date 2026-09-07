@@ -1,6 +1,6 @@
 <?php
 
-namespace Inovector\Mixpost\Http\Controllers;
+namespace OneMediaLabs\MixpostMcp\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -8,10 +8,10 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
-use Inovector\Mixpost\Facades\SocialProviderManager;
-use Inovector\Mixpost\Http\Requests\StoreProviderEntities;
-use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Support\SocialProviderResponse;
+use OneMediaLabs\MixpostMcp\Facades\SocialProviderManager;
+use OneMediaLabs\MixpostMcp\Http\Requests\StoreProviderEntities;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Support\SocialProviderResponse;
 
 class AccountEntitiesController extends Controller
 {
@@ -20,7 +20,7 @@ class AccountEntitiesController extends Controller
         $providerName = $request->route('provider');
 
         if (! $request->session()->has('mixpost_callback_response')) {
-            return redirect()->route('mixpost.accounts.index');
+            return redirect()->route('mixpostmcp.accounts.index');
         }
 
         $provider = SocialProviderManager::connect($providerName);
@@ -28,7 +28,7 @@ class AccountEntitiesController extends Controller
         $accessToken = $provider->requestAccessToken($request->session()->get('mixpost_callback_response'));
 
         if ($error = Arr::get($accessToken, 'error')) {
-            return redirect()->route('mixpost.accounts.index')
+            return redirect()->route('mixpostmcp.accounts.index')
                 ->with('error', $error);
         }
 
@@ -38,7 +38,7 @@ class AccountEntitiesController extends Controller
         $response = $provider->getEntities();
 
         if ($response->hasError()) {
-            return redirect()->route('mixpost.accounts.index')
+            return redirect()->route('mixpostmcp.accounts.index')
                 ->with('warning', "It's something wrong. Try again.");
         }
 
@@ -59,7 +59,7 @@ class AccountEntitiesController extends Controller
         // pick rendered an empty picker instead of saying so. A Google account with no YouTube
         // channel is the ordinary way to reach this.
         if ($entities->isEmpty()) {
-            return redirect()->route('mixpost.accounts.index')
+            return redirect()->route('mixpostmcp.accounts.index')
                 ->with('warning', 'The account has no entities.');
         }
 
@@ -73,6 +73,6 @@ class AccountEntitiesController extends Controller
     {
         $storeAccountEntities->handle();
 
-        return redirect()->route('mixpost.accounts.index');
+        return redirect()->route('mixpostmcp.accounts.index');
     }
 }
