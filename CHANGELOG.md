@@ -2,6 +2,19 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
+## 2.22.2 - 2026-09-21
+
+**Added**
+
+- **A desktop app.** `desktop/` is a small Laravel host app wrapped by NativePHP for Desktop that
+  bundles PHP and opens MixpostMCP in its own window — no server, Docker, MySQL or Redis. It runs
+  on a single SQLite file in the user's app-data folder, with the queue worker (`default` and
+  `publish-post` queues) and the scheduler running inside the app, so scheduled posts publish
+  while it is open. There is no login screen: a local user is signed in automatically. Media
+  files are stored in app-data and served by the app itself. Networks cannot be connected from
+  the desktop app yet — that arrives in a later version. `desktop/build.sh win|mac` builds the
+  installer.
+
 ## 2.22.1 - 2026-09-21
 
 **Fixed**
