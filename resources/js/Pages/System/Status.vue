@@ -17,6 +17,24 @@ const props = defineProps({
 
 const {notify} = useNotifications();
 
+// Server installs run Redis under Horizon; the desktop app runs the `database` driver with a
+// built-in worker. The two queue rows read differently for each, so the wording lives here.
+const isDatabaseQueue = props.health.queue_driver === 'database';
+
+const horizonVariant = {
+    'Active': 'success',
+    'Paused': 'warning',
+    'Not installed': 'neutral',
+}[props.health.horizon_status] ?? 'error';
+
+const publishQueueVariant = props.health.publish_queue_supervised === null
+    ? 'warning'
+    : (props.health.publish_queue_supervised ? 'success' : 'error');
+
+const publishQueueSummary = props.health.publish_queue_supervised === null
+    ? 'Cannot verify'
+    : (props.health.publish_queue_supervised ? 'Ok' : 'Not ok');
+
 const getBody = () => {
     let body = `## Describe your issue\n\n--- \n`;
 
@@ -24,8 +42,8 @@ const getBody = () => {
     body += `**Environment**: ${props.health.env} \n`;
     body += `**Debug Mode**: ${props.health.debug ? 'Enabled' : 'Disabled'} \n`
     body += `**Horizon**: ${props.health.horizon_status} \n`
-    body += `**Queue connection**: ${props.health.has_queue_connection ? 'Ok' : 'Not ok'} \n`
-    body += `**Publish queue**: ${props.health.publish_queue_supervised ? 'Ok' : 'Not ok'} \n`
+    body += `**Queue connection**: ${props.health.has_queue_connection ? 'Ok' : 'Not ok'} (${props.health.queue_driver ?? 'none'}) \n`
+    body += `**Publish queue**: ${publishQueueSummary} \n`
     body += `**Schedule**: ${props.health.last_scheduled_run.message} \n`
 
     body += `\n`;
@@ -33,16 +51,16 @@ const getBody = () => {
     body += `## Technical Details:\n\n`;
     body += `**App directory**: ${props.tech.base_path} \n`;
     body += `**Upload Media Disk**: ${props.tech.disk} \n`;
-    body += `*Log Channel**: ${props.tech.log_channel} \n`;
+    body += `**Log Channel**: ${props.tech.log_channel} \n`;
     body += `**Cache Driver**: ${props.tech.cache_driver} \n`;
     body += `**User agent**: ${props.tech.user_agent} \n`;
     body += `**FFmpeg**: ${props.tech.ffmpeg_status} \n`;
-    if (props.tech.versions.mysql) {
-        body += `**MySql**: ${props.tech.versions.mysql} \n`;
+    if (props.tech.versions.database) {
+        body += `**Database**: ${props.tech.versions.database} \n`;
     }
     body += `**PHP**: ${props.tech.versions.php} \n`;
     body += `**Laravel**: ${props.tech.versions.laravel} \n`;
-    body += `**Horizon**: ${props.tech.versions.horizon} \n`;
+    body += `**Horizon**: ${props.tech.versions.horizon ?? 'Not installed'} \n`;
     body += `**MixpostMCP**: ${props.tech.versions.mixpostmcp} \n`;
 
     return body;
@@ -93,8 +111,7 @@ const copyToClipboard = () => {
                         </TableRow>
                         <TableRow :hoverable="true">
                             <TableCell>
-                                <Badge
-                                    :variant="health.horizon_status === 'Active' ? 'success' : (health.horizon_status === 'Paused' ? 'warning' : 'error')">
+                                <Badge :variant="horizonVariant">
                                     Horizon
                                 </Badge>
                             </TableCell>
@@ -103,6 +120,10 @@ const copyToClipboard = () => {
                                     <span class="block">Inactive</span>
                                     Read the <a
                                     :href="`${$page.props.mixpostmcp.docs_link}/lite/installation/laravel-package#5-install-horizon`">documentation</a>.
+                                </span>
+                                <span v-else-if="health.horizon_status === 'Not installed'">
+                                    <span class="block">Not installed</span>
+                                    Jobs run through a built-in worker instead of Horizon.
                                 </span>
                                 <span v-else>
                                     {{ health.horizon_status }}
@@ -116,11 +137,11 @@ const copyToClipboard = () => {
                                 </Badge>
                             </TableCell>
                             <TableCell>
-                                <span
-                                    v-if="health.has_queue_connection">The default queue connection is Redis.</span>
+                                <span v-if="health.has_queue_connection && isDatabaseQueue">The default queue connection is the database.</span>
+                                <span v-else-if="health.has_queue_connection">The default queue connection is Redis.</span>
                                 <span v-else>
-                                    <span class="block">The default <span class="font-medium">queue connection</span> is not Redis, so Horizon cannot run jobs.</span>
-                                    <span class="block">Set <span class="font-medium">QUEUE_CONNECTION=redis</span> in your <span class="font-medium">.env</span>.</span>
+                                    <span class="block">The default <span class="font-medium">queue connection</span> is <span class="font-medium">{{ health.queue_driver ?? 'not set' }}</span>, which cannot run jobs in the background.</span>
+                                    <span class="block">Set <span class="font-medium">QUEUE_CONNECTION=redis</span> (or <span class="font-medium">database</span>) in your <span class="font-medium">.env</span>.</span>
                                      Read the <a
                                     :href="`${$page.props.mixpostmcp.docs_link}/lite/installation/laravel-package#5-install-horizon`">documentation</a>.
                                </span>
@@ -128,13 +149,20 @@ const copyToClipboard = () => {
                         </TableRow>
                         <TableRow :hoverable="true">
                             <TableCell>
-                                <Badge :variant="health.publish_queue_supervised ? 'success'  : 'error'">
+                                <Badge :variant="publishQueueVariant">
                                     Publish queue
                                 </Badge>
                             </TableCell>
                             <TableCell>
-                                <span
-                                    v-if="health.publish_queue_supervised">A Horizon supervisor is working the <span class="font-medium">publish-post</span> queue.</span>
+                                <span v-if="health.publish_queue_supervised === null">
+                                    Cannot verify which queues the worker is listening on. Scheduled posts are sent only if a worker runs the <span class="font-medium">publish-post</span> queue.
+                                </span>
+                                <span v-else-if="health.publish_queue_supervised && isDatabaseQueue">A built-in worker lists the <span class="font-medium">publish-post</span> queue.</span>
+                                <span v-else-if="health.publish_queue_supervised">A Horizon supervisor is working the <span class="font-medium">publish-post</span> queue.</span>
+                                <span v-else-if="isDatabaseQueue">
+                                    <span class="block">No built-in worker lists the <span class="font-medium">publish-post</span> queue, so scheduled posts will never be sent.</span>
+                                    <span class="block">Add <span class="font-medium">'publish-post'</span> to the <span class="font-medium">queues</span> array of a worker in <span class="font-medium">config/nativephp.php</span>, then restart the app.</span>
+                                </span>
                                 <span v-else>
                                     <span class="block">No Horizon supervisor lists the <span class="font-medium">publish-post</span> queue, so scheduled posts will never be sent.</span>
                                     <span class="block">Add <span class="font-medium">'publish-post'</span> to the <span class="font-medium">queue</span> array of a supervisor in <span class="font-medium">config/horizon.php</span>, then restart Horizon.</span>
@@ -206,13 +234,13 @@ const copyToClipboard = () => {
                                 {{ tech.ffmpeg_status }}
                             </TableCell>
                         </TableRow>
-                        <template v-if="tech.versions.mysql">
+                        <template v-if="tech.versions.database">
                             <TableRow :hoverable="true">
                                 <TableCell class="font-medium">
-                                    MySql
+                                    Database
                                 </TableCell>
                                 <TableCell>
-                                    {{ tech.versions.mysql }}
+                                    {{ tech.versions.database }}
                                 </TableCell>
                             </TableRow>
                         </template>
@@ -237,7 +265,7 @@ const copyToClipboard = () => {
                                 Horizon
                             </TableCell>
                             <TableCell>
-                                {{ tech.versions.horizon }}
+                                {{ tech.versions.horizon ?? 'Not installed' }}
                             </TableCell>
                         </TableRow>
                         <TableRow :hoverable="true">

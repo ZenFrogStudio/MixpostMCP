@@ -23,9 +23,9 @@ class TwitterReports extends Report
     protected function metrics(Account $account, string $period): array
     {
         $report = Metric::account($account->id)->select(
-            DB::raw('SUM(JSON_EXTRACT(data, "$.likes")) as likes'),
-            DB::raw('SUM(JSON_EXTRACT(data, "$.retweets")) as retweets'),
-            DB::raw('SUM(JSON_EXTRACT(data, "$.impressions")) as impressions')
+            DB::raw("SUM(JSON_EXTRACT(data, '$.likes')) as likes"),
+            DB::raw("SUM(JSON_EXTRACT(data, '$.retweets')) as retweets"),
+            DB::raw("SUM(JSON_EXTRACT(data, '$.impressions')) as impressions")
         )->when($period, function (Builder $query) use ($period) {
             return $this->queryPeriod($query, $period);
         })->first();

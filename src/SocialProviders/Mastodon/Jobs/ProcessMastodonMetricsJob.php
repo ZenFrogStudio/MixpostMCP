@@ -29,9 +29,9 @@ class ProcessMastodonMetricsJob implements ShouldQueue
     public function handle()
     {
         $items = ImportedPost::select('created_at',
-            DB::raw('SUM(JSON_EXTRACT(metrics, "$.replies")) as replies'),
-            DB::raw('SUM(JSON_EXTRACT(metrics, "$.reblogs")) as reblogs'),
-            DB::raw('SUM(JSON_EXTRACT(metrics, "$.favourites")) as favourites'))
+            DB::raw("SUM(JSON_EXTRACT(metrics, '$.replies')) as replies"),
+            DB::raw("SUM(JSON_EXTRACT(metrics, '$.reblogs')) as reblogs"),
+            DB::raw("SUM(JSON_EXTRACT(metrics, '$.favourites')) as favourites"))
             ->where('account_id', $this->account->id)
             ->groupBy('created_at')
             ->cursor();

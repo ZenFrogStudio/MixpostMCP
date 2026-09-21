@@ -12,6 +12,12 @@ class HorizonStatus
 
     public function get(): string
     {
+        // The desktop build never registers Horizon, so the repository is not bound and the
+        // container hands the constructor null.
+        if ($this->masterSupervisorRepository === null) {
+            return 'Not installed';
+        }
+
         if (! $masters = $this->masterSupervisorRepository->all()) {
             return 'Inactive';
         }

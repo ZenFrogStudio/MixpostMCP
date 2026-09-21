@@ -161,12 +161,13 @@ class Util
 
     public static function isFFmpegInstalled(): bool
     {
-        $ffmpegPath = Util::config('ffmpeg_path');
-        $ffprobePath = Util::config('ffprobe_path');
+        $ffmpegPath = (string) Util::config('ffmpeg_path');
+        $ffprobePath = (string) Util::config('ffprobe_path');
 
+        // The Windows desktop build bundles ffmpeg.exe / ffprobe.exe, hence the optional suffix.
         return file_exists($ffmpegPath) &&
             file_exists($ffprobePath) &&
-            str_ends_with($ffmpegPath, 'ffmpeg') &&
-            str_ends_with($ffprobePath, 'ffprobe');
+            preg_match('/ffmpeg(\.exe)?$/i', $ffmpegPath) &&
+            preg_match('/ffprobe(\.exe)?$/i', $ffprobePath);
     }
 }

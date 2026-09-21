@@ -2,6 +2,27 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
+## 2.22.1 - 2026-09-21
+
+**Fixed**
+
+- **The post search and media checks now work on SQLite.** The keyword filter on the posts page,
+  the "is this media used by a post" check behind media deletion, and the Twitter and Mastodon
+  metric reports all used MySQL-only JSON syntax. Each now has an SQLite form, so the package can
+  run on a plain SQLite file with nothing else installed. MySQL is untouched.
+- **ffmpeg is recognised on Windows.** The System Status page said ffmpeg was not installed when
+  the configured path ended in `ffmpeg.exe`, because the check only accepted the bare `ffmpeg`
+  name. Both are accepted now.
+
+**Changed**
+
+- **The System Status page no longer assumes Horizon or Redis.** When Horizon is not registered it
+  says "Not installed" in grey instead of red; when the queue runs on the `database` driver it
+  says so and reports whether a built-in worker lists the `publish-post` queue, or "cannot
+  verify" if that cannot be read. The MySQL version row is now a Database row and shows the
+  driver alongside the version (for example `sqlite 3.45.1`). Installs on Redis and Horizon see
+  exactly what they saw before.
+
 ## 2.22.0 - 2026-09-06
 
 **Added**

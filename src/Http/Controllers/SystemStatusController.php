@@ -24,7 +24,8 @@ class SystemStatusController extends Controller
                 'env' => App::environment(),
                 'debug' => Config::get('app.debug'),
                 'horizon_status' => resolve(HorizonStatus::class)->get(),
-                'has_queue_connection' => $this->hasRedisQueue(),
+                'queue_driver' => $this->queueDriver(),
+                'has_queue_connection' => $this->hasQueueConnection(),
                 'publish_queue_supervised' => $this->publishQueueSupervised(),
                 'last_scheduled_run' => $this->getLastScheduleRun(),
             ],
@@ -38,31 +39,48 @@ class SystemStatusController extends Controller
                 'versions' => [
                     'php' => PHP_VERSION,
                     'laravel' => App::version(),
-                    'horizon' => InstalledVersions::getVersion('laravel/horizon'),
-                    'mysql' => $this->mysqlVersion(),
+                    'horizon' => InstalledVersions::isInstalled('laravel/horizon') ? InstalledVersions::getVersion('laravel/horizon') : null,
+                    'database' => $this->databaseVersion(),
                     'mixpostmcp' => InstalledVersions::getVersion('onemedialabs/mixpostmcp'),
                 ],
             ],
         ]);
     }
 
-    /**
-     * Horizon only works Redis queues, so the default queue connection has to be one. The old
-     * check looked for a connection named after the package instead, which nothing dispatches to.
-     */
-    protected function hasRedisQueue(): bool
+    protected function queueDriver(): ?string
     {
         $connection = Config::get('queue.default');
 
-        return Config::get("queue.connections.$connection.driver") === 'redis';
+        return Config::get("queue.connections.$connection.driver");
     }
 
     /**
-     * Every publish is batched onto the `publish-post` queue. If no Horizon supervisor lists it,
+     * Two setups can run jobs: Redis under Horizon (server), or the `database` driver worked by a
+     * built-in worker (desktop). Anything else — `sync`, `null` — silently drops scheduled posts.
+     */
+    protected function hasQueueConnection(): bool
+    {
+        return in_array($this->queueDriver(), ['redis', 'database'], true);
+    }
+
+    /**
+     * Every publish is batched onto the `publish-post` queue. If nothing is working that queue,
      * everything else on this page can be green while no post ever goes out — which is exactly how
      * the dev harness ran for a week.
+     *
+     * Returns null when there is no way to tell (the `database` driver without NativePHP's worker
+     * config), so the page can say "cannot verify" instead of a false red or green.
      */
-    protected function publishQueueSupervised(): bool
+    protected function publishQueueSupervised(): ?bool
+    {
+        return match ($this->queueDriver()) {
+            'redis' => $this->horizonWorksPublishQueue(),
+            'database' => $this->nativeWorkerWorksPublishQueue(),
+            default => false,
+        };
+    }
+
+    protected function horizonWorksPublishQueue(): bool
     {
         $supervisors = array_merge(
             Config::get('horizon.defaults', []),
@@ -76,6 +94,21 @@ class SystemStatusController extends Controller
                 if ($queue === 'publish-post' || $queue === '*') {
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+
+    protected function nativeWorkerWorksPublishQueue(): ?bool
+    {
+        if (! Config::has('nativephp.queue_workers')) {
+            return null;
+        }
+
+        foreach (Config::get('nativephp.queue_workers', []) as $worker) {
+            if (in_array('publish-post', (array) ($worker['queues'] ?? []), true)) {
+                return true;
             }
         }
 
@@ -108,14 +141,23 @@ class SystemStatusController extends Controller
         ];
     }
 
-    protected function mysqlVersion(): string
+    /**
+     * "<driver> <version>", e.g. "mysql 8.0.36" or "sqlite 3.45.1". Empty for any other driver.
+     */
+    protected function databaseVersion(): string
     {
-        if (! Util::isMysqlDatabase()) {
+        $driver = Util::getDatabaseDriver();
+
+        $sql = match ($driver) {
+            'mysql' => 'select version() as version',
+            'sqlite' => 'select sqlite_version() as version',
+            default => null,
+        };
+
+        if ($sql === null) {
             return '';
         }
 
-        $results = DB::select('select version() as version');
-
-        return (string) $results[0]->version;
+        return $driver.' '.DB::select($sql)[0]->version;
     }
 }

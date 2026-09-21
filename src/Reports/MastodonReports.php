@@ -21,9 +21,9 @@ class MastodonReports extends Report
     protected function metrics(Account $account, string $period): array
     {
         $report = Metric::account($account->id)->select(
-            DB::raw('SUM(JSON_EXTRACT(data, "$.replies")) as replies'),
-            DB::raw('SUM(JSON_EXTRACT(data, "$.reblogs")) as reblogs'),
-            DB::raw('SUM(JSON_EXTRACT(data, "$.favourites")) as favourites')
+            DB::raw("SUM(JSON_EXTRACT(data, '$.replies')) as replies"),
+            DB::raw("SUM(JSON_EXTRACT(data, '$.reblogs')) as reblogs"),
+            DB::raw("SUM(JSON_EXTRACT(data, '$.favourites')) as favourites")
         )->when($period, function (Builder $query) use ($period) {
             return $this->queryPeriod($query, $period);
         })->first();
