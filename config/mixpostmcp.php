@@ -59,6 +59,12 @@ return [
     'ffprobe_path' => env('FFPROBE_PATH', '/usr/bin/ffprobe'),
 
     /*
+     * When set, OAuth redirect URLs are `<base>/<provider>/` instead of this install's own callback
+     * route. Used by the desktop app, whose local address is not reachable by the networks.
+     */
+    'oauth_callback_base' => env('MIXPOSTMCP_OAUTH_CALLBACK_BASE'),
+
+    /*
      * Define cache prefix
      */
     'cache_prefix' => env('MIXPOSTMCP_CACHE_PREFIX', 'mixpostmcp'),

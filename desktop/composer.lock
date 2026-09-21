@@ -3262,7 +3262,7 @@
             "dist": {
                 "type": "path",
                 "url": "..",
-                "reference": "27fa3e062df3afb9ca1dbf26e5a4326b71970e44"
+                "reference": "9599317c24944b773da3192aebde43361034b49d"
             },
             "require": {
                 "ext-fileinfo": "*",

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\DesktopAddAccountController;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\ServiceProvider;
+use OneMediaLabs\MixpostMcp\Http\Controllers\AddAccountController;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
         if (config('nativephp-internal.running')) {
             config(['app.key' => $this->installKey()]);
         }
+
+        // The router resolves controllers from the container, so the package's Connect route runs the
+        // desktop version — which opens the sign-in in the system browser — without touching routes.
+        $this->app->bind(AddAccountController::class, DesktopAddAccountController::class);
     }
 
     /**

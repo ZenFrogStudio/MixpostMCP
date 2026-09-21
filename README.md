@@ -41,20 +41,27 @@ network, and keeping those connections alive.
 Every network needs an app of your own in that network's developer portal. You put the app's
 credentials on MixpostMCP's **Services** page, and you register MixpostMCP's callback URL on the app.
 
-The callback URL is always the same shape:
+The callback URL depends on how you run MixpostMCP. On a server it is your own domain:
 
 ```
 https://<your-domain>/mixpostmcp/callback/<provider>
 ```
 
-| Network | Provider key | Callback URL to register | Developer portal |
-| --- | --- | --- | --- |
-| Facebook Page | `facebook_page` | `https://<your-domain>/mixpostmcp/callback/facebook_page` | [Meta for Developers](https://developers.facebook.com/apps) |
-| Instagram | `instagram` | `https://<your-domain>/mixpostmcp/callback/instagram` | Same Meta app as Facebook |
-| X (Twitter) | `twitter` | `https://<your-domain>/mixpostmcp/callback/twitter` | [X Developer Portal](https://developer.x.com/en/portal/dashboard) |
-| LinkedIn | `linkedin` | `https://<your-domain>/mixpostmcp/callback/linkedin` | [LinkedIn Developers](https://www.linkedin.com/developers/apps) |
-| TikTok | `tiktok` | `https://<your-domain>/mixpostmcp/callback/tiktok` | [TikTok for Developers](https://developers.tiktok.com/) |
-| YouTube | `youtube` | `https://<your-domain>/mixpostmcp/callback/youtube` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
+The **desktop app** has no address the networks can reach, so it uses a fixed relay page instead —
+note the trailing slash, it is part of the URL:
+
+```
+https://zenfrogstudio.github.io/MixpostMCP/callback/<provider>/
+```
+
+| Network | Provider key | Callback URL — server | Callback URL — desktop app | Developer portal |
+| --- | --- | --- | --- | --- |
+| Facebook Page | `facebook_page` | `https://<your-domain>/mixpostmcp/callback/facebook_page` | `https://zenfrogstudio.github.io/MixpostMCP/callback/facebook_page/` | [Meta for Developers](https://developers.facebook.com/apps) |
+| Instagram | `instagram` | `https://<your-domain>/mixpostmcp/callback/instagram` | `https://zenfrogstudio.github.io/MixpostMCP/callback/instagram/` | Same Meta app as Facebook |
+| X (Twitter) | `twitter` | `https://<your-domain>/mixpostmcp/callback/twitter` | `https://zenfrogstudio.github.io/MixpostMCP/callback/twitter/` | [X Developer Portal](https://developer.x.com/en/portal/dashboard) |
+| LinkedIn | `linkedin` | `https://<your-domain>/mixpostmcp/callback/linkedin` | `https://zenfrogstudio.github.io/MixpostMCP/callback/linkedin/` | [LinkedIn Developers](https://www.linkedin.com/developers/apps) |
+| TikTok | `tiktok` | `https://<your-domain>/mixpostmcp/callback/tiktok` | `https://zenfrogstudio.github.io/MixpostMCP/callback/tiktok/` | [TikTok for Developers](https://developers.tiktok.com/) |
+| YouTube | `youtube` | `https://<your-domain>/mixpostmcp/callback/youtube` | `https://zenfrogstudio.github.io/MixpostMCP/callback/youtube/` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials) |
 
 Register **both** Facebook Page and Instagram callback URLs on the same Meta app — they are two
 different URLs even though they share one app.
@@ -62,6 +69,22 @@ different URLs even though they share one app.
 `<your-domain>` must be the domain in your `APP_URL`, over HTTPS, and must match character for
 character what you register — every one of these portals rejects a callback that differs by so much
 as a trailing slash.
+
+### From the desktop app
+
+Clicking **Connect** in the desktop app opens the network's sign-in page in your normal web browser
+(Google refuses to sign in inside embedded browsers, and your existing logins are there anyway). When
+you approve, the network sends your browser to the relay page above, which hands the result straight
+to the app and tells you the tab can be closed. **The app must be open when you come back** — it is,
+since you just clicked Connect in it. The relay page holds no credentials and stores nothing; it only
+forwards the network's reply.
+
+Everything else in this section still applies on desktop: Meta apps in Development mode, TikTok's
+content posting audit, the YouTube consent screen, and so on.
+
+If you host MixpostMCP somewhere the networks cannot reach and want your own fixed callback address,
+set `MIXPOSTMCP_OAUTH_CALLBACK_BASE` to the base URL of a copy of the `relay/callback` pages; redirects
+then go to `<base>/<provider>/`.
 
 ### Facebook Pages
 

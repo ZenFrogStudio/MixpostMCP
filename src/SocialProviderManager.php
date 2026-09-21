@@ -33,11 +33,28 @@ class SocialProviderManager extends SocialProviderManagerAbstract
         ];
     }
 
+    /**
+     * The URL a network sends the user back to after sign-in.
+     *
+     * Normally this install's own callback route. With `oauth_callback_base` set it is a fixed HTTPS
+     * address that relays to the app instead — the desktop app cannot be reached by the networks.
+     * The trailing slash is deliberate: GitHub Pages serves `callback/<provider>/index.html` at exactly
+     * that URL, without a redirect that might drop the query string.
+     */
+    protected function callbackUrl(string $provider): string
+    {
+        if ($base = $this->config->get('mixpostmcp.oauth_callback_base')) {
+            return rtrim($base, '/')."/$provider/";
+        }
+
+        return route('mixpostmcp.callbackSocialProvider', ['provider' => $provider]);
+    }
+
     protected function connectTwitterProvider()
     {
         $config = ServiceManager::get('twitter', 'configuration');
 
-        $config['redirect'] = route('mixpostmcp.callbackSocialProvider', ['provider' => 'twitter']);
+        $config['redirect'] = $this->callbackUrl('twitter');
 
         return $this->buildConnectionProvider(TwitterProvider::class, $config);
     }
@@ -46,7 +63,7 @@ class SocialProviderManager extends SocialProviderManagerAbstract
     {
         $config = ServiceManager::get('facebook', 'configuration');
 
-        $config['redirect'] = route('mixpostmcp.callbackSocialProvider', ['provider' => 'facebook_page']);
+        $config['redirect'] = $this->callbackUrl('facebook_page');
 
         return $this->buildConnectionProvider(FacebookPageProvider::class, $config);
     }
@@ -57,7 +74,7 @@ class SocialProviderManager extends SocialProviderManagerAbstract
         // so it reads the `facebook` service configuration rather than its own.
         $config = ServiceManager::get('facebook', 'configuration');
 
-        $config['redirect'] = route('mixpostmcp.callbackSocialProvider', ['provider' => 'instagram']);
+        $config['redirect'] = $this->callbackUrl('instagram');
 
         return $this->buildConnectionProvider(InstagramProvider::class, $config);
     }
@@ -66,7 +83,7 @@ class SocialProviderManager extends SocialProviderManagerAbstract
     {
         $config = ServiceManager::get('linkedin', 'configuration');
 
-        $config['redirect'] = route('mixpostmcp.callbackSocialProvider', ['provider' => 'linkedin']);
+        $config['redirect'] = $this->callbackUrl('linkedin');
 
         return $this->buildConnectionProvider(LinkedInProvider::class, $config);
     }
@@ -75,7 +92,7 @@ class SocialProviderManager extends SocialProviderManagerAbstract
     {
         $config = ServiceManager::get('tiktok', 'configuration');
 
-        $config['redirect'] = route('mixpostmcp.callbackSocialProvider', ['provider' => 'tiktok']);
+        $config['redirect'] = $this->callbackUrl('tiktok');
 
         return $this->buildConnectionProvider(TikTokProvider::class, $config);
     }
@@ -84,7 +101,7 @@ class SocialProviderManager extends SocialProviderManagerAbstract
     {
         $config = ServiceManager::get('youtube', 'configuration');
 
-        $config['redirect'] = route('mixpostmcp.callbackSocialProvider', ['provider' => 'youtube']);
+        $config['redirect'] = $this->callbackUrl('youtube');
 
         return $this->buildConnectionProvider(YouTubeProvider::class, $config);
     }
@@ -105,7 +122,7 @@ class SocialProviderManager extends SocialProviderManagerAbstract
 
         $config = ServiceManager::get("mastodon.$serverName", 'configuration');
 
-        $config['redirect'] = route('mixpostmcp.callbackSocialProvider', ['provider' => 'mastodon']);
+        $config['redirect'] = $this->callbackUrl('mastodon');
         $config['values'] = [
             'data' => ['server' => $serverName],
         ];

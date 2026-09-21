@@ -10,6 +10,35 @@
     @routes
     {{ mixpostMcpAssets() }}
     @inertiaHead
+    <script>
+        // Desktop app only: a network's OAuth callback arrives as a mixpostmcp://callback/<provider>?…
+        // deep link. Finish it on this same origin so the session that started the sign-in ends it.
+        // `Native` exists only inside NativePHP; on a server this registers nothing.
+        (function () {
+            function onOpenedFromUrl(payload) {
+                var raw = Array.isArray(payload) ? payload[0] : (payload && payload.url);
+                var url;
+
+                try { url = new URL(raw); } catch (e) { return; }
+
+                if (url.protocol !== 'mixpostmcp:' || url.hostname !== 'callback' || !/^\/[a-z_]{1,32}$/.test(url.pathname)) {
+                    return;
+                }
+
+                window.location.href = '/mixpostmcp/callback' + url.pathname + url.search;
+            }
+
+            function listen() {
+                window.Native.on('Native\\Desktop\\Events\\App\\OpenedFromURL', onOpenedFromUrl);
+            }
+
+            if (window.Native) {
+                listen();
+            } else {
+                window.addEventListener('native:init', listen);
+            }
+        })();
+    </script>
 </head>
 <body class="font-sans">
 @inertia

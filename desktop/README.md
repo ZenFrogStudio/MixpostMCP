@@ -11,8 +11,40 @@ What it does **not** do:
   only to itself. Use the server install for Instagram.
 - **Publish while closed.** Posts are sent by the app's own worker; quit the app and nothing goes out
   until you open it again.
-- **Connect networks yet.** Adding a social account needs an OAuth callback the desktop app cannot
-  receive yet. That arrives in the next version.
+
+## Connecting social networks
+
+Every network needs an app of your own in its developer portal, exactly as on a server — the main
+[README](../README.md#connecting-social-networks) walks through each one. The difference is the
+callback URL you register. The desktop app runs on an address the networks cannot reach, so it uses
+a fixed relay page hosted with this repository (trailing slash included):
+
+```
+https://zenfrogstudio.github.io/MixpostMCP/callback/<provider>/
+```
+
+| Network | Callback URL to register |
+| --- | --- |
+| Facebook Page | `https://zenfrogstudio.github.io/MixpostMCP/callback/facebook_page/` |
+| Instagram | `https://zenfrogstudio.github.io/MixpostMCP/callback/instagram/` |
+| X (Twitter) | `https://zenfrogstudio.github.io/MixpostMCP/callback/twitter/` |
+| LinkedIn | `https://zenfrogstudio.github.io/MixpostMCP/callback/linkedin/` |
+| TikTok | `https://zenfrogstudio.github.io/MixpostMCP/callback/tiktok/` |
+| YouTube | `https://zenfrogstudio.github.io/MixpostMCP/callback/youtube/` |
+
+Clicking **Connect** opens the network's sign-in page in your normal web browser. When you approve,
+the network sends the browser to the relay page, which passes the result to the app through its
+`mixpostmcp://` link and tells you the tab can be closed. **The app must be open when you come back.**
+The relay page holds no credentials and stores nothing; it only forwards the network's reply.
+
+The per-network caveats in the main README still apply here: Meta apps in Development mode can only
+post to your own Pages, TikTok posts are private until the app passes TikTok's audit, and a YouTube
+consent screen in Testing expires its tokens after seven days.
+
+The relay pages live in `relay/` at the repository root and are published by the
+`.github/workflows/relay-pages.yml` workflow. The app points at them through
+`MIXPOSTMCP_OAUTH_CALLBACK_BASE` in `.env`; if you fork this project, host your own copy of `relay/`
+and change that value.
 
 ## Build on Windows
 

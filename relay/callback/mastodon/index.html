@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Returning to MixpostMCP</title>
+</head>
+<body style="font-family: system-ui, sans-serif; max-width: 40rem; margin: 4rem auto; padding: 0 1rem; color: #1f2937;">
+    <h1 style="font-size: 1.25rem;">Returning to MixpostMCP…</h1>
+    <p>If the app did not open, <a id="open" href="#">Open MixpostMCP</a>.</p>
+    <p>You can close this tab.</p>
+    <script>
+        // The network sent the user here; hand the same query string to the desktop app. The provider
+        // is the folder this page lives in, so one file serves every network unchanged.
+        (function () {
+            var segments = location.pathname.split('/').filter(Boolean);
+            var provider = segments[segments.length - 1];
+
+            if (!/^[a-z_]{1,32}$/.test(provider)) {
+                return;
+            }
+
+            var target = 'mixpostmcp://callback/' + provider + location.search;
+
+            document.getElementById('open').href = target;
+            location.replace(target);
+        })();
+    </script>
+</body>
+</html>

@@ -2,6 +2,21 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
+## 2.22.4 - 2026-09-21
+
+**Added**
+
+- **Connecting networks from the desktop app.** Clicking Connect now opens the network's sign-in page
+  in your system browser; when you approve, the network sends the browser to a small relay page on
+  GitHub Pages, which hands the reply to the running app through its `mixpostmcp://` link and the app
+  finishes the connection in the same session that started it. Register
+  `https://zenfrogstudio.github.io/MixpostMCP/callback/<provider>/` (trailing slash included) as the
+  callback URL on each network's app. The relay pages live in `relay/` and deploy from the
+  `relay-pages` workflow.
+- **`MIXPOSTMCP_OAUTH_CALLBACK_BASE`.** When set, OAuth redirects go to `<base>/<provider>/` instead
+  of the install's own callback route, for anyone who needs a fixed callback address the networks
+  can reach.
+
 ## 2.22.3 - 2026-09-21
 
 **Added**
