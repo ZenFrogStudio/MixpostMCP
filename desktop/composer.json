@@ -105,7 +105,10 @@
             "type": "path",
             "url": "../",
             "options": {
-                "symlink": false
+                "symlink": false,
+                "versions": {
+                    "onemedialabs/mixpostmcp": "2.23.0"
+                }
             }
         }
     ]

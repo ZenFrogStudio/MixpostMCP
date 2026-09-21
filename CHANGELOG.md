@@ -2,6 +2,36 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
+## 2.23.0 - 2026-09-21
+
+**Added**
+
+- **MixpostMCP is now a desktop app for Windows and macOS.** Download the installer from the
+  Releases page and run it — there is no Docker, database server or PHP to install. The app bundles
+  its own PHP, keeps everything in one SQLite file in your app-data folder, and opens straight onto
+  the dashboard with no login screen; the security boundary is your computer's user account. The
+  queue worker and scheduler run inside the app, so scheduled posts go out while it is open, and
+  anything that came due while it was closed is published shortly after you reopen it. Signing in to
+  a network opens your normal browser; the network sends you back through a small relay page and a
+  `mixpostmcp://` link into the running app. **Help → Copy Claude Desktop config** puts a
+  ready-to-paste block on your clipboard that points Claude Desktop at the app's own MCP server.
+  This release collects the work in 2.22.1 through 2.22.4 below; those entries have the details.
+  Two things stay server-only: Instagram publishing (Instagram fetches media from a public URL) and
+  publishing while the computer is off.
+- **The README now starts with the two ways to run MixpostMCP** — desktop app or server — and
+  `SECURITY.md` describes the desktop app's security model. `desktop/README.md` walks through the
+  macOS build in order, ending with how to attach the `.dmg` to a release.
+
+**Changed**
+
+- **The app shows its release number instead of a git branch name.** The desktop build mirrors the
+  package from the working copy, and Composer names such a copy after the current branch, so the
+  Status page and sidebar read `dev-…` rather than a version. The desktop app now pins the package
+  version in `desktop/composer.json`, and the version is shown in its short form (`2.23.0`, not
+  `2.23.0.0`). The MCP server reports the same number.
+- **The 2.22.2 heading was missing from this changelog** — its entry had been folded into 2.22.3.
+  Restored.
+
 ## 2.22.4 - 2026-09-21
 
 **Added**
@@ -47,6 +77,8 @@ All notable changes to MixpostMCP will be documented in this file.
   mirror that lives inside its own source; the script now removes the old mirror first.
 - **The desktop app menu was labelled `mixpostmcp`** on Windows (the package slug); it now reads
   `MixpostMCP`.
+
+## 2.22.2 - 2026-09-21
 
 **Added**
 

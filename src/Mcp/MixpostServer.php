@@ -18,7 +18,7 @@ class MixpostServer extends Server
 {
     protected string $name = 'MixpostMCP';
 
-    protected string $version = '2.22.0';
+    protected string $version = '2.23.0';
 
     /**
      * The house rules, stated up front so an agent does not have to discover them by failing.

@@ -66,7 +66,8 @@ class HandleInertiaRequests extends Middleware
             'mixpostmcp' => [
                 // Upstream's docs. The install and network-setup guides there still apply to this fork.
                 'docs_link' => 'https://docs.mixpost.app',
-                'version' => InstalledVersions::getVersion('onemedialabs/mixpostmcp'),
+                // Pretty, not normalised: "2.23.0" rather than "2.23.0.0".
+                'version' => InstalledVersions::getPrettyVersion('onemedialabs/mixpostmcp'),
                 'mime_types' => Config::get('mixpostmcp.mime_types'),
                 'settings' => [
                     'timezone' => Settings::get('timezone'),

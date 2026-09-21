@@ -39,9 +39,10 @@ class SystemStatusController extends Controller
                 'versions' => [
                     'php' => PHP_VERSION,
                     'laravel' => App::version(),
-                    'horizon' => InstalledVersions::isInstalled('laravel/horizon') ? InstalledVersions::getVersion('laravel/horizon') : null,
+                    // Pretty, not normalised: "2.23.0" rather than "2.23.0.0".
+                    'horizon' => InstalledVersions::isInstalled('laravel/horizon') ? InstalledVersions::getPrettyVersion('laravel/horizon') : null,
                     'database' => $this->databaseVersion(),
-                    'mixpostmcp' => InstalledVersions::getVersion('onemedialabs/mixpostmcp'),
+                    'mixpostmcp' => InstalledVersions::getPrettyVersion('onemedialabs/mixpostmcp'),
                 ],
             ],
         ]);

@@ -28,6 +28,29 @@ written once.
 
 ## Installation
 
+There are two ways to run MixpostMCP: as a desktop app on your own computer, or on a server.
+
+### Desktop app
+
+Download the installer for Windows (`.exe`) or macOS (`.dmg`) from the
+[Releases](https://github.com/ZenFrogStudio/MixpostMCP/releases) page and run it. It needs nothing
+else — no Docker, no database server, no PHP. The app bundles its own PHP and keeps everything in
+one SQLite file in your app-data folder. There is no login screen: the app opens straight onto the
+dashboard, and the queue worker and scheduler run inside it, so scheduled posts go out while it is
+open.
+
+Two things stay server-only:
+
+- **Instagram publishing.** Instagram fetches media from a public URL, and the desktop app serves
+  media only to itself.
+- **Publishing while the computer is off.** Posts are sent by the worker inside the app, so nothing
+  goes out while it is closed. Anything that came due while it was closed is published shortly after
+  you open it again.
+
+To build the app from source, see [desktop/README.md](desktop/README.md).
+
+### On a server
+
 MixpostMCP installs the same way as upstream Mixpost Lite, so the
 [Mixpost Lite documentation](https://docs.mixpost.app/lite/) covers getting a server up and running.
 The package name, config file, routes and database tables are unchanged from upstream, so you can
@@ -237,6 +260,10 @@ verification if you use the `youtube.upload` scope.
 
 ## Keeping accounts connected
 
+**In the desktop app, everything in this section up to the token table is built in** — the
+scheduler and the queue worker run inside the app whenever it is open. The rest is for server
+installs.
+
 **The Laravel scheduler must actually be running.** MixpostMCP's scheduled work — publishing queued
 posts, importing metrics, and refreshing access tokens — all runs from it. Add this to your
 server's crontab:
@@ -298,7 +325,12 @@ page. All of that depends on the cron entry above being in place.
 MixpostMCP ships an optional MCP server, so Claude and other AI agents can read your accounts and your
 results, draft posts and put them on the schedule.
 
-It is **off unless you install the package it needs**:
+**In the desktop app** the server is already there. Open **Help → Copy Claude Desktop config**, paste
+the block that lands on your clipboard into `claude_desktop_config.json` (Claude Desktop → Settings →
+Developer → Edit Config) and restart Claude Desktop. Skip the rest of this subsection — it is for
+server installs — and pick up at [What an agent can do](#what-an-agent-can-do).
+
+**On a server** it is **off unless you install the package it needs**:
 
 ```
 composer require laravel/mcp
