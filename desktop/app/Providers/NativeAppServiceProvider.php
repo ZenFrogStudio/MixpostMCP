@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Support\McpLauncher;
 use Native\Desktop\Contracts\ProvidesPhpIni;
+use Native\Desktop\Facades\Menu;
 use Native\Desktop\Facades\Window;
 
 class NativeAppServiceProvider implements ProvidesPhpIni
@@ -12,6 +14,21 @@ class NativeAppServiceProvider implements ProvidesPhpIni
      */
     public function boot(): void
     {
+        // Rewritten every start so it always points at the current install (see App\Listeners\HelpMenu).
+        McpLauncher::write();
+
+        Menu::create(
+            // Windows labels the app menu with the package slug ("mixpostmcp") unless told otherwise.
+            Menu::app()->label(config('app.name')),
+            Menu::edit(),
+            Menu::view(),
+            Menu::window(),
+            Menu::make(
+                Menu::label('Copy Claude Desktop config')->id('copy-claude-config'),
+                Menu::label('Open data folder')->id('open-data-folder'),
+            )->label('Help'),
+        );
+
         Window::open()
             ->title('MixpostMCP')
             ->url(url('/mixpostmcp'))

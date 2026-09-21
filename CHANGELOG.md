@@ -2,7 +2,36 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
-## 2.22.2 - 2026-09-21
+## 2.22.3 - 2026-09-21
+
+**Added**
+
+- **The desktop app bundles ffmpeg.** `ffmpeg` and `ffprobe` ship next to the app, so video
+  thumbnails work out of the box and the Status page reports ffmpeg as installed. They are GPL
+  binaries run as separate programs; MixpostMCP itself stays MIT.
+- **Every install gets its own encryption key.** Previously the key was baked into the installer, so
+  anyone holding the installer could decrypt any user's saved network tokens. The installer now
+  ships without a key and the app generates one on first launch into its app-data folder
+  (`storage/app/app.key`). Deleting the app-data folder resets it.
+- **Claude Desktop launcher.** The app writes `mcp/mixpostmcp-mcp.cmd` (`.sh` on macOS) into its
+  app-data folder on every start; it runs the MCP server against the installed PHP, code and
+  database. A new **Help** menu offers **Copy Claude Desktop config** (puts the ready-to-paste
+  `mcpServers` block on the clipboard) and **Open data folder**.
+- **App icon.** A placeholder rounded square in the accent colour, at `desktop/public/icon.png`;
+  replacing that one file changes the icon everywhere.
+- **macOS build instructions** in `desktop/README.md`, which now documents the whole desktop build.
+
+**Fixed**
+
+- **Video thumbnails failed on Windows.** The video conversion copies the upload into a temporary
+  folder before calling ffmpeg. Media paths use forward slashes, but the temporary-directory helper
+  looked for a backslash to find the folder part, so on Windows the sub-folder was never created
+  and the copy failed with "No such file or directory". Slashes are now normalised first; Linux and
+  macOS are unaffected.
+- **`desktop/build.sh` failed on the second run.** Composer refuses to update a path-repository
+  mirror that lives inside its own source; the script now removes the old mirror first.
+- **The desktop app menu was labelled `mixpostmcp`** on Windows (the package slug); it now reads
+  `MixpostMCP`.
 
 **Added**
 

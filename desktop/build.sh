@@ -17,6 +17,9 @@ unset ELECTRON_RUN_AS_NODE
 (cd .. && npm run build)
 
 # 2. Refresh the mirrored copy of the package, then strip what Composer copied along with it.
+#    Composer refuses to update a path-repo mirror that sits inside its own source, but it happily
+#    installs one, so the old copy goes first.
+rm -rf vendor/onemedialabs/mixpostmcp
 composer update onemedialabs/mixpostmcp --no-interaction
 rm -rf vendor/onemedialabs/mixpostmcp/{vendor,node_modules,desktop}
 
@@ -32,13 +35,15 @@ mkdir -p public/vendor
 cp -R ../resources/dist/vendor/mixpostmcp public/vendor/mixpostmcp
 cp ../resources/img/favicon.ico public/vendor/mixpostmcp/favicon.ico
 
-# 5. ffmpeg binaries (script arrives in a later version).
-if [[ -f scripts/copy-ffmpeg.mjs ]]; then
-    node scripts/copy-ffmpeg.mjs
-fi
+# 5. ffmpeg binaries: extras/ffmpeg ships next to the app as <install>/extras/ffmpeg.
+node scripts/copy-ffmpeg.mjs
 
-# 6. Build the installer.
-php artisan native:build "$platform" --no-interaction
+# 6. Build the installer. Windows is x64 only; macOS builds for the Mac it runs on (arm64 on Apple Silicon).
+arch=""
+if [[ "$platform" == "mac" ]]; then
+    arch=$([[ "$(uname -m)" == "arm64" ]] && echo arm64 || echo x64)
+fi
+php artisan native:build "$platform" $arch --no-interaction
 
 # 7. Newest artifact (NativePHP 2.3 writes installers to nativephp/electron/dist).
 echo

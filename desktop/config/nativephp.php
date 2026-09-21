@@ -61,6 +61,7 @@ return [
      * You may use wildcards to match multiple keys.
      */
     'cleanup_env_keys' => [
+        'APP_KEY', // every install generates its own key on first run (AppServiceProvider)
         'AWS_*',
         'AZURE_*',
         'GITHUB_*',

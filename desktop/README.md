@@ -1,59 +1,118 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MixpostMCP Desktop
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A small Laravel app that wraps the MixpostMCP package with [NativePHP for Desktop](https://nativephp.com)
+and ships it as a normal Windows or macOS program. It bundles its own PHP, runs on a single SQLite file
+in your app-data folder, and needs no server, Docker, MySQL or Redis. The queue worker and the scheduler
+run inside the app, so scheduled posts go out while it is open.
 
-## About Laravel
+What it does **not** do:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Instagram publishing.** Instagram fetches media from a public URL, and the desktop app serves media
+  only to itself. Use the server install for Instagram.
+- **Publish while closed.** Posts are sent by the app's own worker; quit the app and nothing goes out
+  until you open it again.
+- **Connect networks yet.** Adding a social account needs an OAuth callback the desktop app cannot
+  receive yet. That arrives in the next version.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Build on Windows
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+You need:
 
-## Learning Laravel
+- **PHP 8.3** (NTS, x64) with **Composer** — e.g. the `php-8.3` folder installed under
+  `%LOCALAPPDATA%\Programs`, both on your `PATH`
+- **Node 22 or newer** (nvm-windows is fine)
+- Git Bash to run `build.sh`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Then, from the repository root:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+npm install && npm run build
+cd desktop
+composer install
+npm install
+./build.sh win
+```
 
-## Laravel Sponsors
+`build.sh` rebuilds the package assets, refreshes the copy of the package inside `vendor/`, copies
+ffmpeg into `extras/`, and runs `php artisan native:build`. The installer lands in
+`desktop/nativephp/electron/dist/MixpostMCP-<version>-setup.exe`. It installs per user (no admin
+prompt) into `%LOCALAPPDATA%\Programs\mixpostmcp` and runs silently with `/S`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+If your terminal is itself an Electron app (VS Code, Claude Code) it sets `ELECTRON_RUN_AS_NODE=1`,
+which makes the build — and the installed app — start Electron as plain Node and exit. `build.sh`
+unsets it; unset it yourself before launching `mixpostmcp.exe` from such a terminal.
 
-### Premium Partners
+## Build on macOS
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+You need:
 
-## Contributing
+- **PHP 8.3 and Composer** — [Laravel Herd](https://herd.laravel.com) gives you both, or
+  `brew install php@8.3 composer`
+- **Node 22 or newer**
+- **Xcode Command Line Tools** (`xcode-select --install`)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Same commands, different target:
 
-## Code of Conduct
+```bash
+npm install && npm run build
+cd desktop
+composer install
+npm install
+./build.sh mac
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+The `.dmg` lands in `desktop/nativephp/electron/dist/`. `build.sh` builds for the Mac it runs on:
+arm64 on Apple Silicon, x64 on Intel. The build is not signed or notarised, so Gatekeeper blocks it the
+first time: right-click the app → **Open**, or run `xattr -d com.apple.quarantine /Applications/MixpostMCP.app`.
 
-## Security Vulnerabilities
+## AI agents (Claude Desktop)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The app ships the MixpostMCP MCP server. It must run against the *installed* app's PHP, code and
+database, and those paths differ per machine, so the app writes a launcher script into its app-data
+folder every time it starts:
 
-## License
+- Windows: `%APPDATA%\mixpostmcp\mcp\mixpostmcp-mcp.cmd`
+- macOS: `~/Library/Application Support/mixpostmcp/mcp/mixpostmcp-mcp.sh`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+You do not have to find it. In the app, open **Help → Copy Claude Desktop config**; the ready-to-paste
+block is on your clipboard:
+
+```json
+{
+    "mcpServers": {
+        "mixpostmcp": {
+            "command": "C:\\Users\\you\\AppData\\Roaming\\mixpostmcp\\mcp\\mixpostmcp-mcp.cmd"
+        }
+    }
+}
+```
+
+Paste it into `claude_desktop_config.json` (Claude Desktop → Settings → Developer → Edit Config) and
+restart Claude Desktop. The app has to be installed and to have been opened at least once, because the
+launcher is written at start-up; it does not have to be open while an agent uses it. The launcher holds
+only paths — no secrets. See the root README for what the tools can do.
+
+## Where your data lives
+
+Everything the app creates is in one folder — **Help → Open data folder** takes you there:
+
+- Windows: `%APPDATA%\mixpostmcp`
+- macOS: `~/Library/Application Support/mixpostmcp`
+
+Inside: `database/database.sqlite` (accounts, posts, settings), `storage/app/mixpostmcp-media/` (uploads),
+`storage/app/app.key` (the encryption key for saved network tokens — generated on first run, unique to
+this install), `storage/logs/`, and `mcp/` (the launcher above).
+
+**To reset the app**, quit it and delete that folder. Everything, including the key, is recreated on the
+next start. Uninstalling leaves the folder in place.
+
+## Icon
+
+`public/icon.png` (1024×1024) is the only icon file; NativePHP derives the `.ico` and `.icns` from it at
+build time. Replace that one file to change the icon everywhere. The current one is a placeholder.
+
+## Licences
+
+MixpostMCP is MIT. The bundled `ffmpeg` and `ffprobe` (from the `ffmpeg-static` and `ffprobe-static`
+npm packages) are GPL-licensed. They ship as separate executables in `extras/ffmpeg/` that the app runs
+as external programs, with their licence text alongside; they are not linked into MixpostMCP.
