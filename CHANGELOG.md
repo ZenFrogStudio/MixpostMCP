@@ -2,6 +2,17 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
+## 2.23.1 - 2026-09-22
+
+**Note**
+
+- **The newer networks can be connected and posted to, but the dashboard does not report on them
+  yet.** Instagram, LinkedIn, TikTok and YouTube accounts publish normally and have their own post
+  previews in the composer, but the dashboard's follower counts and reports still cover X, Facebook
+  Pages and Mastodon only — pick one of the newer accounts on the dashboard and it shows nothing.
+  Audience and metrics imports for those four networks, and dashboard reports for them, are
+  scheduled work landing across 2.23.2 to 2.24.0.
+
 ## 2.23.0 - 2026-09-21
 
 **Added**

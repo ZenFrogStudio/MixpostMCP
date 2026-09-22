@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "535f25cd4bd057255db64f537c1f7929",
+    "content-hash": "660410b453b28db9d225349378e7485c",
     "packages": [
         {
             "name": "brick/math",
@@ -3258,11 +3258,11 @@
         },
         {
             "name": "onemedialabs/mixpostmcp",
-            "version": "2.23.0",
+            "version": "2.23.1",
             "dist": {
                 "type": "path",
                 "url": "..",
-                "reference": "a4cbed9c2599c1365b3898bb4dba7540ec256324"
+                "reference": "004f97f7677f57fdf9a8c204838009851606c943"
             },
             "require": {
                 "ext-fileinfo": "*",

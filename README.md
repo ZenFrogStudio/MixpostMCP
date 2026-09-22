@@ -89,6 +89,10 @@ https://zenfrogstudio.github.io/MixpostMCP/callback/<provider>/
 Register **both** Facebook Page and Instagram callback URLs on the same Meta app — they are two
 different URLs even though they share one app.
 
+Every network in this table can be connected and posted to. The dashboard's follower counts and
+reports currently cover X, Facebook Pages and Mastodon only; reporting for Instagram, LinkedIn,
+TikTok and YouTube is scheduled work landing across 2.23.2 to 2.24.0.
+
 `<your-domain>` must be the domain in your `APP_URL`, over HTTPS, and must match character for
 character what you register — every one of these portals rejects a callback that differs by so much
 as a trailing slash.
