@@ -77,7 +77,7 @@ trait ManagesFacebookPageResources
     {
         $data = [
             'access_token' => $this->getAccessToken()['page_access_token'],
-            'metric' => 'page_post_engagements,page_posts_impressions', // facebook deprecated `page_engaged_users` metric
+            'metric' => 'page_post_engagements,page_media_view', // Meta retired `page_engaged_users`, then `page_posts_impressions` (June 2025); `page_media_view` is its documented successor family
             'period' => 'day',
             'since' => Carbon::today('UTC')->subDays(90)->toDateString(),
             'until' => Carbon::today('UTC')->toDateString(),

@@ -2,6 +2,22 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
+## 2.23.2 - 2026-09-22
+
+**Added**
+
+- **Instagram accounts now feed the dashboard.** Follower counts are imported every three hours and
+  daily reach and profile views every two, so the numbers are already building up for the Instagram
+  reports arriving in 2.24.0. Each metric is requested on its own, so when Meta retires one the
+  others keep importing.
+
+**Changed**
+
+- **Facebook Page reports count media views instead of post impressions.** Meta retired the
+  `page_posts_impressions` metric in June 2025, and one retired metric fails the whole insights call, so
+  post engagements had stopped importing too. The panel now shows `page_media_view`, Meta's successor
+  for impressions, and both metrics import again.
+
 ## 2.23.1 - 2026-09-22
 
 **Note**

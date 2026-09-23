@@ -3,6 +3,7 @@
 namespace OneMediaLabs\MixpostMcp\SocialProviders\Meta\Concerns;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
@@ -43,6 +44,99 @@ trait ManagesInstagramResources
                 'image' => $data['profile_picture_url'] ?? null,
             ];
         });
+    }
+
+    public function getAudience(): SocialProviderResponse
+    {
+        $response = Http::get("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}", [
+            'fields' => 'followers_count,media_count',
+            'access_token' => $this->getAccessToken()['page_access_token'],
+        ]);
+
+        return $this->buildResponse($response);
+    }
+
+    /**
+     * Daily account insights for the last 30 days, the most Instagram returns per call.
+     *
+     * Meta retires Instagram metrics one at a time, and a retired metric in the list fails the whole
+     * call. Each metric is therefore requested on its own and dropped if it errors, so the context is
+     * `['reach' => ['2026-09-21' => 123, …], 'profile_views' => […]]` with only the metrics that came
+     * back. Only when every metric fails is the last error returned, so the job can log it.
+     *
+     * @see https://developers.facebook.com/docs/instagram-platform/insights
+     */
+    public function getInsights(): SocialProviderResponse
+    {
+        $url = "$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/insights";
+        $token = $this->getAccessToken()['page_access_token'];
+
+        $insights = [];
+        $lastError = null;
+        $response = null;
+
+        foreach (['reach', 'profile_views'] as $metric) {
+            $response = $this->buildResponse(Http::get($url, [
+                'metric' => $metric,
+                'period' => 'day',
+                'since' => Carbon::today('UTC')->subDays(29)->toDateString(),
+                'until' => Carbon::today('UTC')->toDateString(),
+                'access_token' => $token,
+            ]));
+
+            if ($response->isUnauthorized() || $response->hasExceededRateLimit()) {
+                return $response;
+            }
+
+            // Meta moves metrics to "total only" one by one; the error asks for `metric_type`. Such a
+            // metric has no daily series, so ask for yesterday's total and file it under yesterday.
+            if ($response->hasError() && str_contains(Arr::get($response->context(), 'error.message', ''), 'metric_type')) {
+                $response = $this->buildResponse(Http::get($url, [
+                    'metric' => $metric,
+                    'period' => 'day',
+                    'metric_type' => 'total_value',
+                    'since' => Carbon::yesterday('UTC')->toDateString(),
+                    'until' => Carbon::today('UTC')->toDateString(),
+                    'access_token' => $token,
+                ]));
+
+                if ($response->isUnauthorized() || $response->hasExceededRateLimit()) {
+                    return $response;
+                }
+
+                if (! $response->hasError()) {
+                    $insights[$metric] = [
+                        Carbon::yesterday('UTC')->toDateString() => Arr::get($response->context(), 'data.0.total_value.value', 0),
+                    ];
+
+                    continue;
+                }
+            }
+
+            if ($response->hasError()) {
+                $lastError = $response;
+
+                continue;
+            }
+
+            $insights[$metric] = [];
+
+            foreach (Arr::get($response->context(), 'data.0.values', []) as $item) {
+                $insights[$metric][Carbon::parse($item['end_time'], 'UTC')->toDateString()] = $item['value'] ?? 0;
+            }
+        }
+
+        if (! $insights && $lastError) {
+            return $lastError;
+        }
+
+        return $this->response(
+            SocialProviderResponseStatus::OK,
+            $insights,
+            $response->rateLimitAboutToBeExceeded(),
+            $response->retryAfter(),
+            $response->isAppLevel()
+        );
     }
 
     public function getEntities(bool $withAccessToken = false): SocialProviderResponse

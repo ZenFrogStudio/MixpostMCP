@@ -107,7 +107,7 @@
             "options": {
                 "symlink": false,
                 "versions": {
-                    "onemedialabs/mixpostmcp": "2.23.1"
+                    "onemedialabs/mixpostmcp": "2.23.2"
                 }
             }
         }

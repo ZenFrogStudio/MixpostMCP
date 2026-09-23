@@ -38,9 +38,9 @@ const getAudienceData = (value) => {
             </Panel>
 
             <Panel>
-                <template #title><span v-tooltip="'The number of times your Page\'s posts entered a person\'s screen. Posts include statuses, photos, links, videos and more.'">Posts Impressions</span>
+                <template #title><span v-tooltip="'The number of times your content was played or displayed. Content includes videos, posts, stories and ads.'">Media Views</span>
                 </template>
-                <div class="font-semibold text-indigo-500 text-2xl">{{ getMetricCount('page_posts_impressions') }}</div>
+                <div class="font-semibold text-indigo-500 text-2xl">{{ getMetricCount('page_media_view') }}</div>
             </Panel>
         </div>
     </div>

@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use OneMediaLabs\MixpostMcp\Concerns\AccountsOption;
 use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Jobs\ImportMastodonPostsJob;
 use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportFacebookInsightsJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportInstagramInsightsJob;
 use OneMediaLabs\MixpostMcp\SocialProviders\Twitter\Jobs\ImportTwitterPostsJob;
 
 class ImportAccountData extends Command
@@ -22,6 +23,7 @@ class ImportAccountData extends Command
             $job = match ($account->provider) {
                 'twitter' => ImportTwitterPostsJob::class,
                 'facebook_page' => ImportFacebookInsightsJob::class,
+                'instagram' => ImportInstagramInsightsJob::class,
                 'mastodon' => ImportMastodonPostsJob::class,
                 default => null,
             };

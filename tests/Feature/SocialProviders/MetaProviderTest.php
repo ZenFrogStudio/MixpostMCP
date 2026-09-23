@@ -1,12 +1,23 @@
 <?php
 
+use Carbon\Carbon;
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\Request;
+use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Support\Facades\Http;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Audience;
+use OneMediaLabs\MixpostMcp\Models\Metric;
+use OneMediaLabs\MixpostMcp\Models\Service;
 use OneMediaLabs\MixpostMcp\SocialProviders\Meta\FacebookPageProvider;
 use OneMediaLabs\MixpostMcp\SocialProviders\Meta\InstagramProvider;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportInstagramFollowersJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportInstagramInsightsJob;
 
+// No catch-all Http::fake() here: stubs answer in the order they were registered, so a catch-all
+// set up first would shadow every fake a test registers for itself. Each test fakes what it calls.
 beforeEach(function () {
     Http::preventStrayRequests();
-    Http::fake();
 });
 
 it('builds a Facebook authorization URL', function () {
@@ -107,4 +118,189 @@ it('does not inherit the Facebook Page composer limits', function () {
         ->and($instagram['media_limit']['max']['gifs']['default'])->toBe(0)
         ->and($instagram['text_char_limit']['max']['default'])
         ->not->toBe($facebook['text_char_limit']['max']['default']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Instagram audience and insights
+|--------------------------------------------------------------------------
+*/
+
+function instagramProvider(): InstagramProvider
+{
+    return makeProvider(InstagramProvider::class, 'instagram', ['provider_id' => '17841400000'])
+        ->useAccessToken(['access_token' => 'user-token', 'page_access_token' => 'page-token']);
+}
+
+function instagramAccount(): Account
+{
+    Service::factory()->create([
+        'name' => 'facebook',
+        'configuration' => ['client_id' => 'test-client-id', 'client_secret' => 'test-client-secret', 'api_version' => 'v25.0'],
+        'active' => true,
+    ]);
+
+    return Account::factory()->create([
+        'provider' => 'instagram',
+        'provider_id' => '17841400000',
+        'access_token' => ['access_token' => 'user-token', 'page_access_token' => 'page-token'],
+    ]);
+}
+
+/**
+ * captureException() reads the queued job's payload, which a job run straight from handle() does
+ * not have. This is the same stand-in Laravel's own dispatchSync() gives a job.
+ */
+function runInstagramJob(object $job): void
+{
+    $job->job = new SyncJob(app(), json_encode(['displayName' => $job::class]), 'sync', 'sync');
+    $job->handle();
+}
+
+function graphError(int $code, string $message = 'Something went wrong'): PromiseInterface
+{
+    return Http::response(['error' => ['code' => $code, 'message' => $message, 'type' => 'OAuthException']], 400);
+}
+
+function graphDailySeries(string $metric, array $valuesByDate): PromiseInterface
+{
+    $values = [];
+
+    foreach ($valuesByDate as $date => $value) {
+        $values[] = ['value' => $value, 'end_time' => "{$date}T07:00:00+0000"];
+    }
+
+    return Http::response(['data' => [['name' => $metric, 'period' => 'day', 'values' => $values]]]);
+}
+
+it('requests Instagram followers with the Page token', function () {
+    Http::fake(['graph.facebook.com/*' => Http::response(['followers_count' => 321, 'media_count' => 12, 'id' => '17841400000'])]);
+
+    $response = instagramProvider()->getAudience();
+
+    expect($response->isOk())->toBeTrue()
+        ->and($response->context()['followers_count'])->toBe(321);
+
+    Http::assertSent(function (Request $request) {
+        $params = queryParams($request->url());
+
+        return str_contains($request->url(), '/17841400000?')
+            && $params['fields'] === 'followers_count,media_count'
+            && $params['access_token'] === 'page-token';
+    });
+});
+
+it('drops a retired metric and keeps the rest', function () {
+    Http::fake(function (Request $request) {
+        return match (queryParams($request->url())['metric']) {
+            'reach' => graphDailySeries('reach', ['2026-09-20' => 40, '2026-09-21' => 55]),
+            'profile_views' => graphError(100, '(#100) The metric profile_views is no longer supported'),
+        };
+    });
+
+    $response = instagramProvider()->getInsights();
+
+    expect($response->isOk())->toBeTrue()
+        ->and($response->context())->toBe(['reach' => ['2026-09-20' => 40, '2026-09-21' => 55]])
+        ->and($response->context())->not->toHaveKey('profile_views');
+
+    Http::assertSentCount(2);
+});
+
+it('falls back to the total value for a metric Meta now reports as a total only', function () {
+    Http::fake(function (Request $request) {
+        $params = queryParams($request->url());
+
+        if ($params['metric'] === 'reach') {
+            return graphDailySeries('reach', ['2026-09-21' => 55]);
+        }
+
+        if (isset($params['metric_type'])) {
+            return Http::response(['data' => [['name' => 'profile_views', 'period' => 'day', 'total_value' => ['value' => 9]]]]);
+        }
+
+        return graphError(100, '(#100) profile_views metric requires a metric_type of total_value');
+    });
+
+    $response = instagramProvider()->getInsights();
+    $yesterday = Carbon::yesterday('UTC')->toDateString();
+
+    expect($response->isOk())->toBeTrue()
+        ->and($response->context()['profile_views'])->toBe([$yesterday => 9])
+        ->and($response->context()['reach'])->toBe(['2026-09-21' => 55]);
+
+    Http::assertSent(function (Request $request) use ($yesterday) {
+        $params = queryParams($request->url());
+
+        return ($params['metric_type'] ?? null) === 'total_value'
+            && $params['since'] === $yesterday
+            && $params['until'] === Carbon::today('UTC')->toDateString();
+    });
+});
+
+it('reports an error when every Instagram metric fails', function () {
+    Http::fake(['graph.facebook.com/*' => graphError(100)]);
+
+    $response = instagramProvider()->getInsights();
+
+    expect($response->hasError())->toBeTrue();
+});
+
+it('imports Instagram followers once per day', function () {
+    Http::fake(['graph.facebook.com/*' => Http::response(['followers_count' => 321, 'media_count' => 12])]);
+
+    $account = instagramAccount();
+
+    (new ImportInstagramFollowersJob($account))->handle();
+    (new ImportInstagramFollowersJob($account))->handle();
+
+    $rows = Audience::account($account->id)->get();
+
+    expect($rows)->toHaveCount(1)
+        ->and($rows->first()->total)->toBe(321)
+        ->and($rows->first()->date->toDateString())->toBe(Carbon::today('UTC')->toDateString());
+});
+
+it('imports Instagram insights as one metric row per date', function () {
+    Http::fake(function (Request $request) {
+        return match (queryParams($request->url())['metric']) {
+            'reach' => graphDailySeries('reach', ['2026-09-20' => 40, '2026-09-21' => 55]),
+            'profile_views' => graphDailySeries('profile_views', ['2026-09-21' => 7]),
+        };
+    });
+
+    $account = instagramAccount();
+
+    (new ImportInstagramInsightsJob($account))->handle();
+    (new ImportInstagramInsightsJob($account))->handle();
+
+    $rows = Metric::account($account->id)->orderBy('date')->get();
+
+    expect($rows)->toHaveCount(2)
+        ->and($rows[0]->date->toDateString())->toBe('2026-09-20')
+        ->and($rows[0]->data)->toBe(['reach' => 40])
+        ->and($rows[1]->date->toDateString())->toBe('2026-09-21')
+        ->and($rows[1]->data)->toBe(['reach' => 55, 'profile_views' => 7]);
+});
+
+it('marks an Instagram account unauthorized on an expired token', function () {
+    Http::fake(['graph.facebook.com/*' => graphError(190, 'Error validating access token')]);
+
+    $account = instagramAccount();
+
+    runInstagramJob(new ImportInstagramFollowersJob($account));
+
+    expect($account->fresh()->authorized)->toBeFalse()
+        ->and(Audience::account($account->id)->count())->toBe(0);
+});
+
+it('keeps an Instagram account authorized on any other Graph error', function () {
+    Http::fake(['graph.facebook.com/*' => graphError(100)]);
+
+    $account = instagramAccount();
+
+    runInstagramJob(new ImportInstagramFollowersJob($account));
+
+    expect($account->fresh()->authorized)->toBeTrue()
+        ->and(Audience::account($account->id)->count())->toBe(0);
 });

@@ -11,4 +11,5 @@ enum FacebookInsightType: int
     case PAGE_ENGAGED_USERS = 1;
     case PAGE_POST_ENGAGEMENTS = 2;
     case PAGE_POSTS_IMPRESSIONS = 3;
+    case PAGE_MEDIA_VIEW = 4;
 }
