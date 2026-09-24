@@ -3,6 +3,7 @@
 namespace OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Concerns;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use OneMediaLabs\MixpostMcp\Enums\SocialProviderResponseStatus;
@@ -24,6 +25,82 @@ trait ManagesResources
     public function getAccount(): SocialProviderResponse
     {
         return $this->isOrganization() ? $this->getOrganizationAccount() : $this->getMemberAccount();
+    }
+
+    /**
+     * The company page's follower count. LinkedIn has no follower API for a personal profile, so a
+     * member account has nothing to import and makes no request.
+     *
+     * @see https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/organization-lookup-api#retrieve-organization-follower-count
+     */
+    public function getAudience(): SocialProviderResponse
+    {
+        if (! $this->isOrganization()) {
+            return $this->response(SocialProviderResponseStatus::OK, []);
+        }
+
+        // `COMPANY_FOLLOWED_BY_MEMBER` since version 202305 — the older `CompanyFollowedByMember`
+        // spelling is not accepted by the versioned API.
+        $response = $this->restRequest()
+            ->get("$this->apiUrl/rest/networkSizes/".rawurlencode($this->authorUrn()), [
+                'edgeType' => 'COMPANY_FOLLOWED_BY_MEMBER',
+            ]);
+
+        // A page connected before `r_organization_social` was requested gets a 403 here. It keeps
+        // posting; it just has no numbers until it is reconnected, so this is not an error.
+        if ($response->clientError() && ! in_array($response->status(), [401, 429], true)) {
+            return $this->response(SocialProviderResponseStatus::OK, []);
+        }
+
+        return $this->buildResponse($response);
+    }
+
+    /**
+     * Daily post statistics for the company page over the last 90 days — the dashboard's longest
+     * period — keyed by UTC date. A personal profile has no such API and makes no request.
+     *
+     * @see https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/share-statistics
+     */
+    public function getMetrics(): SocialProviderResponse
+    {
+        if (! $this->isOrganization()) {
+            return $this->response(SocialProviderResponseStatus::OK, []);
+        }
+
+        $start = Carbon::today('UTC')->subDays(90)->getTimestampMs();
+        $end = Carbon::now('UTC')->getTimestampMs();
+
+        // Rest.li's `timeIntervals` needs its parentheses and colons literal, and passing it through
+        // the params array would percent-encode them — so the query string is written out by hand.
+        $response = $this->restRequest()->get(
+            "$this->apiUrl/rest/organizationalEntityShareStatistics?q=organizationalEntity"
+            .'&organizationalEntity='.rawurlencode($this->authorUrn())
+            ."&timeIntervals=(timeRange:(start:$start,end:$end),timeGranularityType:DAY)"
+        );
+
+        // Same as getAudience(): a token without the statistics scope means nothing to import.
+        if ($response->clientError() && ! in_array($response->status(), [401, 429], true)) {
+            return $this->response(SocialProviderResponseStatus::OK, []);
+        }
+
+        return $this->buildResponse($response, function () use ($response) {
+            $byDate = [];
+
+            foreach ($response->json('elements', []) as $element) {
+                $date = Carbon::createFromTimestampMs(Arr::get($element, 'timeRange.start'), 'UTC')->toDateString();
+                $stats = Arr::get($element, 'totalShareStatistics', []);
+
+                $byDate[$date] = [
+                    'impressions' => (int) Arr::get($stats, 'impressionCount', 0),
+                    'likes' => (int) Arr::get($stats, 'likeCount', 0),
+                    'comments' => (int) Arr::get($stats, 'commentCount', 0),
+                    'shares' => (int) Arr::get($stats, 'shareCount', 0),
+                    'clicks' => (int) Arr::get($stats, 'clickCount', 0),
+                ];
+            }
+
+            return $byDate;
+        });
     }
 
     /**

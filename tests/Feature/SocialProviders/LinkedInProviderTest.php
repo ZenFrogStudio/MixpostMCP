@@ -1,6 +1,14 @@
 <?php
 
+use Carbon\Carbon;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
+use OneMediaLabs\MixpostMcp\Models\Account;
+use OneMediaLabs\MixpostMcp\Models\Audience;
+use OneMediaLabs\MixpostMcp\Models\Metric;
+use OneMediaLabs\MixpostMcp\Models\Service;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Jobs\ImportLinkedInFollowersJob;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Jobs\ProcessLinkedInMetricsJob;
 use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\LinkedInProvider;
 
 // No catch-all Http::fake() here: stubs match in the order they are registered, so a catch-all set
@@ -24,7 +32,9 @@ it('requests the member and organization scopes', function () {
     expect($scopes)->toContain('openid', 'profile', 'email', 'w_member_social')
         // These two need the Community Management API approved on the app; LinkedIn refuses the
         // whole authorization rather than dropping them, which is why README calls it out.
-        ->toContain('r_organization_admin', 'w_organization_social');
+        ->toContain('r_organization_admin', 'w_organization_social')
+        // Needed for the follower count and share statistics; without it those calls answer 403.
+        ->toContain('r_organization_social');
 });
 
 it('sends the callback URL and client id LinkedIn was configured with', function () {
@@ -228,4 +238,154 @@ it('reports a rejected refresh rather than throwing', function () {
     expect($result['error'])->toBe('The refresh token is expired')
         // The old token must survive a failed refresh, so nothing overwrites it with a null.
         ->and($provider->getAccessToken()['access_token'])->toBe('an-old-token');
+});
+
+/*
+|--------------------------------------------------------------------------
+| LinkedIn audience and metrics
+|--------------------------------------------------------------------------
+*/
+
+function linkedInProvider(string $type): LinkedInProvider
+{
+    $urn = $type === 'organization' ? 'urn:li:organization:123' : 'urn:li:person:abc';
+
+    return makeProvider(LinkedInProvider::class, 'linkedin', ['provider_id' => $urn, 'data' => ['type' => $type]])
+        ->useAccessToken(['access_token' => 'a-token']);
+}
+
+function linkedInAccount(string $type): Account
+{
+    Service::factory()->create([
+        'name' => 'linkedin',
+        'configuration' => ['client_id' => 'test-client-id', 'client_secret' => 'test-client-secret'],
+        'active' => true,
+    ]);
+
+    return Account::factory()->create([
+        'provider' => 'linkedin',
+        'provider_id' => $type === 'organization' ? 'urn:li:organization:1' : 'urn:li:person:abc',
+        'data' => ['type' => $type],
+        'access_token' => ['access_token' => 'a-token'],
+    ]);
+}
+
+// Two days of LinkedIn's daily share statistics: 2026-09-20 and 2026-09-21, midnight UTC.
+function linkedInShareStatistics(): array
+{
+    return ['elements' => [
+        [
+            'timeRange' => ['start' => 1789862400000, 'end' => 1789948800000],
+            'totalShareStatistics' => ['impressionCount' => 331, 'likeCount' => 4, 'commentCount' => 2, 'shareCount' => 1, 'clickCount' => 9, 'engagement' => 0.05],
+        ],
+        [
+            'timeRange' => ['start' => 1789948800000, 'end' => 1790035200000],
+            'totalShareStatistics' => ['impressionCount' => 120, 'likeCount' => 0, 'commentCount' => 0, 'shareCount' => 0, 'clickCount' => 3],
+        ],
+    ]];
+}
+
+it('asks LinkedIn nothing about a personal profile', function () {
+    $provider = linkedInProvider('person');
+
+    $audience = $provider->getAudience();
+    $metrics = $provider->getMetrics();
+
+    expect($audience->hasError())->toBeFalse()
+        ->and($audience->context())->toBe([])
+        ->and($metrics->hasError())->toBeFalse()
+        ->and($metrics->context())->toBe([]);
+
+    Http::assertNothingSent();
+});
+
+it('reads a company page follower count through the versioned API', function () {
+    Http::fake(['api.linkedin.com/rest/networkSizes/*' => Http::response(['firstDegreeSize' => 219])]);
+
+    $response = linkedInProvider('organization')->getAudience();
+
+    expect($response->hasError())->toBeFalse()
+        ->and($response->context()['firstDegreeSize'])->toBe(219);
+
+    Http::assertSent(fn (Request $request) => str_contains($request->url(), '/rest/networkSizes/urn%3Ali%3Aorganization%3A123')
+        && str_contains($request->url(), 'edgeType=COMPANY_FOLLOWED_BY_MEMBER')
+        && $request->hasHeader('LinkedIn-Version', LinkedInProvider::API_VERSION)
+        && $request->hasHeader('X-Restli-Protocol-Version', '2.0.0'));
+});
+
+it('maps daily share statistics to one entry per date', function () {
+    Http::fake(['api.linkedin.com/rest/organizationalEntityShareStatistics*' => Http::response(linkedInShareStatistics())]);
+
+    $response = linkedInProvider('organization')->getMetrics();
+
+    expect($response->hasError())->toBeFalse()
+        ->and($response->context())->toBe([
+            '2026-09-20' => ['impressions' => 331, 'likes' => 4, 'comments' => 2, 'shares' => 1, 'clicks' => 9],
+            '2026-09-21' => ['impressions' => 120, 'likes' => 0, 'comments' => 0, 'shares' => 0, 'clicks' => 3],
+        ]);
+
+    // Rest.li reads `timeIntervals` only when its parentheses and colons arrive unencoded.
+    Http::assertSent(fn (Request $request) => str_contains($request->url(), 'organizationalEntity=urn%3Ali%3Aorganization%3A123')
+        && str_contains($request->url(), 'timeIntervals=(timeRange:(start:')
+        && str_contains($request->url(), 'timeGranularityType:DAY)'));
+});
+
+it('treats a 403 as nothing to import rather than an error', function (string $method) {
+    Http::fake(['api.linkedin.com/*' => Http::response(['message' => 'Not enough permissions', 'status' => 403], 403)]);
+
+    $response = linkedInProvider('organization')->$method();
+
+    expect($response->hasError())->toBeFalse()
+        ->and($response->isUnauthorized())->toBeFalse()
+        ->and($response->context())->toBe([]);
+})->with(['getAudience', 'getMetrics']);
+
+it('reports an expired token as unauthorized', function (string $method) {
+    Http::fake(['api.linkedin.com/*' => Http::response(['message' => 'Expired token', 'status' => 401], 401)]);
+
+    expect(linkedInProvider('organization')->$method()->isUnauthorized())->toBeTrue();
+})->with(['getAudience', 'getMetrics']);
+
+it('imports LinkedIn followers once per day', function () {
+    Http::fake(['api.linkedin.com/rest/networkSizes/*' => Http::response(['firstDegreeSize' => 219])]);
+
+    $account = linkedInAccount('organization');
+
+    (new ImportLinkedInFollowersJob($account))->handle();
+    (new ImportLinkedInFollowersJob($account))->handle();
+
+    $rows = Audience::account($account->id)->get();
+
+    expect($rows)->toHaveCount(1)
+        ->and($rows->first()->total)->toBe(219)
+        ->and($rows->first()->date->toDateString())->toBe(Carbon::today('UTC')->toDateString());
+});
+
+it('imports LinkedIn metrics as one row per date', function () {
+    Http::fake(['api.linkedin.com/rest/organizationalEntityShareStatistics*' => Http::response(linkedInShareStatistics())]);
+
+    $account = linkedInAccount('organization');
+
+    (new ProcessLinkedInMetricsJob($account))->handle();
+    (new ProcessLinkedInMetricsJob($account))->handle();
+
+    $rows = Metric::account($account->id)->orderBy('date')->get();
+
+    expect($rows)->toHaveCount(2)
+        ->and($rows[0]->date->toDateString())->toBe('2026-09-20')
+        ->and($rows[0]->data)->toBe(['impressions' => 331, 'likes' => 4, 'comments' => 2, 'shares' => 1, 'clicks' => 9])
+        ->and($rows[1]->date->toDateString())->toBe('2026-09-21');
+});
+
+it('imports nothing for a personal profile and keeps it authorized', function () {
+    $account = linkedInAccount('person');
+
+    (new ImportLinkedInFollowersJob($account))->handle();
+    (new ProcessLinkedInMetricsJob($account))->handle();
+
+    expect(Audience::account($account->id)->count())->toBe(0)
+        ->and(Metric::account($account->id)->count())->toBe(0)
+        ->and($account->fresh()->authorized)->toBeTrue();
+
+    Http::assertNothingSent();
 });

@@ -2,6 +2,16 @@
 
 All notable changes to MixpostMCP will be documented in this file.
 
+## 2.23.3 - 2026-09-22
+
+**Added**
+
+- **LinkedIn company pages now feed the dashboard.** Follower counts are imported every three hours,
+  along with daily impressions, likes, comments, shares and clicks, so the numbers are already building
+  up for the LinkedIn reports arriving in 2.24.0. Personal profiles get no numbers, because LinkedIn
+  offers no statistics for them. A page connected before this release keeps posting as before but
+  records nothing until it is reconnected once — the connection needs one more permission.
+
 ## 2.23.2 - 2026-09-22
 
 **Added**

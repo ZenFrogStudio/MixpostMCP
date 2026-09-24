@@ -195,14 +195,18 @@ Your app needs these products:
 | --- | --- | --- |
 | Sign In with LinkedIn using OpenID Connect | `openid`, `profile`, `email` | Yes |
 | Share on LinkedIn | `w_member_social` — posting as yourself | Yes |
-| Community Management API | `r_organization_admin`, `w_organization_social` — listing and posting as company pages | Only for company pages |
+| Community Management API | `r_organization_admin`, `r_organization_social`, `w_organization_social` — listing, posting as and reporting on company pages | Only for company pages |
 
 **The Community Management API has to be approved before you connect.** MixpostMCP always asks for the
 organization scopes, and LinkedIn refuses the whole authorization if the app is not approved for
 them — it does not quietly drop them. If approval is still pending, either finish it first or
-remove the two `*_organization_*` entries from `$scopes` in
+remove the three `*_organization_*` entries from `$scopes` in
 `src/SocialProviders/LinkedIn/Concerns/ManagesOAuth.php`; you will then be able to connect your own
 profile but no company pages.
+
+Company pages connected before 2.23.3 keep posting, but need to be reconnected once before their
+follower counts and post statistics start showing on the dashboard. Personal profiles never report
+any — LinkedIn offers no statistics for them.
 
 Access tokens last about 60 days. Refresh tokens are only issued to apps LinkedIn has approved for
 them, so most self-hosted installs will need to reconnect the account when the token expires.

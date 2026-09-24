@@ -13,8 +13,10 @@ trait ManagesOAuth
 
     /**
      * `openid`, `profile`, `email` and `w_member_social` come with the Sign In with LinkedIn and
-     * Share on LinkedIn products. The two organization scopes come with the Community Management
-     * API, which has to be approved on the app separately — see README.md.
+     * Share on LinkedIn products. The organization scopes come with the Community Management API,
+     * which has to be approved on the app separately — see README.md. `r_organization_social` is
+     * part of that same product, so an app approved for the other two is approved for it too; it is
+     * what lets a company page's follower count and daily statistics be imported.
      */
     protected array $scopes = [
         'openid',
@@ -22,6 +24,7 @@ trait ManagesOAuth
         'email',
         'w_member_social',
         'r_organization_admin',
+        'r_organization_social',
         'w_organization_social',
     ];
 

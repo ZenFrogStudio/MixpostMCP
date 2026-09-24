@@ -4,6 +4,7 @@ namespace OneMediaLabs\MixpostMcp\Commands;
 
 use Illuminate\Console\Command;
 use OneMediaLabs\MixpostMcp\Concerns\AccountsOption;
+use OneMediaLabs\MixpostMcp\SocialProviders\LinkedIn\Jobs\ImportLinkedInFollowersJob;
 use OneMediaLabs\MixpostMcp\SocialProviders\Mastodon\Jobs\ImportMastodonFollowersJob;
 use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportFacebookPageFollowersJob;
 use OneMediaLabs\MixpostMcp\SocialProviders\Meta\Jobs\ImportInstagramFollowersJob;
@@ -25,6 +26,7 @@ class ImportAccountAudience extends Command
                 'facebook_page' => ImportFacebookPageFollowersJob::class,
                 'instagram' => ImportInstagramFollowersJob::class,
                 'mastodon' => ImportMastodonFollowersJob::class,
+                'linkedin' => ImportLinkedInFollowersJob::class,
                 default => null,
             };
 
